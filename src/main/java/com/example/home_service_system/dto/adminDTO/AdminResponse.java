@@ -12,15 +12,4 @@ public record AdminResponse(Long id,
                             String phoneNumber,
                             LocalDate birthday,
                             String email) {
-
-    /*public static AdminResponse from(Admin admin) {
-        return new AdminResponse(
-                admin.getId(),
-                admin.getFirstName(),
-                admin.getLastName(),
-                admin.getPhoneNumber(),
-                admin.getUsername(),
-                admin.getNationalID()
-                );
-    }*/
 }

@@ -1,5 +1,7 @@
 package com.example.home_service_system.dto.customerDTO;
 
+import com.example.home_service_system.entity.enums.UserStatus;
+
 import java.time.LocalDate;
 
 public record CustomerResponse(String firstName,
@@ -8,5 +10,7 @@ public record CustomerResponse(String firstName,
                                String nationalId,
                                String phoneNumber,
                                LocalDate birthday,
-                               String email) {
+                               String email,
+                               UserStatus userStatus,
+                               Long balance) {
 }

@@ -20,5 +20,5 @@ public class Expert extends User {
     byte[] expertImage;
 
     @Column(nullable = false)
-    Long score = 0L;
+    Integer score = 0;
 }

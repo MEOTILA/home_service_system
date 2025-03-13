@@ -1,5 +1,7 @@
 package com.example.home_service_system.dto.expertDTO;
 
+import com.example.home_service_system.entity.enums.UserStatus;
+
 import java.time.LocalDate;
 
 public record ExpertResponse (String firstName,
@@ -9,5 +11,8 @@ public record ExpertResponse (String firstName,
                               String phoneNumber,
                               LocalDate birthday,
                               String email,
-                              byte[] expertImage){
+                              byte[] expertImage,
+                              Integer score,
+                              UserStatus userStatus,
+                              Long balance){
 }
