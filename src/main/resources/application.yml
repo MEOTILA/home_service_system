@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: my-spring boot
+
+  datasource:
+    url: jdbc:postgresql://localhost:5433/home_service_system
+    username: admin
+    password: password
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: true
+
+
+server:
+  port: 8081
