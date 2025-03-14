@@ -4,6 +4,7 @@ import com.example.home_service_system.base.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
@@ -17,6 +18,9 @@ import org.hibernate.annotations.SoftDelete;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 public class CustomerCommentAndRate extends BaseEntity<Long> {
+    @Column(nullable = false)
+    @OneToOne
+    Order order;
 
     @Column(nullable = false)
     @ManyToOne
@@ -30,8 +34,6 @@ public class CustomerCommentAndRate extends BaseEntity<Long> {
     String customerComment;
 
     @Column(nullable = false)
-/*    @Min(value = 0, message = "Rating must be at least 0!")
-    @Max(value = 100, message = "Rating must not exceed 100!")*/
     Integer customerRatingForExpert;
 
     @Column(nullable = false)

@@ -29,7 +29,7 @@ public class Order extends BaseEntity<Long> {
     @Column(nullable = false)
     Long customerOfferedCost;
 
-    @Column(length = 500)
+    @Column(length = 500, nullable = false)
     String customerDescription;
 
     @Column(nullable = false)
@@ -47,6 +47,9 @@ public class Order extends BaseEntity<Long> {
 
     @OneToMany(mappedBy = "order")
     List<ExpertSuggestion> expertSuggestionList = new ArrayList<>();
+
+    @OneToOne
+    CustomerCommentAndRate customerCommentAndRate;
 
     @Column(nullable = false)
     boolean isDeleted = false;

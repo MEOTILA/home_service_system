@@ -11,6 +11,7 @@ import org.hibernate.annotations.SoftDelete;
 
 import java.sql.Time;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Getter
 @Setter
@@ -31,13 +32,13 @@ public class ExpertSuggestion extends BaseEntity<Long> {
     LocalDateTime suggestionSubmitDate;
 
     @Column(nullable = false)
-    Long expertOfferedCost;
+    Long expertOfferedCost = order.getCustomerOfferedCost();
 
     @Column(nullable = false)
     Time serviceTimeDuration;
 
     @Column(nullable = false)
-    LocalDateTime expertServiceStartDate;
+    LocalTime expertServiceStartTime;
 
     @Column(nullable = false)
     boolean isDeleted = false;
