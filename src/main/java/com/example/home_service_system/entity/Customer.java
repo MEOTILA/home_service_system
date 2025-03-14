@@ -6,7 +6,6 @@ import jakarta.persistence.OneToMany;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.SoftDelete;
 
 import java.util.ArrayList;
 import java.util.List;

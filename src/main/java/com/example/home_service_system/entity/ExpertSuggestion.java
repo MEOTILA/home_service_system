@@ -7,7 +7,7 @@ import jakarta.persistence.ManyToOne;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.SoftDelete;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Time;
 import java.time.LocalDateTime;
@@ -28,7 +28,8 @@ public class ExpertSuggestion extends BaseEntity<Long> {
     @Column(length = 500, nullable = false)
     String expertSuggestion;
 
-    @Column(nullable = false)
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
     LocalDateTime suggestionSubmitDate;
 
     @Column(nullable = false)

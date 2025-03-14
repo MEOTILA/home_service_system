@@ -3,11 +3,10 @@ package com.example.home_service_system.entity;
 import com.example.home_service_system.base.BaseEntity;
 import com.example.home_service_system.entity.enums.OrderStatus;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.SoftDelete;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -32,18 +31,19 @@ public class Order extends BaseEntity<Long> {
     @Column(length = 500, nullable = false)
     String customerDescription;
 
-    @Column(nullable = false)
-    LocalDateTime orderSubmitDate;
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
+    LocalDateTime submitDate;
 
     @Column(nullable = false)
-    LocalDateTime orderServiceDate;
+    LocalDateTime serviceDate;
 
     @Column(nullable = false, length = 250)
-    String Address;
+    String address;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    OrderStatus orderStatus;
+    OrderStatus status;
 
     @OneToMany(mappedBy = "order")
     List<ExpertSuggestion> expertSuggestionList = new ArrayList<>();

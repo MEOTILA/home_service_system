@@ -8,7 +8,6 @@ import jakarta.persistence.OneToOne;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.SoftDelete;
 
 @Getter
 @Setter
@@ -31,10 +30,10 @@ public class CustomerCommentAndRate extends BaseEntity<Long> {
     Expert expert;
 
     @Column(length = 500)
-    String customerComment;
+    String comment;
 
     @Column(nullable = false)
-    Integer customerRatingForExpert;
+    Integer rating;
 
     @Column(nullable = false)
     boolean isDeleted = false;

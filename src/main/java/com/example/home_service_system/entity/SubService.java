@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.SoftDelete;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,13 +19,13 @@ import java.util.List;
 public class SubService extends BaseEntity<Long> {
 
     @Column(length = 50, nullable = false, unique = true)
-    String subServiceName;
+    String name;
 
     @Column(nullable = false)
-    Long subServiceBaseCost;
+    Long baseCost;
 
     @Column(length = 500, nullable = false)
-    String subServiceDescription;
+    String description;
 
     @Column(nullable = false)
     @ManyToOne
