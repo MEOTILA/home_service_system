@@ -3,9 +3,11 @@ package com.example.home_service_system.entity;
 import com.example.home_service_system.base.BaseEntity;
 import com.example.home_service_system.entity.enums.OrderStatus;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.SoftDelete;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -45,4 +47,7 @@ public class Order extends BaseEntity<Long> {
 
     @OneToMany(mappedBy = "order")
     List<ExpertSuggestion> expertSuggestionList = new ArrayList<>();
+
+    @Column(nullable = false)
+    boolean isDeleted = false;
 }

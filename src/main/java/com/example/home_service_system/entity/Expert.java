@@ -1,9 +1,12 @@
 package com.example.home_service_system.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.SoftDelete;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +23,8 @@ public class Expert extends User {
     @Column(nullable = false)
     byte[] expertImage;
 
+/*    @Min(value = 0, message = "Rating must be at least 0!")
+    @Max(value = 100, message = "Rating must not exceed 100!")*/
     @Column(nullable = false)
     Integer rating = 0;
 
@@ -33,4 +38,7 @@ public class Expert extends User {
 
     @OneToMany(mappedBy = "expert")
     List<CustomerCommentAndRate> customerCommentAndRateList = new ArrayList<>();
+
+    @Column(nullable = false)
+    boolean isDeleted = false;
 }

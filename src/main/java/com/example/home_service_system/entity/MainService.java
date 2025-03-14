@@ -8,6 +8,7 @@ import jakarta.persistence.OneToMany;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.SoftDelete;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,4 +28,7 @@ public class MainService extends BaseEntity<Long> {
     @Column(length = 50)
     @OneToMany(mappedBy = "subServiceName")
     List<SubService> subServices = new ArrayList<>();
+
+    @Column(nullable = false)
+    boolean isDeleted = false;
 }
