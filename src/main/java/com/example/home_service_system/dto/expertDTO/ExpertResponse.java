@@ -12,7 +12,7 @@ public record ExpertResponse (String firstName,
                               LocalDate birthday,
                               String email,
                               byte[] expertImage,
-                              Integer score,
+                              Integer rating,
                               UserStatus userStatus,
                               Long balance){
 }

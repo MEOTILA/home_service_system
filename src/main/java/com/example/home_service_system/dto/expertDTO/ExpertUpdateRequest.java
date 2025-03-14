@@ -60,10 +60,10 @@ public record ExpertUpdateRequest(
         @Size(max = 307200, message = "Image size must not exceed 300KB!")
         byte[] expertImage,
 
-        @Min(value = 0, message = "Score cannot be negative!")
-        @Max(value = 100, message = "Score must not exceed 100!")
-        @NotNull(message = "Score cannot be null!")
-        Integer score,
+        @Min(value = 0, message = "rating cannot be negative!")
+        @Max(value = 100, message = "rating must not exceed 100!")
+        @NotNull(message = "rating cannot be null!")
+        Integer rating,
 
         @NotNull(message = "User status cannot be null!")
         UserStatus userStatus,

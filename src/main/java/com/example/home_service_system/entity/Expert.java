@@ -1,11 +1,12 @@
 package com.example.home_service_system.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.validation.constraints.Null;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -20,5 +21,16 @@ public class Expert extends User {
     byte[] expertImage;
 
     @Column(nullable = false)
-    Integer score = 0;
+    Integer rating = 0;
+
+    @ManyToMany
+    @JoinTable(
+            name = "expert_subservice",
+            joinColumns = @JoinColumn(name = "expert_id"),
+            inverseJoinColumns = @JoinColumn(name = "subservice_id")
+    )
+    List<SubService> expertServiceFields = new ArrayList<>();
+
+    @OneToMany(mappedBy = "expert")
+    List<CustomerCommentAndRate> customerCommentAndRateList = new ArrayList<>();
 }

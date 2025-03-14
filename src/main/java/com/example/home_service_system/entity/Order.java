@@ -8,6 +8,8 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -40,4 +42,7 @@ public class Order extends BaseEntity<Long> {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     OrderStatus orderStatus;
+
+    @OneToMany(mappedBy = "order")
+    List<ExpertSuggestion> expertSuggestionList = new ArrayList<>();
 }
