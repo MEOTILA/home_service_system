@@ -1,10 +1,7 @@
 package com.example.home_service_system.entity;
 
 import com.example.home_service_system.base.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
@@ -30,6 +27,10 @@ public class SubService extends BaseEntity<Long> {
 
     @Column(length = 500, nullable = false)
     String subServiceDescription;
+
+    @Column(nullable = false)
+    @ManyToOne
+    MainService mainService;
 
     @OneToMany(mappedBy = "subService")
     List<Order> orderList = new ArrayList<>();

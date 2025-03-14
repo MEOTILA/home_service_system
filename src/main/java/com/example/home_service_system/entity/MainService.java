@@ -25,8 +25,8 @@ public class MainService extends BaseEntity<Long> {
     @Column(length = 50, nullable = false, unique = true)
     String mainServiceName;
 
-    @Column(length = 50)
-    @OneToMany(mappedBy = "subServiceName")
+    @Column(nullable = false)
+    @OneToMany(mappedBy = "mainService")
     List<SubService> subServices = new ArrayList<>();
 
     @Column(nullable = false)
