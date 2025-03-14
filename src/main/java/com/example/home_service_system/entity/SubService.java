@@ -4,7 +4,6 @@ import com.example.home_service_system.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +12,6 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@SuperBuilder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 public class SubService extends BaseEntity<Long> {
@@ -27,7 +25,6 @@ public class SubService extends BaseEntity<Long> {
     @Column(length = 500, nullable = false)
     String description;
 
-    @Column(nullable = false)
     @ManyToOne
     MainService mainService;
 

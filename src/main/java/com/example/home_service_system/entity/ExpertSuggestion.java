@@ -6,7 +6,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Time;
@@ -17,7 +16,6 @@ import java.time.LocalTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@SuperBuilder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 public class ExpertSuggestion extends BaseEntity<Long> {
@@ -33,7 +31,7 @@ public class ExpertSuggestion extends BaseEntity<Long> {
     LocalDateTime suggestionSubmitDate;
 
     @Column(nullable = false)
-    Long expertOfferedCost = order.getCustomerOfferedCost();
+    Long expertOfferedCost;
 
     @Column(nullable = false)
     Time serviceTimeDuration;

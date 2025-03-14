@@ -5,7 +5,6 @@ import com.example.home_service_system.entity.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -16,13 +15,11 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@SuperBuilder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 public class Order extends BaseEntity<Long> {
 
     @ManyToOne
-    @Column(nullable = false)
     SubService subService;
 
     @Column(nullable = false)

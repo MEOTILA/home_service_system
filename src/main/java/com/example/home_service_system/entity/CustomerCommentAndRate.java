@@ -7,25 +7,20 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@SuperBuilder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 public class CustomerCommentAndRate extends BaseEntity<Long> {
-    @Column(nullable = false)
     @OneToOne
     Order order;
 
-    @Column(nullable = false)
     @ManyToOne
     Customer customer;
 
-    @Column(nullable = false)
     @ManyToOne
     Expert expert;
 

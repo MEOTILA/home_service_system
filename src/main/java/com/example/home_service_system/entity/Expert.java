@@ -3,7 +3,6 @@ package com.example.home_service_system.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +11,6 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@SuperBuilder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 public class Expert extends User {
@@ -20,8 +18,6 @@ public class Expert extends User {
     @Column(nullable = false)
     byte[] expertImage;
 
-/*    @Min(value = 0, message = "Rating must be at least 0!")
-    @Max(value = 100, message = "Rating must not exceed 100!")*/
     @Column(nullable = false)
     Integer rating = 0;
 

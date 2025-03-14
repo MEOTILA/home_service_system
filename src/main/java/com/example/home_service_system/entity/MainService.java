@@ -6,7 +6,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +14,6 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@SuperBuilder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 public class MainService extends BaseEntity<Long> {
@@ -23,7 +21,6 @@ public class MainService extends BaseEntity<Long> {
     @Column(length = 50, nullable = false, unique = true)
     String name;
 
-    @Column(nullable = false)
     @OneToMany(mappedBy = "mainService")
     List<SubService> subServices = new ArrayList<>();
 
