@@ -72,7 +72,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public AdminResponse update(AdminUpdateRequest adminUpdateRequest) {
+    public AdminResponse update(@Valid AdminUpdateRequest adminUpdateRequest) {
         Admin updatingAdmin = adminRepository.findByIdAndIsDeletedFalse(adminUpdateRequest.id())
                 .orElseThrow(() -> new CustomApiException("Admin with id {"
                         + adminUpdateRequest.id() + "} not found!",

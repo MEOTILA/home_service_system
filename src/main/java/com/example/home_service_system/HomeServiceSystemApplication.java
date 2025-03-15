@@ -12,54 +12,71 @@ import java.time.LocalDate;
 @SpringBootApplication(scanBasePackages = "com.example.home_service_system")
 public class HomeServiceSystemApplication {
 
-	public static void main(String[] args) {
-		var context = SpringApplication.run(HomeServiceSystemApplication.class, args);
-		var adminService = context.getBean(AdminService.class);
+    public static void main(String[] args) {
+        var context = SpringApplication.run(HomeServiceSystemApplication.class, args);
+        var adminService = context.getBean(AdminService.class);
 
-		AdminSaveRequest adminRequest = new AdminSaveRequest(
-				"Sattar",
-				"Boushehri",
-				"Sattar",
-				"Sattar@1234",
-				"0012035012",
-				"09123201670",
-				LocalDate.of(1990, 5, 15),
-				"sattar@example.com"
-		);
-		//adminService.save(adminRequest);
+        AdminSaveRequest adminRequest = new AdminSaveRequest(
+                "Sattar",
+                "Boushehri",
+                "Sattar",
+                "Sattar@1234",
+                "0012035012",
+                "09123201670",
+                LocalDate.of(1990, 5, 15),
+                "sattar@example.com"
+        );
+        //adminService.save(adminRequest);
 
-		AdminSaveRequest adminRequest2 = new AdminSaveRequest(
-				"Roger",
-				"Waters",
-				"Roger",
-				"Roger@12345",
-				"0012035013",
-				"09123201641",
-				LocalDate.of(1990, 5, 15),
-				"roger@example.com"
-		);
-		//adminService.save(adminRequest2);
+        AdminSaveRequest adminRequest2 = new AdminSaveRequest(
+                "Roger",
+                "Waters",
+                "Roger",
+                "Roger@12345",
+                "0012035013",
+                "09123201641",
+                LocalDate.of(1990, 5, 15),
+                "roger@example.com"
+        );
+        //adminService.save(adminRequest2);
 
-		AdminUpdateRequest adminRequest3 = new AdminUpdateRequest(
-				3L,
-				"Sattar",
-				"Boushehri",
-				"Sattar",
-				"Sattar@12345",
-				"0012035012",
-				"09123201670",
-				LocalDate.of(1990, 5, 15),
-				"sattar@example.com"
-		);
-		//adminService.update(adminRequest3);
+        AdminUpdateRequest adminRequest3 = new AdminUpdateRequest(
+                3L,
+                "Sattar",
+                "Boushehri",
+                "Sattar",
+                "Sattar@12345",
+                "0012035012",
+                "09123201670",
+                LocalDate.of(1990, 5, 15),
+                "sattar@example.com"
+        );
 
-		//System.out.println(adminService.findByUsername("Sattar"));
-		//System.out.println(adminService.findAll());
-		AdminChangePasswordRequest adminChangePasswordRequest =
+        //System.out.println(adminService.findByUsername("Sattar"));
+        System.out.println(adminService.findAll());
+
+        //todo: Admin change Password
+		/*AdminChangePasswordRequest adminChangePasswordRequest =
 				new AdminChangePasswordRequest ("Sattar@12345","Sattar@1234");
-		adminService.changePassword(1L,adminChangePasswordRequest);
-		//adminService.deleteById(3L);
+		adminService.changePassword(1L,adminChangePasswordRequest);*/
 
-	}
+        //adminService.deleteById(3L);
+
+        //todo: Admin update
+        AdminUpdateRequest adminRequest4 = new AdminUpdateRequest(
+                1L,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                LocalDate.of(1990, 6, 15),
+                "sattarrrr@example.com"
+        );
+        //adminService.update(adminRequest4);
+
+
+    }
 
 }
