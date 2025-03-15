@@ -29,6 +29,9 @@ public class Expert extends User {
     @Column(nullable = false)
     Long balance = 0L;
 
+    @OneToMany(mappedBy = "expert")
+    List<Order> orderList = new ArrayList<>();
+
     @ManyToMany
     @JoinTable(
             name = "expert_subservice",

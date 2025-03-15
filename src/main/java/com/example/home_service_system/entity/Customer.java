@@ -15,6 +15,10 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 public class Customer extends User {
+
+    @OneToMany(mappedBy = "customer")
+    List<Order> orderList = new ArrayList<>();
+
     @OneToMany(mappedBy = "customer")
     List<CustomerCommentAndRate> customerCommentAndRateList = new ArrayList<>();
 

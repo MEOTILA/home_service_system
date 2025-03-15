@@ -22,6 +22,12 @@ public class Order extends BaseEntity<Long> {
     @ManyToOne
     SubService subService;
 
+    @ManyToOne
+    Customer customer;
+
+    @ManyToOne
+    Expert expert;
+
     @Column(nullable = false)
     Long customerOfferedCost;
 

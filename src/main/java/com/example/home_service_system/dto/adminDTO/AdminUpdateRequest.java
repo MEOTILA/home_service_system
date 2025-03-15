@@ -32,7 +32,7 @@ public record AdminUpdateRequest(
                 regexp = "^[0-9]+$",
                 message = "National Code must contain only digits!"
         )
-        @Size(min = 10, max = 10, message = "National ID must be 10 digits!")
+        @Size(min = 10, max = 10, message = "National Id must be 10 digits!")
         String nationalId,
 
         @Pattern(
