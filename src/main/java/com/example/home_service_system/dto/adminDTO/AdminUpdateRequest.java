@@ -13,9 +13,8 @@ public record AdminUpdateRequest(
         String lastName,
         String username,
         String password,
-        String nationalId,
+        String nationalID,
         String phoneNumber,
         LocalDate birthday,
-        String email,
-        LocalDateTime updatedAt) {
+        String email) {
 }

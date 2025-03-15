@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface AdminService {
     AdminResponse save(@Valid AdminSaveRequest adminSaveRequest);
 
-    AdminResponse update(AdminUpdateRequest adminUpdateRequest);
+    AdminResponse update(@Valid AdminUpdateRequest adminUpdateRequest);
 
     List<AdminResponse> findAll();
 

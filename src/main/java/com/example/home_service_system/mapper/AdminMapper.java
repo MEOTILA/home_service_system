@@ -8,7 +8,6 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface AdminMapper {
-    //AdminMapper INSTANCE = Mappers.getMapper(AdminMapper.class);
 
     AdminResponse to(Admin admin);
 

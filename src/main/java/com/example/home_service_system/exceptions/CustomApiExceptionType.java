@@ -2,7 +2,7 @@ package com.example.home_service_system.exceptions;
 
 public enum CustomApiExceptionType {
     BAD_REQUEST(400, "Bad Request"),
-    UNPROCESSIABLE_ENTITY(422, "Unprocessiable entity"),
+    UNPROCESSABLE_ENTITY(422, "Unprocessable entity"),
     UNAUTHORIZED(401, "Unauthorized"),
     NOT_FOUND(404, "Not Found"),
     INTERNAL_SERVER_ERROR(500, "Internal Server Error");
