@@ -25,9 +25,9 @@ public class HomeServiceSystemApplication {
 				LocalDate.of(1990, 5, 15),
 				"sattar@example.com"
 		);
+		//adminService.save(adminRequest);
 
-		AdminUpdateRequest adminRequest2 = new AdminUpdateRequest(
-				5L,
+		AdminSaveRequest adminRequest2 = new AdminSaveRequest(
 				"Roger",
 				"Waters",
 				"Roger",
@@ -37,7 +37,7 @@ public class HomeServiceSystemApplication {
 				LocalDate.of(1990, 5, 15),
 				"roger@example.com"
 		);
-		adminService.update(adminRequest2);
+		//adminService.save(adminRequest2);
 
 		AdminUpdateRequest adminRequest3 = new AdminUpdateRequest(
 				3L,
@@ -50,7 +50,10 @@ public class HomeServiceSystemApplication {
 				LocalDate.of(1990, 5, 15),
 				"sattar@example.com"
 		);
-		adminService.update(adminRequest3);
+		//adminService.update(adminRequest3);
+
+		System.out.println(adminService.findByUsername("Sattar"));
+		//adminService.deleteById(3L);
 
 	}
 

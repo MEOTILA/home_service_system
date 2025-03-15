@@ -1,5 +1,6 @@
 package com.example.home_service_system.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -14,4 +15,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 public class Admin extends User{
+
+    @Column(nullable = false)
+    boolean isDeleted = false;
 }

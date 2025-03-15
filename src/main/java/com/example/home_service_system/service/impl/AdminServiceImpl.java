@@ -72,7 +72,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public AdminResponse update(AdminUpdateRequest adminUpdateRequest) {
-        Admin updatingAdmin = adminRepository.findById(adminUpdateRequest.id())
+        Admin updatingAdmin = adminRepository.findByIdAndIsDeletedFalse(adminUpdateRequest.id())
                 .orElseThrow(() -> new CustomApiException("Admin with id {"
                         + adminUpdateRequest.id() + "} not found!",
                         CustomApiExceptionType.NOT_FOUND));
@@ -143,11 +143,25 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public void deleteById(Long id) {
+        adminRepository.findByIdAndIsDeletedFalse(id)
+                .orElseThrow(() -> new CustomApiException("Admin with id {"
+                        + id + "} not found!",
+                        CustomApiExceptionType.NOT_FOUND));
 
+        adminRepository.softDeleteById(id);
+
+        log.info("Admin with id {} deleted", id);
     }
 
     @Override
     public Optional<Admin> findByUsername(String username) {
-        return Optional.empty();
+        Optional<Admin> optionalAdmin = adminRepository.findByUsernameAndIsDeletedFalse(username);
+
+        if (optionalAdmin.isEmpty())
+            throw new CustomApiException("Admin with username {"
+                        + username + "} not found!",
+                        CustomApiExceptionType.NOT_FOUND);
+
+        return optionalAdmin;
     }
 }
