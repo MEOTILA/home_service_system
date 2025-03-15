@@ -1,5 +1,6 @@
 package com.example.home_service_system.service;
 
+import com.example.home_service_system.dto.adminDTO.AdminChangePasswordRequest;
 import com.example.home_service_system.dto.adminDTO.AdminResponse;
 import com.example.home_service_system.dto.adminDTO.AdminSaveRequest;
 import com.example.home_service_system.dto.adminDTO.AdminUpdateRequest;
@@ -21,4 +22,6 @@ public interface AdminService {
     AdminResponse findByUsername(String username);
 
     void deleteById(Long id);
+
+    void changePassword(Long id, @Valid AdminChangePasswordRequest request);
 }

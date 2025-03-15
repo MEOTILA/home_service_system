@@ -1,5 +1,6 @@
 package com.example.home_service_system.service.impl;
 
+import com.example.home_service_system.dto.adminDTO.AdminChangePasswordRequest;
 import com.example.home_service_system.dto.adminDTO.AdminResponse;
 import com.example.home_service_system.dto.adminDTO.AdminSaveRequest;
 import com.example.home_service_system.dto.adminDTO.AdminUpdateRequest;
@@ -169,4 +170,23 @@ public class AdminServiceImpl implements AdminService {
 
         log.info("Admin with id {} deleted", id);
     }
+
+    @Override
+    public void changePassword(Long id, @Valid AdminChangePasswordRequest request) {
+        Admin admin = adminRepository.findByIdAndIsDeletedFalse(id)
+                .orElseThrow(() -> new CustomApiException("Admin with id {"
+                        + id + "} not found!", CustomApiExceptionType.NOT_FOUND));
+
+        if (!passwordEncoder.matches(request.currentPassword(), admin.getPassword())) {
+            throw new CustomApiException("Current password is incorrect!",
+                    CustomApiExceptionType.UNAUTHORIZED);
+        }
+
+        String hashedNewPassword = passwordEncoder.encode(request.newPassword());
+        admin.setPassword(hashedNewPassword);
+        adminRepository.save(admin);
+
+        log.info("Password changed successfully for admin with id {}", id);
+    }
+
 }

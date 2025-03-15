@@ -1,5 +1,6 @@
 package com.example.home_service_system;
 
+import com.example.home_service_system.dto.adminDTO.AdminChangePasswordRequest;
 import com.example.home_service_system.dto.adminDTO.AdminSaveRequest;
 import com.example.home_service_system.dto.adminDTO.AdminUpdateRequest;
 import com.example.home_service_system.service.AdminService;
@@ -53,7 +54,10 @@ public class HomeServiceSystemApplication {
 		//adminService.update(adminRequest3);
 
 		//System.out.println(adminService.findByUsername("Sattar"));
-		System.out.println(adminService.findAll());
+		//System.out.println(adminService.findAll());
+		AdminChangePasswordRequest adminChangePasswordRequest =
+				new AdminChangePasswordRequest ("Sattar@12345","Sattar@1234");
+		adminService.changePassword(1L,adminChangePasswordRequest);
 		//adminService.deleteById(3L);
 
 	}
