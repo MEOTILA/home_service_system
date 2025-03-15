@@ -138,7 +138,6 @@ public class AdminServiceImpl implements AdminService {
                 .orElseThrow(() -> new CustomApiException("Admin with id {"
                         + id + "} not found!",
                         CustomApiExceptionType.NOT_FOUND));
-
         return adminMapper.to(admin);
     }
 
@@ -181,11 +180,9 @@ public class AdminServiceImpl implements AdminService {
             throw new CustomApiException("Current password is incorrect!",
                     CustomApiExceptionType.UNAUTHORIZED);
         }
-
         String hashedNewPassword = passwordEncoder.encode(request.newPassword());
         admin.setPassword(hashedNewPassword);
         adminRepository.save(admin);
-
         log.info("Password changed successfully for admin with id {}", id);
     }
 

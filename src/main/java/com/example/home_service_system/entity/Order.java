@@ -17,6 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
+@Table(name = "customer_order")
 public class Order extends BaseEntity<Long> {
 
     @ManyToOne
