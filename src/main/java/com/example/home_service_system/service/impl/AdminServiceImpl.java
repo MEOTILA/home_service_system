@@ -48,11 +48,11 @@ public class AdminServiceImpl implements AdminService {
                     + adminSaveRequest.phoneNumber() + "} already exists!",
                     CustomApiExceptionType.UNPROCESSABLE_ENTITY);
         }
-        Optional<Admin> optionalAdminByNationalID =
-                adminRepository.findByNationalID(adminSaveRequest.nationalID());
-        if (optionalAdminByNationalID.isPresent()) {
+        Optional<Admin> optionalAdminByNationalId =
+                adminRepository.findByNationalId(adminSaveRequest.nationalId());
+        if (optionalAdminByNationalId.isPresent()) {
             throw new CustomApiException("Admin with national ID {"
-                    + adminSaveRequest.nationalID() + "} already exists!",
+                    + adminSaveRequest.nationalId() + "} already exists!",
                     CustomApiExceptionType.UNPROCESSABLE_ENTITY);
         }
         Optional<Admin> optionalAdminByEmail =
@@ -96,14 +96,14 @@ public class AdminServiceImpl implements AdminService {
             String hashedPassword = passwordEncoder.encode(adminUpdateRequest.password());
             updatingAdmin.setPassword(hashedPassword);
         }
-        if (StringUtils.hasText(adminUpdateRequest.nationalID())) {
-            Optional<Admin> existingAdmin = adminRepository.findByNationalID(adminUpdateRequest.nationalID());
+        if (StringUtils.hasText(adminUpdateRequest.nationalId())) {
+            Optional<Admin> existingAdmin = adminRepository.findByNationalId(adminUpdateRequest.nationalId());
             if (existingAdmin.isPresent() && !existingAdmin.get().getId().equals(updatingAdmin.getId())) {
                 throw new CustomApiException("Admin with national ID {"
-                        + adminUpdateRequest.nationalID() + "} already exists!",
+                        + adminUpdateRequest.nationalId() + "} already exists!",
                         CustomApiExceptionType.UNPROCESSABLE_ENTITY);
             }
-            updatingAdmin.setNationalID(adminUpdateRequest.nationalID());
+            updatingAdmin.setNationalId(adminUpdateRequest.nationalId());
         }
         if (StringUtils.hasText(adminUpdateRequest.phoneNumber())) {
             Optional<Admin> existingAdmin = adminRepository.findByPhoneNumber(adminUpdateRequest.phoneNumber());
@@ -132,13 +132,30 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public List<AdminResponse> findAll() {
-        return List.of();
+    public AdminResponse findByIdAndIsDeletedFalse(Long id) {
+        Admin admin = adminRepository.findByIdAndIsDeletedFalse(id)
+                .orElseThrow(() -> new CustomApiException("Admin with id {"
+                        + id + "} not found!",
+                        CustomApiExceptionType.NOT_FOUND));
+
+        return adminMapper.to(admin);
     }
 
     @Override
-    public Optional<Admin> findById(Long id) {
-        return Optional.empty();
+    public List<AdminResponse> findAll() {
+        List<Admin> foundedAdmins = adminRepository.findAllByIsDeletedFalse();
+        return foundedAdmins.stream()
+                .map(adminMapper::to)
+                .toList();
+    }
+
+    @Override
+    public AdminResponse findByUsername(String username) {
+        Admin admin = adminRepository.findByUsernameAndIsDeletedFalse(username)
+                .orElseThrow(() -> new CustomApiException("Admin with username {"
+                        + username + "} not found!",
+                        CustomApiExceptionType.NOT_FOUND));
+        return adminMapper.to(admin);
     }
 
     @Override
@@ -151,17 +168,5 @@ public class AdminServiceImpl implements AdminService {
         adminRepository.softDeleteById(id);
 
         log.info("Admin with id {} deleted", id);
-    }
-
-    @Override
-    public Optional<Admin> findByUsername(String username) {
-        Optional<Admin> optionalAdmin = adminRepository.findByUsernameAndIsDeletedFalse(username);
-
-        if (optionalAdmin.isEmpty())
-            throw new CustomApiException("Admin with username {"
-                        + username + "} not found!",
-                        CustomApiExceptionType.NOT_FOUND);
-
-        return optionalAdmin;
     }
 }

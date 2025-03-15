@@ -13,7 +13,7 @@ public record AdminUpdateRequest(
         String lastName,
         String username,
         String password,
-        String nationalID,
+        String nationalId,
         String phoneNumber,
         LocalDate birthday,
         String email) {

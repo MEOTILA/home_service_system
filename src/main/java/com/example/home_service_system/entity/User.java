@@ -31,7 +31,7 @@ public abstract class User extends BaseEntity<Long> {
     String password;
 
     @Column(length = 10, nullable = false, unique = true)
-    String nationalID;
+    String nationalId;
 
     @Column(length = 11, nullable = false, unique = true)
     String phoneNumber;
@@ -58,7 +58,7 @@ public abstract class User extends BaseEntity<Long> {
                 "\nFirst Name: " + firstName +
                 "\nLast Name: " + lastName +
                 "\nUsername: " + username +
-                "\nNational ID: " + nationalID +
+                "\nNational ID: " + nationalId +
                 "\nPhone Number: " + phoneNumber +
                 "\nBirthday: " + birthday +
                 "\nEmail: " + email;

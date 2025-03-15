@@ -52,7 +52,8 @@ public class HomeServiceSystemApplication {
 		);
 		//adminService.update(adminRequest3);
 
-		System.out.println(adminService.findByUsername("Sattar"));
+		//System.out.println(adminService.findByUsername("Sattar"));
+		System.out.println(adminService.findAll());
 		//adminService.deleteById(3L);
 
 	}

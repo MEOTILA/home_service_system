@@ -14,11 +14,11 @@ public interface AdminService {
 
     AdminResponse update(@Valid AdminUpdateRequest adminUpdateRequest);
 
+    AdminResponse findByIdAndIsDeletedFalse(Long id);
+
     List<AdminResponse> findAll();
 
-    Optional<Admin> findById(Long id);
+    AdminResponse findByUsername(String username);
 
     void deleteById(Long id);
-
-    Optional<Admin> findByUsername(String username);
 }

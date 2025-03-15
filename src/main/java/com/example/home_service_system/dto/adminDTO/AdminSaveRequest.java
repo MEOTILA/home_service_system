@@ -35,7 +35,7 @@ public record AdminSaveRequest(
                 message = "National Code must contain only digits!"
         )
         @Size(min = 10, max = 10, message = "National ID must be 10 digits!")
-        String nationalID,
+        String nationalId,
 
         @NotBlank(message = "Phone Number can not be null or empty!")
         @Pattern(
