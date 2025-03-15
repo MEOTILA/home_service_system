@@ -12,11 +12,6 @@ import java.util.Optional;
 @Repository
 public interface AdminRepository extends JpaRepository<Admin, Long> {
 
-    Optional<Admin> findByUsernameOrPhoneNumberOrNationalIdOrEmail(String username,
-                                                                   String phoneNumber,
-                                                                   String nationalId,
-                                                                   String email);
-
     @Query("SELECT a FROM Admin a WHERE a.id = :id AND a.isDeleted = false")
     Optional<Admin> findByIdAndIsDeletedFalse(Long id);
 

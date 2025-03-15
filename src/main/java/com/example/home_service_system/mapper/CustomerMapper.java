@@ -7,13 +7,12 @@ import com.example.home_service_system.entity.Customer;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface CustomerMapper {
-    CustomerMapper INSTANCE = Mappers.getMapper(CustomerMapper.class);
 
     CustomerResponse to(Customer customer);
 
-    Customer from(CustomerSaveRequest customerSaveRequest);
+    Customer fromSaveRequest(CustomerSaveRequest customerSaveRequest);
 
-    Customer from(CustomerUpdateRequest customerUpdateRequest);
+    Customer fromUpdateRequest(CustomerUpdateRequest customerUpdateRequest);
 }

@@ -10,13 +10,12 @@ import com.example.home_service_system.entity.Expert;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface ExpertMapper {
-    ExpertMapper INSTANCE = Mappers.getMapper(ExpertMapper.class);
 
     ExpertResponse to(Expert expert);
 
-    Expert from(ExpertSaveRequest expertSaveRequest);
+    Expert fromSaveRequest(ExpertSaveRequest expertSaveRequest);
 
-    Expert from(ExpertUpdateRequest expertUpdateRequest);
+    Expert fromUpdateRequest(ExpertUpdateRequest expertUpdateRequest);
 }
