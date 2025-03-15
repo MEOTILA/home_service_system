@@ -1,8 +1,10 @@
 package com.example.home_service_system.dto.adminDTO;
 
 import com.example.home_service_system.entity.Admin;
+import com.example.home_service_system.entity.enums.UserStatus;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public record AdminResponse(Long id,
                             String firstName,
@@ -11,5 +13,7 @@ public record AdminResponse(Long id,
                             String nationalId,
                             String phoneNumber,
                             LocalDate birthday,
-                            String email) {
+                            String email,
+                            LocalDateTime createdAt,
+                            LocalDateTime updatedAt) {
 }

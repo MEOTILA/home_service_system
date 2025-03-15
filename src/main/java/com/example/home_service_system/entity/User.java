@@ -1,10 +1,7 @@
 package com.example.home_service_system.entity;
 
 import com.example.home_service_system.base.BaseEntity;
-import com.example.home_service_system.entity.enums.UserStatus;
 import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.MappedSuperclass;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -44,13 +41,6 @@ public abstract class User extends BaseEntity<Long> {
 
     @Column(length = 50, nullable = false, unique = true)
     String email;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    UserStatus userStatus;
-
-    @Column(nullable = false)
-    Long balance = 0L;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)

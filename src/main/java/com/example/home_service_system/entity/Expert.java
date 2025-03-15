@@ -1,5 +1,6 @@
 package com.example.home_service_system.entity;
 
+import com.example.home_service_system.entity.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -20,6 +21,13 @@ public class Expert extends User {
 
     @Column(nullable = false)
     Integer rating = 0;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    UserStatus userStatus;
+
+    @Column(nullable = false)
+    Long balance = 0L;
 
     @ManyToMany
     @JoinTable(

@@ -1,8 +1,7 @@
 package com.example.home_service_system.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
+import com.example.home_service_system.entity.enums.UserStatus;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -18,6 +17,13 @@ import java.util.List;
 public class Customer extends User {
     @OneToMany(mappedBy = "customer")
     List<CustomerCommentAndRate> customerCommentAndRateList = new ArrayList<>();
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    UserStatus userStatus;
+
+    @Column(nullable = false)
+    Long balance = 0L;
 
     @Column(nullable = false)
     boolean isDeleted = false;
