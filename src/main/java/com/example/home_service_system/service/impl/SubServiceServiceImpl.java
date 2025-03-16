@@ -1,6 +1,8 @@
 package com.example.home_service_system.service.impl;
 
 import com.example.home_service_system.dto.expertDTO.ExpertResponse;
+import com.example.home_service_system.dto.expertDTO.ExpertSaveRequest;
+import com.example.home_service_system.dto.expertDTO.ExpertUpdateRequest;
 import com.example.home_service_system.dto.mainServiceDTO.MainServiceResponse;
 import com.example.home_service_system.dto.subServiceDTO.SubServiceResponse;
 import com.example.home_service_system.dto.subServiceDTO.SubServiceSaveRequest;
@@ -86,9 +88,14 @@ public class SubServiceServiceImpl implements SubServiceService {
     }
 
     @Override
-    public List<SubServiceResponse> findAll() {
+    public List<SubServiceResponse> findAllByIsDeletedFalse() {
         List<SubService> subServices = subServiceRepository.findAllByIsDeletedFalse();
         return subServices.stream().map(subServiceMapper::to).toList();
+    }
+
+    @Override
+    public List<SubService> findAllSubServicesByIsDeletedFalse() {
+        return subServiceRepository.findAllByIsDeletedFalse();
     }
 
     @Override
@@ -108,14 +115,29 @@ public class SubServiceServiceImpl implements SubServiceService {
     }
 
     @Override
+    public void softDeleteAllByMainServiceId(Long mainServiceId) {
+        List<SubService> subServices = subServiceRepository
+                .findAllByMainServiceIdAndIsDeletedFalse(mainServiceId);
+        subServices.forEach(subService -> softDeleteById(subService.getId()));
+        /*for (SubService subService : subServices) {
+            for (Expert expert : subService.getExpertList()) {
+                expert.getExpertServiceFields().remove(subService);
+                expertService.update(expertMapper.toUpdateRequest(expert));
+            }
+            softDeleteById(subService.getId());
+        }*/
+        mainServiceService.softDelete(mainServiceId);
+        log.info("All SubServices related to MainService with ID {} were soft deleted"
+                , mainServiceId);
+    }
+
+    @Override
     public void addExpertToSubService(Long subServiceId, Long expertId) {
         SubService subService = subServiceRepository.findByIdAndIsDeletedFalse(subServiceId)
                 .orElseThrow(() -> new CustomApiException("SubService with id {" + subServiceId + "} not found!",
                         CustomApiExceptionType.NOT_FOUND));
 
-        ExpertResponse expertResponse = expertService.findByIdAndIsDeletedFalse(expertId);
-
-        Expert expert = expertMapper.toExpertFromResponse(expertResponse);
+        Expert expert = expertService.findExpertByIdAndIsDeletedFalse(expertId);
 
         if (subService.getExpertList().contains(expert)) {
             throw new CustomApiException("Expert with id {"
@@ -123,27 +145,33 @@ public class SubServiceServiceImpl implements SubServiceService {
                     + subServiceId + "}", CustomApiExceptionType.BAD_REQUEST);
         }
 
+        expert.getExpertServiceFields().add(subService);
         subService.getExpertList().add(expert);
-        subServiceRepository.save(subService);
+
+        ExpertUpdateRequest expertUpdateRequest = expertMapper.toUpdateRequest(expert);
+        expertService.update(expertUpdateRequest);
+
         log.info("Expert with id {} added to SubService with id {}", expertId, subServiceId);
     }
 
     @Override
     public void removeExpertFromSubService(Long subServiceId, Long expertId) {
         SubService subService = subServiceRepository.findByIdAndIsDeletedFalse(subServiceId)
-                .orElseThrow(() -> new CustomApiException("SubService with id {" + subServiceId + "} not found!",
+                .orElseThrow(() -> new CustomApiException("SubService with id {"
+                        + subServiceId + "} not found!",
                         CustomApiExceptionType.NOT_FOUND));
 
-        ExpertResponse expertResponse = expertService.findByIdAndIsDeletedFalse(expertId);
-        Expert expert = expertMapper.toExpertFromResponse(expertResponse);
+        Expert expert = expertService.findExpertByIdAndIsDeletedFalse(expertId);
 
         if (!subService.getExpertList().contains(expert)) {
-            throw new CustomApiException("Expert with id {" + expertId + "} is not assigned to SubService {"
+            throw new CustomApiException("Expert with id {"
+                    + expertId + "} is not assigned to SubService {"
                     + subServiceId + "}", CustomApiExceptionType.BAD_REQUEST);
         }
-
+        expert.getExpertServiceFields().remove(subService);
         subService.getExpertList().remove(expert);
-        subServiceRepository.save(subService);
+        expertService.update(expertMapper.toUpdateRequest(expert));
+        //subServiceRepository.save(subService);
         log.info("Expert with id {} removed from SubService with id {}", expertId, subServiceId);
     }
 

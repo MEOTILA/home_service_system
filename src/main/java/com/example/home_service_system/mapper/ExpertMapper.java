@@ -8,6 +8,7 @@ import com.example.home_service_system.dto.expertDTO.ExpertUpdateRequest;
 import com.example.home_service_system.entity.Customer;
 import com.example.home_service_system.entity.Expert;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
@@ -20,5 +21,12 @@ public interface ExpertMapper {
     Expert fromUpdateRequest(ExpertUpdateRequest expertUpdateRequest);
 
     Expert toExpertFromResponse(ExpertResponse expertResponse);
+
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "expertImage", source = "expertImage")
+    @Mapping(target = "rating", source = "rating")
+    @Mapping(target = "userStatus", source = "userStatus")
+    @Mapping(target = "balance", source = "balance")
+    ExpertUpdateRequest toUpdateRequest(Expert expert);
 
 }

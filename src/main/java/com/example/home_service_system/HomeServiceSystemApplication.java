@@ -5,11 +5,13 @@ import com.example.home_service_system.dto.adminDTO.AdminSaveRequest;
 import com.example.home_service_system.dto.adminDTO.AdminUpdateRequest;
 import com.example.home_service_system.dto.customerDTO.CustomerSaveRequest;
 import com.example.home_service_system.dto.expertDTO.ExpertSaveRequest;
+import com.example.home_service_system.dto.mainServiceDTO.MainServiceResponse;
 import com.example.home_service_system.dto.mainServiceDTO.MainServiceSaveRequest;
-import com.example.home_service_system.service.AdminService;
-import com.example.home_service_system.service.CustomerService;
-import com.example.home_service_system.service.ExpertService;
-import com.example.home_service_system.service.MainServiceService;
+import com.example.home_service_system.dto.subServiceDTO.SubServiceSaveRequest;
+import com.example.home_service_system.dto.subServiceDTO.SubServiceUpdateRequest;
+import com.example.home_service_system.entity.MainService;
+import com.example.home_service_system.mapper.MainServiceMapper;
+import com.example.home_service_system.service.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -25,6 +27,8 @@ public class HomeServiceSystemApplication {
         var customerService = context.getBean(CustomerService.class);
         var expertService = context.getBean(ExpertService.class);
         var mainServiceService = context.getBean(MainServiceService.class);
+        var subServiceService = context.getBean(SubServiceService.class);
+        var mainServiceMapper = context.getBean(MainServiceMapper.class);
 
         AdminSaveRequest adminRequest = new AdminSaveRequest(
                 "Sattar",
@@ -118,12 +122,38 @@ public class HomeServiceSystemApplication {
         //var savedExpert = expertService.save(expert);
         //System.out.println("Saved Expert: " + savedExpert);
 
-        System.out.println(customerService.findAll());
-        System.out.println(expertService.findAll());
+        //System.out.println(customerService.findAll());
+        //System.out.println(expertService.findAll());
 
         MainServiceSaveRequest mainServiceSaveRequest =
                 new MainServiceSaveRequest("Cleaning");
-        mainServiceService.save(mainServiceSaveRequest);
+        //mainServiceService.save(mainServiceSaveRequest);
+
+        //MainServiceResponse mainServiceResponse = mainServiceService.findById(1L);
+       // MainService mainService = mainServiceMapper.toMainServiceFromResponse(mainServiceResponse);
+
+        /*SubServiceSaveRequest subServiceSaveRequest =
+                new SubServiceSaveRequest("Room Cleaning"
+                ,2000000L,"Full cleaning for Room.",mainService);*/
+        //subServiceService.save(subServiceSaveRequest);
+
+        //subServiceService.addExpertToSubService(2L,1L);
+        subServiceService.addExpertToSubService(1L,1L);
+        subServiceService.addExpertToSubService(3L,1L);
+
+        //subServiceService.removeExpertFromSubService(1L,1L);
+
+        /*SubServiceUpdateRequest subServiceUpdateRequest =
+                new SubServiceUpdateRequest(1L,"Kitchen Cleaning",
+                        2000000L,"Full cleaning for Kitchen."
+                        , mainService,null);*/
+        //subServiceService.updateSubService(1L,subServiceUpdateRequest);
+
+        //System.out.println(subServiceService.findAllSubServicesByIsDeletedFalse());
+        //mainServiceService.softDelete(1L);
+        //subServiceService.softDeleteAllByMainServiceId(1L);
+
+        System.out.println(expertService.findAll());
 
     }
 

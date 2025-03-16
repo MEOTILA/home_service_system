@@ -31,7 +31,8 @@ public class SubService extends BaseEntity<Long> {
     @OneToMany(mappedBy = "subService")
     List<Order> orderList = new ArrayList<>();
 
-    @ManyToMany
+    //@ManyToMany
+    @ManyToMany(mappedBy = "expertServiceFields")
     List<Expert> expertList = new ArrayList<>();
 
     @Column(nullable = false)

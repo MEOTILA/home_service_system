@@ -167,6 +167,14 @@ public class ExpertServiceImpl implements ExpertService {
     }
 
     @Override
+    public Expert findExpertByIdAndIsDeletedFalse(Long id) {
+        return expertRepository.findByIdAndIsDeletedFalse(id)
+                .orElseThrow(() -> new CustomApiException("Expert with id {"
+                        + id + "} not found!",
+                        CustomApiExceptionType.NOT_FOUND));
+    }
+
+    @Override
     public List<ExpertResponse> findAll() {
         List<Expert> foundedExperts = expertRepository.findAllByIsDeletedFalse();
         return foundedExperts.stream()

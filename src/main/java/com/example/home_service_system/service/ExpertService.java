@@ -4,6 +4,7 @@ import com.example.home_service_system.dto.expertDTO.ExpertChangePasswordRequest
 import com.example.home_service_system.dto.expertDTO.ExpertResponse;
 import com.example.home_service_system.dto.expertDTO.ExpertSaveRequest;
 import com.example.home_service_system.dto.expertDTO.ExpertUpdateRequest;
+import com.example.home_service_system.entity.Expert;
 import jakarta.validation.Valid;
 
 import java.util.List;
@@ -14,6 +15,8 @@ public interface ExpertService {
     ExpertResponse update(@Valid ExpertUpdateRequest expertUpdateRequest);
 
     ExpertResponse findByIdAndIsDeletedFalse(Long id);
+
+    Expert findExpertByIdAndIsDeletedFalse(Long id);
 
     List<ExpertResponse> findAll();
 

@@ -4,11 +4,13 @@ import com.example.home_service_system.dto.mainServiceDTO.MainServiceResponse;
 import com.example.home_service_system.dto.mainServiceDTO.MainServiceSaveRequest;
 import com.example.home_service_system.dto.mainServiceDTO.MainServiceUpdateRequest;
 import com.example.home_service_system.entity.MainService;
+import com.example.home_service_system.entity.SubService;
 import com.example.home_service_system.exceptions.CustomApiException;
 import com.example.home_service_system.exceptions.CustomApiExceptionType;
 import com.example.home_service_system.mapper.MainServiceMapper;
 import com.example.home_service_system.repository.MainServiceRepository;
 import com.example.home_service_system.service.MainServiceService;
+import com.example.home_service_system.service.SubServiceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,7 @@ import java.util.List;
 public class MainServiceServiceImpl implements MainServiceService {
     private final MainServiceRepository mainServiceRepository;
     private final MainServiceMapper mainServiceMapper;
+    //private final SubServiceService subServiceService;
 
     @Override
     public MainServiceResponse save(MainServiceSaveRequest request) {
@@ -52,7 +55,6 @@ public class MainServiceServiceImpl implements MainServiceService {
 
     @Override
     public void softDelete(Long id) {
-        log.info("Soft deleting MainService with ID: {}", id);
 
         mainServiceRepository.findByIdAndIsDeletedFalse(id)
                 .orElseThrow(() -> new CustomApiException("MainService not found!"
