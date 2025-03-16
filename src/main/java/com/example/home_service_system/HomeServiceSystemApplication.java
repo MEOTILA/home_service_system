@@ -138,8 +138,8 @@ public class HomeServiceSystemApplication {
         //subServiceService.save(subServiceSaveRequest);
 
         //subServiceService.addExpertToSubService(2L,1L);
-        subServiceService.addExpertToSubService(1L,1L);
-        subServiceService.addExpertToSubService(3L,1L);
+        //subServiceService.addExpertToSubService(1L,1L);
+        //subServiceService.addExpertToSubService(3L,1L);
 
         //subServiceService.removeExpertFromSubService(1L,1L);
 
@@ -153,7 +153,8 @@ public class HomeServiceSystemApplication {
         //mainServiceService.softDelete(1L);
         //subServiceService.softDeleteAllByMainServiceId(1L);
 
-        System.out.println(expertService.findAll());
+       // System.out.println(expertService.findAll());
+        System.out.println(expertService.findByUsername("David"));
 
     }
 

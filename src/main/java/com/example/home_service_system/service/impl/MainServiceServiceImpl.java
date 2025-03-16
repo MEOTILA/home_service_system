@@ -27,7 +27,6 @@ import java.util.List;
 public class MainServiceServiceImpl implements MainServiceService {
     private final MainServiceRepository mainServiceRepository;
     private final MainServiceMapper mainServiceMapper;
-    //private final SubServiceService subServiceService;
 
     @Override
     public MainServiceResponse save(MainServiceSaveRequest request) {
