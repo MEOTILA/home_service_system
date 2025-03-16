@@ -5,12 +5,14 @@ import com.example.home_service_system.dto.expertDTO.ExpertResponse;
 import com.example.home_service_system.dto.expertDTO.ExpertSaveRequest;
 import com.example.home_service_system.dto.expertDTO.ExpertUpdateRequest;
 import com.example.home_service_system.entity.Expert;
+import com.example.home_service_system.entity.SubService;
 import com.example.home_service_system.entity.enums.UserStatus;
 import com.example.home_service_system.exceptions.CustomApiException;
 import com.example.home_service_system.exceptions.CustomApiExceptionType;
 import com.example.home_service_system.mapper.ExpertMapper;
 import com.example.home_service_system.repository.ExpertRepository;
 import com.example.home_service_system.service.ExpertService;
+import com.example.home_service_system.service.SubServiceService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +33,7 @@ import java.util.Optional;
 public class ExpertServiceImpl implements ExpertService {
 
     private final ExpertRepository expertRepository;
+    private final SubServiceService subServiceService;
     private final ExpertMapper expertMapper;
     private final PasswordEncoder passwordEncoder;
 
@@ -144,9 +147,10 @@ public class ExpertServiceImpl implements ExpertService {
         if (expertUpdateRequest.balance() != null) {
             updatingExpert.setBalance(expertUpdateRequest.balance());
         }
-        if (expertUpdateRequest.expertServiceFields() != null) {
-            updatingExpert.setExpertServiceFields(expertUpdateRequest.expertServiceFields());
-        }
+        /*if (expertUpdateRequest.expertServiceFieldIds() != null) {
+            List<SubService> subServices = subServiceService.findAll(expertUpdateRequest.expertServiceFieldIds());
+            updatingExpert.setExpertServiceFields(subServices);
+        }*/
 
         Expert updatedExpert = expertRepository.save(updatingExpert);
         log.info("Expert with id {} updated", updatedExpert.getId());
