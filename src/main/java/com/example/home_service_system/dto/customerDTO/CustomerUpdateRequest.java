@@ -52,9 +52,9 @@ public record CustomerUpdateRequest(
         @Email(regexp = "^(.+)@(.+)$", message = "Invalid email format!")
         String email,
 
-        List<Order> orderList,
+        List<Long> orderIds,
 
-        List<CustomerCommentAndRate> customerCommentAndRateList,
+        List<Long> customerCommentAndRateIds,
 
         UserStatus userStatus,
 

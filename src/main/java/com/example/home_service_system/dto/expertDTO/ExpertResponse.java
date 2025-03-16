@@ -24,7 +24,7 @@ public record ExpertResponse(
         Integer rating,
         UserStatus userStatus,
         Long balance,
-        List<Order> orderList,
-        List<SubService> expertServiceFields,
-        List<CustomerCommentAndRate> customerCommentAndRateList) {
+        List<Long> orderIds,
+        List<Long> expertServiceFieldIds,
+        List<Long> customerCommentAndRateIds) {
 }
