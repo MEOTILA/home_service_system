@@ -8,6 +8,7 @@ import com.example.home_service_system.entity.Admin;
 import com.example.home_service_system.exceptions.CustomApiException;
 import com.example.home_service_system.exceptions.CustomApiExceptionType;
 import com.example.home_service_system.mapper.AdminMapper;
+import com.example.home_service_system.mapper.customMappers.CustomAdminMapper;
 import com.example.home_service_system.repository.AdminRepository;
 import com.example.home_service_system.service.AdminService;
 import jakarta.validation.Valid;
@@ -30,7 +31,7 @@ import java.util.Optional;
 public class AdminServiceImpl implements AdminService {
 
     private final AdminRepository adminRepository;
-    private final AdminMapper adminMapper;
+    //private final AdminMapper adminMapper;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -64,11 +65,11 @@ public class AdminServiceImpl implements AdminService {
                     CustomApiExceptionType.UNPROCESSABLE_ENTITY);
         }
         String hashedPassword = passwordEncoder.encode(adminSaveRequest.password());
-        Admin admin = adminMapper.fromSaveRequest(adminSaveRequest);
+        Admin admin = CustomAdminMapper.fromSaveRequest(adminSaveRequest);
         admin.setPassword(hashedPassword);
         adminRepository.save(admin);
         log.info("Admin with id {} saved", admin.getId());
-        return adminMapper.to(admin);
+        return CustomAdminMapper.to(admin);
     }
 
     @Override
@@ -129,7 +130,7 @@ public class AdminServiceImpl implements AdminService {
         }
         Admin updatedAdmin = adminRepository.save(updatingAdmin);
         log.info("Admin with id {} updated", updatedAdmin.getId());
-        return adminMapper.to(updatedAdmin);
+        return CustomAdminMapper.to(updatedAdmin);
     }
 
     @Override
@@ -138,14 +139,14 @@ public class AdminServiceImpl implements AdminService {
                 .orElseThrow(() -> new CustomApiException("Admin with id {"
                         + id + "} not found!",
                         CustomApiExceptionType.NOT_FOUND));
-        return adminMapper.to(admin);
+        return CustomAdminMapper.to(admin);
     }
 
     @Override
     public List<AdminResponse> findAll() {
         List<Admin> foundedAdmins = adminRepository.findAllByIsDeletedFalse();
         return foundedAdmins.stream()
-                .map(adminMapper::to)
+                .map(CustomAdminMapper::to)
                 .toList();
     }
 
@@ -155,7 +156,7 @@ public class AdminServiceImpl implements AdminService {
                 .orElseThrow(() -> new CustomApiException("Admin with username {"
                         + username + "} not found!",
                         CustomApiExceptionType.NOT_FOUND));
-        return adminMapper.to(admin);
+        return CustomAdminMapper.to(admin);
     }
 
     @Override

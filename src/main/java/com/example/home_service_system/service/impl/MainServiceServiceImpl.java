@@ -8,6 +8,7 @@ import com.example.home_service_system.entity.SubService;
 import com.example.home_service_system.exceptions.CustomApiException;
 import com.example.home_service_system.exceptions.CustomApiExceptionType;
 import com.example.home_service_system.mapper.MainServiceMapper;
+import com.example.home_service_system.mapper.customMappers.CustomMainServiceMapper;
 import com.example.home_service_system.repository.MainServiceRepository;
 import com.example.home_service_system.service.MainServiceService;
 import com.example.home_service_system.service.SubServiceService;
@@ -26,7 +27,7 @@ import java.util.List;
 @Validated
 public class MainServiceServiceImpl implements MainServiceService {
     private final MainServiceRepository mainServiceRepository;
-    private final MainServiceMapper mainServiceMapper;
+    //private final MainServiceMapper mainServiceMapper;
 
     @Override
     public MainServiceResponse save(MainServiceSaveRequest request) {
@@ -35,9 +36,9 @@ public class MainServiceServiceImpl implements MainServiceService {
             throw new CustomApiException("MainService with this name already exists!"
                     , CustomApiExceptionType.BAD_REQUEST);
         }
-        MainService mainService = mainServiceMapper.fromSaveRequest(request);
+        MainService mainService = CustomMainServiceMapper.fromSaveRequest(request);
         mainServiceRepository.save(mainService);
-        return mainServiceMapper.to(mainService);
+        return CustomMainServiceMapper.to(mainService);
 
     }
 
@@ -49,7 +50,7 @@ public class MainServiceServiceImpl implements MainServiceService {
                         , CustomApiExceptionType.NOT_FOUND));
 
         mainService.setName(request.name());
-        return mainServiceMapper.to(mainService);
+        return CustomMainServiceMapper.to(mainService);
     }
 
     @Override
@@ -69,7 +70,7 @@ public class MainServiceServiceImpl implements MainServiceService {
                 .orElseThrow(() -> new CustomApiException("MainService not found!"
                         , CustomApiExceptionType.NOT_FOUND));
 
-        return mainServiceMapper.to(mainService);
+        return CustomMainServiceMapper.to(mainService);
     }
 
     @Override
@@ -80,6 +81,6 @@ public class MainServiceServiceImpl implements MainServiceService {
             throw new CustomApiException("No MainServices found!", CustomApiExceptionType.NOT_FOUND);
         }
 
-        return mainServices.stream().map(mainServiceMapper::to).toList();
+        return mainServices.stream().map(CustomMainServiceMapper::to).toList();
     }
 }

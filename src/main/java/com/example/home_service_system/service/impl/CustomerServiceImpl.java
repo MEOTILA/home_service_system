@@ -9,6 +9,7 @@ import com.example.home_service_system.entity.enums.UserStatus;
 import com.example.home_service_system.exceptions.CustomApiException;
 import com.example.home_service_system.exceptions.CustomApiExceptionType;
 import com.example.home_service_system.mapper.CustomerMapper;
+import com.example.home_service_system.mapper.customMappers.CustomCustomerMapper;
 import com.example.home_service_system.repository.CustomerRepository;
 import com.example.home_service_system.service.CustomerService;
 import jakarta.validation.Valid;
@@ -31,7 +32,7 @@ import java.util.Optional;
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
-    private final CustomerMapper customerMapper;
+    //private final CustomerMapper customerMapper;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -64,12 +65,12 @@ public class CustomerServiceImpl implements CustomerService {
                     CustomApiExceptionType.UNPROCESSABLE_ENTITY);
         }
         String hashedPassword = passwordEncoder.encode(customerSaveRequest.password());
-        Customer customer = customerMapper.fromSaveRequest(customerSaveRequest);
+        Customer customer = CustomCustomerMapper.fromSaveRequest(customerSaveRequest);
         customer.setPassword(hashedPassword);
         customer.setUserStatus(UserStatus.NEW);
         customerRepository.save(customer);
         log.info("Customer with id {} saved", customer.getId());
-        return customerMapper.to(customer);
+        return CustomCustomerMapper.to(customer);
     }
 
     @Override
@@ -141,7 +142,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         Customer updatedCustomer = customerRepository.save(updatingCustomer);
         log.info("Customer with id {} updated", updatedCustomer.getId());
-        return customerMapper.to(updatedCustomer);
+        return CustomCustomerMapper.to(updatedCustomer);
     }
 
 
@@ -150,14 +151,14 @@ public class CustomerServiceImpl implements CustomerService {
         Customer customer = customerRepository.findByIdAndIsDeletedFalse(id)
                 .orElseThrow(() -> new CustomApiException("Customer with id {" + id + "} not found!",
                         CustomApiExceptionType.NOT_FOUND));
-        return customerMapper.to(customer);
+        return CustomCustomerMapper.to(customer);
     }
 
     @Override
     public List<CustomerResponse> findAll() {
         List<Customer> foundedCustomers = customerRepository.findAllByIsDeletedFalse();
         return foundedCustomers.stream()
-                .map(customerMapper::to)
+                .map(CustomCustomerMapper::to)
                 .toList();
     }
 
@@ -166,7 +167,7 @@ public class CustomerServiceImpl implements CustomerService {
         Customer customer = customerRepository.findByUsernameAndIsDeletedFalse(username)
                 .orElseThrow(() -> new CustomApiException("Customer with username {" + username + "} not found!",
                         CustomApiExceptionType.NOT_FOUND));
-        return customerMapper.to(customer);
+        return CustomCustomerMapper.to(customer);
     }
 
     @Override

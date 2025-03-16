@@ -10,7 +10,7 @@ public record SubServiceResponse (
         String name,
         Long baseCost,
         String description,
-        MainService mainService,
+        Long mainServiceId,
         List<Long> orderListIds,
         List<Long> expertIds
 ){

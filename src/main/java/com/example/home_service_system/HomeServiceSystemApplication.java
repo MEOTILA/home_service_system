@@ -4,13 +4,16 @@ import com.example.home_service_system.dto.adminDTO.AdminChangePasswordRequest;
 import com.example.home_service_system.dto.adminDTO.AdminSaveRequest;
 import com.example.home_service_system.dto.adminDTO.AdminUpdateRequest;
 import com.example.home_service_system.dto.customerDTO.CustomerSaveRequest;
+import com.example.home_service_system.dto.customerDTO.CustomerUpdateRequest;
 import com.example.home_service_system.dto.expertDTO.ExpertSaveRequest;
 import com.example.home_service_system.dto.mainServiceDTO.MainServiceResponse;
 import com.example.home_service_system.dto.mainServiceDTO.MainServiceSaveRequest;
+import com.example.home_service_system.dto.mainServiceDTO.MainServiceUpdateRequest;
 import com.example.home_service_system.dto.subServiceDTO.SubServiceSaveRequest;
 import com.example.home_service_system.dto.subServiceDTO.SubServiceUpdateRequest;
 import com.example.home_service_system.entity.MainService;
 import com.example.home_service_system.mapper.MainServiceMapper;
+import com.example.home_service_system.mapper.customMappers.CustomMainServiceMapper;
 import com.example.home_service_system.service.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -54,6 +57,20 @@ public class HomeServiceSystemApplication {
         );
         //adminService.save(adminRequest2);
 
+        AdminSaveRequest adminRequest5 = new AdminSaveRequest(
+                "Sam",
+                "Serious",
+                "Sam",
+                "Sam@1234",
+                "0012036013",
+                "09133201641",
+                LocalDate.of(1990, 5, 15),
+                "sam@example.com"
+        );
+        //adminService.save(adminRequest5);
+        //System.out.println(adminService.findByUsername("Sam"));
+        //System.out.println(adminService.findAll());
+
         AdminUpdateRequest adminRequest3 = new AdminUpdateRequest(
                 3L,
                 "Sattar",
@@ -92,54 +109,78 @@ public class HomeServiceSystemApplication {
 
 
         CustomerSaveRequest customer = new CustomerSaveRequest(
-                "James",
-                "Hetfield",
-                "James",
-                "James@1234",
-                "0012045673",
-                "09120132074",
+                "Alan",
+                "Parson",
+                "Alan",
+                "Alan@1234",
+                "0011045673",
+                "09020132074",
                 LocalDate.of(1995, 5, 20),
-                "james@example.com"
+                "alan@example.com"
         );
 
-        //var savedCustomer = customerService.save(customer);
-        //System.out.println("Saved Customer: " + savedCustomer);
+        CustomerUpdateRequest customer2 = new CustomerUpdateRequest(
+                3L,
+                "Alan",
+                "Parson",
+                "Alan",
+                "Alan@1234",
+                "0011045673",
+                "09020132074",
+                LocalDate.of(1995, 5, 20),
+                "alans@example.com",
+                null,
+                null,
+                null,
+               null
+        );
+
+        //customerService.save(customer);
+        //customerService.update(customer2);
+        //System.out.println(customerService.findAll());
 
         byte[] dummyImage = new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 
         ExpertSaveRequest expert = new ExpertSaveRequest(
-                "David",
-                "Gilmour",
-                "David",
-                "David@1234",
-                "0013054327",
-                "09124032176",
+                "Tim",
+                "Timian",
+                "Tim",
+                "Tin@1234",
+                "0019954327",
+                "09184032176",
                 LocalDate.of(1990, 8, 15),
-                "david@example.com",
+                "tim@example.com",
                 dummyImage
         );
 
-        //var savedExpert = expertService.save(expert);
-        //System.out.println("Saved Expert: " + savedExpert);
+        //expertService.save(expert);
 
         //System.out.println(customerService.findAll());
         //System.out.println(expertService.findAll());
 
         MainServiceSaveRequest mainServiceSaveRequest =
-                new MainServiceSaveRequest("Cleaning");
+                new MainServiceSaveRequest("Electronic");
+
+        MainServiceUpdateRequest mainServiceUpdateRequest =
+                new MainServiceUpdateRequest(2L,"Electronics",null);
+       // mainServiceService.update(mainServiceUpdateRequest);
         //mainServiceService.save(mainServiceSaveRequest);
+       //System.out.println(mainServiceService.findAll());
 
-        //MainServiceResponse mainServiceResponse = mainServiceService.findById(1L);
-       // MainService mainService = mainServiceMapper.toMainServiceFromResponse(mainServiceResponse);
+       MainServiceResponse mainServiceResponse = mainServiceService.findById(2L);
+       MainService mainService = CustomMainServiceMapper.toMainServiceFromResponse(mainServiceResponse);
 
-        /*SubServiceSaveRequest subServiceSaveRequest =
-                new SubServiceSaveRequest("Room Cleaning"
-                ,2000000L,"Full cleaning for Room.",mainService);*/
+        SubServiceUpdateRequest subServiceUpdateRequest =
+                new SubServiceUpdateRequest(4L,"Repairing Lights"
+                ,510000L,"Full Repairing for Lightssss.",mainService,null);
         //subServiceService.save(subServiceSaveRequest);
+        //subServiceService.updateSubService(4L,subServiceUpdateRequest);
+        //System.out.println(subServiceService.findAllByIsDeletedFalse());
 
-        //subServiceService.addExpertToSubService(2L,1L);
+        //subServiceService.addExpertToSubService(2L,2L);
         //subServiceService.addExpertToSubService(1L,1L);
         //subServiceService.addExpertToSubService(3L,1L);
+        //subServiceService.addExpertToSubService(4L,1L);
 
         //subServiceService.removeExpertFromSubService(1L,1L);
 
@@ -154,7 +195,7 @@ public class HomeServiceSystemApplication {
         //subServiceService.softDeleteAllByMainServiceId(1L);
 
        // System.out.println(expertService.findAll());
-        System.out.println(expertService.findByUsername("David"));
+        //System.out.println(expertService.findByUsername("David"));
 
     }
 

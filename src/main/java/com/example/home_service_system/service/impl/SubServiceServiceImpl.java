@@ -15,6 +15,9 @@ import com.example.home_service_system.exceptions.CustomApiExceptionType;
 import com.example.home_service_system.mapper.ExpertMapper;
 import com.example.home_service_system.mapper.MainServiceMapper;
 import com.example.home_service_system.mapper.SubServiceMapper;
+import com.example.home_service_system.mapper.customMappers.CustomExpertMapper;
+import com.example.home_service_system.mapper.customMappers.CustomMainServiceMapper;
+import com.example.home_service_system.mapper.customMappers.CustomSubServiceMapper;
 import com.example.home_service_system.repository.SubServiceRepository;
 import com.example.home_service_system.service.ExpertService;
 import com.example.home_service_system.service.MainServiceService;
@@ -36,9 +39,9 @@ import java.util.Optional;
 @Validated
 public class SubServiceServiceImpl implements SubServiceService {
     private final SubServiceRepository subServiceRepository;
-    private final SubServiceMapper subServiceMapper;
-    private final ExpertMapper expertMapper;
-    private final MainServiceMapper mainServiceMapper;
+    //private final SubServiceMapper subServiceMapper;
+    //private final ExpertMapper expertMapper;
+    //private final MainServiceMapper mainServiceMapper;
     private final ExpertService expertService;
     private final MainServiceService mainServiceService;
 
@@ -50,11 +53,11 @@ public class SubServiceServiceImpl implements SubServiceService {
                     CustomApiExceptionType.UNPROCESSABLE_ENTITY);
         }
 
-        SubService subService = subServiceMapper.fromSaveRequest(request);
+        SubService subService = CustomSubServiceMapper.fromSaveRequest(request);
         SubService savedSubService = subServiceRepository.save(subService);
         log.info("SubService with id {} created", savedSubService.getId());
 
-        return subServiceMapper.to(savedSubService);
+        return CustomSubServiceMapper.to(savedSubService);
     }
 
     @Override
@@ -76,7 +79,7 @@ public class SubServiceServiceImpl implements SubServiceService {
         SubService updatedSubService = subServiceRepository.save(existingSubService);
         log.info("SubService with id {} updated", updatedSubService.getId());
 
-        return subServiceMapper.to(updatedSubService);
+        return CustomSubServiceMapper.to(updatedSubService);
     }
 
     @Override
@@ -84,13 +87,13 @@ public class SubServiceServiceImpl implements SubServiceService {
         SubService subService = subServiceRepository.findByIdAndIsDeletedFalse(id)
                 .orElseThrow(() -> new CustomApiException("SubService with id {" + id + "} not found!",
                         CustomApiExceptionType.NOT_FOUND));
-        return subServiceMapper.to(subService);
+        return CustomSubServiceMapper.to(subService);
     }
 
     @Override
     public List<SubServiceResponse> findAllByIsDeletedFalse() {
         List<SubService> subServices = subServiceRepository.findAllByIsDeletedFalse();
-        return subServices.stream().map(subServiceMapper::to).toList();
+        return subServices.stream().map(CustomSubServiceMapper::to).toList();
     }
 
     @Override
@@ -101,7 +104,7 @@ public class SubServiceServiceImpl implements SubServiceService {
     @Override
     public List<SubServiceResponse> findAllByMainServiceId(Long mainServiceId) {
         List<SubService> subServices = subServiceRepository.findAllByMainServiceIdAndIsDeletedFalse(mainServiceId);
-        return subServices.stream().map(subServiceMapper::to).toList();
+        return subServices.stream().map(CustomSubServiceMapper::to).toList();
     }
 
     @Override
@@ -148,7 +151,7 @@ public class SubServiceServiceImpl implements SubServiceService {
         expert.getExpertServiceFields().add(subService);
         subService.getExpertList().add(expert);
 
-        ExpertUpdateRequest expertUpdateRequest = expertMapper.toUpdateRequest(expert);
+        ExpertUpdateRequest expertUpdateRequest = CustomExpertMapper.toUpdateRequest(expert);
         expertService.update(expertUpdateRequest);
 
         log.info("Expert with id {} added to SubService with id {}", expertId, subServiceId);
@@ -170,7 +173,7 @@ public class SubServiceServiceImpl implements SubServiceService {
         }
         expert.getExpertServiceFields().remove(subService);
         subService.getExpertList().remove(expert);
-        expertService.update(expertMapper.toUpdateRequest(expert));
+        expertService.update(CustomExpertMapper.toUpdateRequest(expert));
         //subServiceRepository.save(subService);
         log.info("Expert with id {} removed from SubService with id {}", expertId, subServiceId);
     }
@@ -197,7 +200,7 @@ public class SubServiceServiceImpl implements SubServiceService {
         if (updateRequest.mainService() != null && updateRequest.mainService().getId() != null) {
             MainServiceResponse mainServiceResponse = mainServiceService.findById(updateRequest.mainService().getId());
 
-            MainService mainService = mainServiceMapper.toMainServiceFromResponse(mainServiceResponse);
+            MainService mainService = CustomMainServiceMapper.toMainServiceFromResponse(mainServiceResponse);
 
             if (mainService == null) {
                 throw new CustomApiException(
@@ -210,7 +213,7 @@ public class SubServiceServiceImpl implements SubServiceService {
 
         SubService updatedSubService = subServiceRepository.save(subService);
         log.info("SubService with id {} updated", updatedSubService.getId());
-        return subServiceMapper.to(updatedSubService);
+        return CustomSubServiceMapper.to(updatedSubService);
     }
 
 
