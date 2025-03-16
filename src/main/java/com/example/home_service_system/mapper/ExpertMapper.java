@@ -18,4 +18,7 @@ public interface ExpertMapper {
     Expert fromSaveRequest(ExpertSaveRequest expertSaveRequest);
 
     Expert fromUpdateRequest(ExpertUpdateRequest expertUpdateRequest);
+
+    Expert toExpertFromResponse(ExpertResponse expertResponse);
+
 }

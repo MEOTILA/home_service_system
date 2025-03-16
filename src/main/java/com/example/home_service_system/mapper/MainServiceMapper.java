@@ -14,4 +14,6 @@ public interface MainServiceMapper {
     MainService fromSaveRequest(MainServiceSaveRequest request);
 
     MainService fromUpdateRequest(MainServiceUpdateRequest request);
+
+    MainService toMainServiceFromResponse(MainServiceResponse response);
 }

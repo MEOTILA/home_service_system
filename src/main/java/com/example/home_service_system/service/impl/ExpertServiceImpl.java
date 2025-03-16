@@ -33,7 +33,6 @@ import java.util.Optional;
 public class ExpertServiceImpl implements ExpertService {
 
     private final ExpertRepository expertRepository;
-    private final SubServiceService subServiceService;
     private final ExpertMapper expertMapper;
     private final PasswordEncoder passwordEncoder;
 

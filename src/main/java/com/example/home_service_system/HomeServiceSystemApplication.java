@@ -5,9 +5,11 @@ import com.example.home_service_system.dto.adminDTO.AdminSaveRequest;
 import com.example.home_service_system.dto.adminDTO.AdminUpdateRequest;
 import com.example.home_service_system.dto.customerDTO.CustomerSaveRequest;
 import com.example.home_service_system.dto.expertDTO.ExpertSaveRequest;
+import com.example.home_service_system.dto.mainServiceDTO.MainServiceSaveRequest;
 import com.example.home_service_system.service.AdminService;
 import com.example.home_service_system.service.CustomerService;
 import com.example.home_service_system.service.ExpertService;
+import com.example.home_service_system.service.MainServiceService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -22,6 +24,7 @@ public class HomeServiceSystemApplication {
         var adminService = context.getBean(AdminService.class);
         var customerService = context.getBean(CustomerService.class);
         var expertService = context.getBean(ExpertService.class);
+        var mainServiceService = context.getBean(MainServiceService.class);
 
         AdminSaveRequest adminRequest = new AdminSaveRequest(
                 "Sattar",
@@ -117,6 +120,10 @@ public class HomeServiceSystemApplication {
 
         System.out.println(customerService.findAll());
         System.out.println(expertService.findAll());
+
+        MainServiceSaveRequest mainServiceSaveRequest =
+                new MainServiceSaveRequest("Cleaning");
+        mainServiceService.save(mainServiceSaveRequest);
 
     }
 
