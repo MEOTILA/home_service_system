@@ -14,6 +14,8 @@ public interface SubServiceService {
 
     SubServiceResponse findById(Long id);
 
+    SubService findSubServiceById(Long id);
+
     List<SubServiceResponse> findAllByIsDeletedFalse();
 
     List<SubService>  findAllSubServicesByIsDeletedFalse();

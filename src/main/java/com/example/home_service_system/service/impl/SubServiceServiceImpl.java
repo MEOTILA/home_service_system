@@ -91,6 +91,13 @@ public class SubServiceServiceImpl implements SubServiceService {
     }
 
     @Override
+    public SubService findSubServiceById(Long id){
+        return subServiceRepository.findByIdAndIsDeletedFalse(id)
+                .orElseThrow(() -> new CustomApiException("SubService with id {" + id + "} not found!",
+                        CustomApiExceptionType.NOT_FOUND));
+    }
+
+    @Override
     public List<SubServiceResponse> findAllByIsDeletedFalse() {
         List<SubService> subServices = subServiceRepository.findAllByIsDeletedFalse();
         return subServices.stream().map(CustomSubServiceMapper::to).toList();

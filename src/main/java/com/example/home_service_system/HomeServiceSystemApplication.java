@@ -9,16 +9,19 @@ import com.example.home_service_system.dto.expertDTO.ExpertSaveRequest;
 import com.example.home_service_system.dto.mainServiceDTO.MainServiceResponse;
 import com.example.home_service_system.dto.mainServiceDTO.MainServiceSaveRequest;
 import com.example.home_service_system.dto.mainServiceDTO.MainServiceUpdateRequest;
+import com.example.home_service_system.dto.orderDTO.OrderSaveRequest;
 import com.example.home_service_system.dto.subServiceDTO.SubServiceSaveRequest;
 import com.example.home_service_system.dto.subServiceDTO.SubServiceUpdateRequest;
 import com.example.home_service_system.entity.MainService;
 import com.example.home_service_system.mapper.MainServiceMapper;
 import com.example.home_service_system.mapper.customMappers.CustomMainServiceMapper;
 import com.example.home_service_system.service.*;
+import com.example.home_service_system.service.impl.OrderService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Base64;
 
 @SpringBootApplication(scanBasePackages = "com.example.home_service_system")
@@ -32,6 +35,7 @@ public class HomeServiceSystemApplication {
         var mainServiceService = context.getBean(MainServiceService.class);
         var subServiceService = context.getBean(SubServiceService.class);
         var mainServiceMapper = context.getBean(MainServiceMapper.class);
+        var orderService = context.getBean(OrderService.class);
 
         AdminSaveRequest adminRequest = new AdminSaveRequest(
                 "Sattar",
@@ -196,6 +200,16 @@ public class HomeServiceSystemApplication {
 
        // System.out.println(expertService.findAll());
         //System.out.println(expertService.findByUsername("David"));
+
+
+        OrderSaveRequest orderSaveRequest1 = new OrderSaveRequest(
+                1L,2L,300L
+                ,"i need help to fix my kitchen",
+                LocalDateTime.now().plusDays(1L),"Azadi , azadi, azadi azadi"
+        );
+        orderService.save(orderSaveRequest1);
+        System.out.println(orderService.findAll());
+
 
     }
 

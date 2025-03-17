@@ -4,6 +4,7 @@ import com.example.home_service_system.dto.customerDTO.CustomerChangePasswordReq
 import com.example.home_service_system.dto.customerDTO.CustomerResponse;
 import com.example.home_service_system.dto.customerDTO.CustomerSaveRequest;
 import com.example.home_service_system.dto.customerDTO.CustomerUpdateRequest;
+import com.example.home_service_system.entity.Customer;
 import jakarta.validation.Valid;
 
 import java.util.List;
@@ -14,6 +15,8 @@ public interface CustomerService {
     CustomerResponse update(@Valid CustomerUpdateRequest customerUpdateRequest);
 
     CustomerResponse findByIdAndIsDeletedFalse(Long id);
+
+    Customer findCustomerByIdAndIsDeletedFalse(Long id);
 
     List<CustomerResponse> findAll();
 

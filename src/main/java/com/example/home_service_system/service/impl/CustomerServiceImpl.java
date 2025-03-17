@@ -155,6 +155,13 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    public Customer findCustomerByIdAndIsDeletedFalse(Long id) {
+        return customerRepository.findByIdAndIsDeletedFalse(id)
+                .orElseThrow(() -> new CustomApiException("Customer with id {" + id + "} not found!",
+                        CustomApiExceptionType.NOT_FOUND));
+    }
+
+    @Override
     public List<CustomerResponse> findAll() {
         List<Customer> foundedCustomers = customerRepository.findAllByIsDeletedFalse();
         return foundedCustomers.stream()
