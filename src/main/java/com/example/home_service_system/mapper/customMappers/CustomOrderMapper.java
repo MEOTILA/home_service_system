@@ -3,7 +3,12 @@ package com.example.home_service_system.mapper.customMappers;
 import com.example.home_service_system.dto.orderDTO.OrderResponse;
 import com.example.home_service_system.dto.orderDTO.OrderSaveRequest;
 import com.example.home_service_system.dto.orderDTO.OrderUpdateRequest;
+import com.example.home_service_system.entity.CustomerCommentAndRate;
 import com.example.home_service_system.entity.Order;
+import com.example.home_service_system.entity.enums.OrderStatus;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
 
 import java.util.stream.Collectors;
 
@@ -47,6 +52,23 @@ public class CustomOrderMapper {
         order.setAddress(request.address());
         order.setStatus(request.status());
         return order;
+    }
+
+    public static OrderUpdateRequest toUpdateRequest(Order order) {
+        return new OrderUpdateRequest(
+                order.getId(),
+                order.getSubService().getId(),
+                order.getCustomer().getId(),
+                order.getExpert().getId(),
+                order.getCustomerOfferedCost(),
+                order.getCustomerDescription(),
+                order.getServiceDate(),
+                order.getAddress(),
+                order.getStatus(),
+                order.getExpertSuggestionList().stream().map(e -> e.getId())
+                        .collect(Collectors.toList()),
+                order.getCustomerCommentAndRate()
+        );
     }
 }
 

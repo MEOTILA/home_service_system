@@ -1,0 +1,106 @@
+package com.example.home_service_system.service.impl;
+
+import com.example.home_service_system.dto.expertSuggestionDTO.ExpertSuggestionResponse;
+import com.example.home_service_system.dto.expertSuggestionDTO.ExpertSuggestionSaveRequest;
+import com.example.home_service_system.dto.orderDTO.OrderUpdateRequest;
+import com.example.home_service_system.entity.ExpertSuggestion;
+import com.example.home_service_system.entity.Order;
+import com.example.home_service_system.mapper.customMappers.CustomExpertSuggestionMapper;
+import com.example.home_service_system.mapper.customMappers.CustomOrderMapper;
+import com.example.home_service_system.repository.ExpertSuggestionRepository;
+import com.example.home_service_system.service.ExpertService;
+import com.example.home_service_system.service.ExpertSuggestionService;
+import com.example.home_service_system.service.OrderService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
+
+import java.util.List;
+
+@RequiredArgsConstructor
+@Service
+@Transactional
+@Slf4j
+@Validated
+public class ExpertSuggestionServiceImpl implements ExpertSuggestionService {
+    private final ExpertSuggestionRepository repository;
+    private final ExpertService expertService;
+    private final OrderService orderService;
+
+    @Override
+    public ExpertSuggestionResponse save(@Valid ExpertSuggestionSaveRequest request) {
+        ExpertSuggestion expertSuggestion = CustomExpertSuggestionMapper.fromSaveRequest(request);
+
+        Order order = orderService.findOrderByIdAndIsDeletedFalse(request.order().getId());
+        expertSuggestion.setOrder(order);
+
+        List<ExpertSuggestion> expertSuggestionList = order.getExpertSuggestionList();
+        expertSuggestionList.add(expertSuggestion);
+
+        OrderUpdateRequest orderUpdateRequest = CustomOrderMapper.toUpdateRequest(order);
+        orderService.update(orderUpdateRequest);
+
+        repository.save(expertSuggestion);
+        log.info("ExpertSuggestion with id {} saved", expertSuggestion.getId());
+        return CustomExpertSuggestionMapper.to(expertSuggestion);
+    }
+
+    @Override
+    public List<ExpertSuggestionResponse> findAllByIsDeletedFalse() {
+        List<ExpertSuggestion> foundedItems = repository.findAllByIsDeletedFalse();
+        return foundedItems.stream()
+                .map(CustomExpertSuggestionMapper::to)
+                .toList();
+    }
+
+    /*@Override
+    public ExpertSuggestionResponse update(ExpertSuggestionUpdateRequest request) {
+        ExpertSuggestion existingSuggestion = expertService.findByIdAndIsDeletedFalse(request.id())
+                .orElseThrow(() -> new CustomApiException("ExpertSuggestion with id {" + request.id() + "} not found!",
+                        CustomApiExceptionType.NOT_FOUND));
+
+        if (StringUtils.hasText(request.expertSuggestion())) {
+            existingSuggestion.setExpertSuggestion(request.expertSuggestion());
+        }
+        if (request.expertOfferedCost() != null) {
+            existingSuggestion.setExpertOfferedCost(request.expertOfferedCost());
+        }
+        if (request.serviceTimeDuration() != null) {
+            existingSuggestion.setServiceTimeDuration(request.serviceTimeDuration());
+        }
+        if (request.expertServiceStartDateTime() != null) {
+            existingSuggestion.setExpertServiceStartDateTime(request.expertServiceStartDateTime());
+        }
+
+        expertService.save(existingSuggestion);
+        log.info("ExpertSuggestion with id {} updated", existingSuggestion.getId());
+        return CustomExpertSuggestionMapper.to(existingSuggestion);
+    }
+
+    @Override
+    public ExpertSuggestionResponse findById(Long id) {
+        ExpertSuggestion expertSuggestion = expertService.findByIdAndIsDeletedFalse(id)
+                .orElseThrow(() -> new CustomApiException("ExpertSuggestion with id {" + id + "} not found!",
+                        CustomApiExceptionType.NOT_FOUND));
+        return CustomExpertSuggestionMapper.to(expertSuggestion);
+    }
+
+    @Override
+    public List<ExpertSuggestionResponse> findAllByOrderId(Long orderId) {
+        return expertService.findAllByOrderIdAndIsDeletedFalse(orderId).stream()
+                .map(CustomExpertSuggestionMapper::to)
+                .toList();
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        expertService.findByIdAndIsDeletedFalse(id)
+                .orElseThrow(() -> new CustomApiException("ExpertSuggestion with id {" + id + "} not found!",
+                        CustomApiExceptionType.NOT_FOUND));
+        expertService.softDeleteById(id);
+        log.info("ExpertSuggestion with id {} deleted", id);
+    }*/
+}

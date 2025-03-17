@@ -7,6 +7,7 @@ import com.example.home_service_system.dto.customerCommentAndRateDTO.CustomerCom
 import com.example.home_service_system.dto.customerDTO.CustomerSaveRequest;
 import com.example.home_service_system.dto.customerDTO.CustomerUpdateRequest;
 import com.example.home_service_system.dto.expertDTO.ExpertSaveRequest;
+import com.example.home_service_system.dto.expertSuggestionDTO.ExpertSuggestionSaveRequest;
 import com.example.home_service_system.dto.mainServiceDTO.MainServiceResponse;
 import com.example.home_service_system.dto.mainServiceDTO.MainServiceSaveRequest;
 import com.example.home_service_system.dto.mainServiceDTO.MainServiceUpdateRequest;
@@ -23,6 +24,7 @@ import com.example.home_service_system.service.OrderService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -39,6 +41,7 @@ public class HomeServiceSystemApplication {
         var mainServiceMapper = context.getBean(MainServiceMapper.class);
         var orderService = context.getBean(OrderService.class);
         var customerCommentAndRateservice = context.getBean(CustomerCommentAndRateService.class);
+        var expertSuggestionService = context.getBean(ExpertSuggestionService.class);
 
         AdminSaveRequest adminRequest = new AdminSaveRequest(
                 "Sattar",
@@ -235,7 +238,14 @@ public class HomeServiceSystemApplication {
         CustomerCommentAndRateUpdateRequest request2 = new CustomerCommentAndRateUpdateRequest(
               3L,  order2, 39, "Well Doooone!"
         );
-        customerCommentAndRateservice.update(request2);
+        //customerCommentAndRateservice.update(request2);
+
+        ExpertSuggestionSaveRequest request3 = new ExpertSuggestionSaveRequest(
+                order2,"Man miam",156451L, Duration.ofHours(3L)
+                ,LocalDateTime.now().plusDays(3)
+        );
+        expertSuggestionService.save(request3);
+        System.out.println(expertSuggestionService.findAllByIsDeletedFalse());
 
 
     }

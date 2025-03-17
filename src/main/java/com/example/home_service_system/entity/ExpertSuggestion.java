@@ -9,6 +9,7 @@ import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Time;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
@@ -34,10 +35,10 @@ public class ExpertSuggestion extends BaseEntity<Long> {
     Long expertOfferedCost;
 
     @Column(nullable = false)
-    Time serviceTimeDuration;
+    Duration serviceTimeDuration;
 
     @Column(nullable = false)
-    LocalTime expertServiceStartTime;
+    LocalDateTime expertServiceStartDateTime;
 
     @Column(nullable = false)
     boolean isDeleted = false;
