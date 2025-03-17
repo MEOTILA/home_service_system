@@ -28,9 +28,9 @@ public class CustomExpertMapper {
                 expert.getOrderList().stream().map(order -> order.getId())
                         .collect(Collectors.toList()),
                 expert.getExpertServiceFields().stream().map(SubService::getId)
-                        .collect(Collectors.toList()),
-                expert.getCustomerCommentAndRateList().stream().map(comment -> comment.getId())
                         .collect(Collectors.toList())
+               /* expert.getCustomerCommentAndRateList().stream().map(comment -> comment.getId())
+                        .collect(Collectors.toList())*/
         );
     }
 
@@ -105,9 +105,9 @@ public class CustomExpertMapper {
                 expert.getOrderList().stream().map(order -> order.getId())
                         .collect(Collectors.toList()),
                 expert.getExpertServiceFields().stream().map(SubService::getId)
-                        .collect(Collectors.toList()),
-                expert.getCustomerCommentAndRateList().stream().map(comment -> comment.getId())
                         .collect(Collectors.toList())
+                /*expert.getCustomerCommentAndRateList().stream().map(comment -> comment.getId())
+                        .collect(Collectors.toList())*/
         );
     }
 }

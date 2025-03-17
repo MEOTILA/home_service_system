@@ -18,7 +18,7 @@ public record CustomerResponse(
         LocalDate birthday,
         String email,
         List<Long> orderIds,
-        List<Long> customerCommentAndRateIds,
+        //List<Long> customerCommentAndRateIds,
         LocalDateTime createdAt,
         LocalDateTime updatedAt,
         UserStatus userStatus,

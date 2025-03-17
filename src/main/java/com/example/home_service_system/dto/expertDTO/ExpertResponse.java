@@ -25,7 +25,7 @@ public record ExpertResponse(
         UserStatus userStatus,
         Long balance,
         List<Long> orderIds,
-        List<Long> expertServiceFieldIds,
-        List<Long> customerCommentAndRateIds
+        List<Long> expertServiceFieldIds
+//        List<Long> customerCommentAndRateIds
 ) {
 }

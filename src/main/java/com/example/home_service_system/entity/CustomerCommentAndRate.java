@@ -18,18 +18,19 @@ public class CustomerCommentAndRate extends BaseEntity<Long> {
     @OneToOne
     Order order;
 
-    @ManyToOne
-    Customer customer;
-
-    @ManyToOne
-    Expert expert;
+    @Column(nullable = false)
+    Integer rating;
 
     @Column(length = 500)
     String comment;
 
     @Column(nullable = false)
-    Integer rating;
-
-    @Column(nullable = false)
     boolean isDeleted = false;
+
+
+    /* @ManyToOne
+     Customer customer;
+
+     @ManyToOne
+     Expert expert;*/
 }

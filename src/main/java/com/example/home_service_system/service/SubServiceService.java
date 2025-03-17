@@ -12,9 +12,9 @@ public interface SubServiceService {
 
     SubServiceResponse update(SubServiceUpdateRequest request);
 
-    SubServiceResponse findById(Long id);
+    SubServiceResponse findByIdAndIsDeletedFalse(Long id);
 
-    SubService findSubServiceById(Long id);
+    SubService findSubServiceByIdAndIsDeletedFalse(Long id);
 
     List<SubServiceResponse> findAllByIsDeletedFalse();
 

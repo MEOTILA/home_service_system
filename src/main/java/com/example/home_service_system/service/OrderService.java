@@ -1,4 +1,4 @@
-package com.example.home_service_system.service.impl;
+package com.example.home_service_system.service;
 
 import com.example.home_service_system.dto.orderDTO.OrderResponse;
 import com.example.home_service_system.dto.orderDTO.OrderSaveRequest;
@@ -18,17 +18,17 @@ public interface OrderService {
 
     OrderResponse findByIdAndIsDeletedFalse(Long id);
 
+    Order findOrderByIdAndIsDeletedFalse(Long id);
+
     List<OrderResponse> findAllByIsDeletedFalse();
 
-    List<OrderResponse> findAll();
+    List<OrderResponse> findByCustomerIdAndIsDeletedFalse(Long customerId);
 
-    List<OrderResponse> findByCustomerId(Long customerId);
+    List<OrderResponse> findByExpertIdAndIsDeletedFalse(Long expertId);
 
-    List<OrderResponse> findByExpertId(Long expertId);
-
-    List<OrderResponse> findByStatus(OrderStatus status);
+    List<OrderResponse> findByStatusAndIsDeletedFalse(OrderStatus status);
 
     List<OrderResponse> findByServiceDateBetween(LocalDateTime startDate, LocalDateTime endDate);
 
-    void deleteById(Long id);
+    void softDeleteById(Long id);
 }

@@ -83,7 +83,7 @@ public class SubServiceServiceImpl implements SubServiceService {
     }
 
     @Override
-    public SubServiceResponse findById(Long id) {
+    public SubServiceResponse findByIdAndIsDeletedFalse(Long id) {
         SubService subService = subServiceRepository.findByIdAndIsDeletedFalse(id)
                 .orElseThrow(() -> new CustomApiException("SubService with id {" + id + "} not found!",
                         CustomApiExceptionType.NOT_FOUND));
@@ -91,7 +91,7 @@ public class SubServiceServiceImpl implements SubServiceService {
     }
 
     @Override
-    public SubService findSubServiceById(Long id){
+    public SubService findSubServiceByIdAndIsDeletedFalse(Long id){
         return subServiceRepository.findByIdAndIsDeletedFalse(id)
                 .orElseThrow(() -> new CustomApiException("SubService with id {" + id + "} not found!",
                         CustomApiExceptionType.NOT_FOUND));

@@ -18,6 +18,6 @@ public record OrderResponse(
         String address,
         OrderStatus status,
         List<Long> expertSuggestionListIds,
-        CustomerCommentAndRate customerCommentAndRate
+        Long customerCommentAndRateId
 ) {
 }

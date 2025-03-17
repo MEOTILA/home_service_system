@@ -23,7 +23,8 @@ public class CustomOrderMapper {
                 order.getExpertSuggestionList().stream()
                         .map(expertSuggestion -> expertSuggestion.getId())
                         .collect(Collectors.toList()),
-                order.getCustomerCommentAndRate()
+                //order.getCustomerCommentAndRate(),
+                order.getCustomerCommentAndRate() != null ? order.getCustomerCommentAndRate().getId() : null
         );
     }
 

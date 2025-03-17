@@ -14,23 +14,26 @@ import com.example.home_service_system.mapper.customMappers.CustomOrderMapper;
 import com.example.home_service_system.repository.OrderRepository;
 import com.example.home_service_system.service.CustomerService;
 import com.example.home_service_system.service.ExpertService;
+import com.example.home_service_system.service.OrderService;
 import com.example.home_service_system.service.SubServiceService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
 @Transactional
 @Slf4j
 @Validated
-public class OrderServiceImpl implements OrderService{
+public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
     private final ExpertService expertService;
@@ -40,15 +43,16 @@ public class OrderServiceImpl implements OrderService{
     @Override
     public OrderResponse save(@Valid OrderSaveRequest request) {
         Order order = CustomOrderMapper.fromSaveRequest(request);
-        order.setStatus(OrderStatus.WAITING_FOR_EXPERT_TO_RESPONSE);
 
         Customer customer = customerService
                 .findCustomerByIdAndIsDeletedFalse(request.customerId());
         order.setCustomer(customer);
 
         SubService subService = subServiceService
-                .findSubServiceById(request.subServiceId());
+                .findSubServiceByIdAndIsDeletedFalse(request.subServiceId());
         order.setSubService(subService);
+
+        order.setStatus(OrderStatus.WAITING_FOR_EXPERT_TO_RESPONSE);
 
         orderRepository.save(order);
         log.info("Order with id {} saved", order.getId());
@@ -63,7 +67,7 @@ public class OrderServiceImpl implements OrderService{
 
         if (request.subServiceId() != null) {
             SubService subService = subServiceService
-                    .findSubServiceById(request.subServiceId());
+                    .findSubServiceByIdAndIsDeletedFalse(request.subServiceId());
             order.setSubService(subService);
         }
         if (request.customerId() != null) {
@@ -78,13 +82,13 @@ public class OrderServiceImpl implements OrderService{
         if (request.customerOfferedCost() != null) {
             order.setCustomerOfferedCost(request.customerOfferedCost());
         }
-        if (request.customerDescription() != null) {
+        if (StringUtils.hasText(request.customerDescription())) {
             order.setCustomerDescription(request.customerDescription());
         }
         if (request.serviceDate() != null) {
             order.setServiceDate(request.serviceDate());
         }
-        if (request.address() != null) {
+        if (StringUtils.hasText(request.address())) {
             order.setAddress(request.address());
         }
         if (request.status() != null) {
@@ -98,36 +102,38 @@ public class OrderServiceImpl implements OrderService{
     @Override
     public OrderResponse findByIdAndIsDeletedFalse(Long id) {
         Order order = orderRepository.findByIdAndIsDeletedFalse(id)
-                .orElseThrow(() -> new CustomApiException("Order with id {" + id + "} not found!", CustomApiExceptionType.NOT_FOUND));
+                .orElseThrow(() -> new CustomApiException("Order with id {"
+                        + id + "} not found!", CustomApiExceptionType.NOT_FOUND));
         return CustomOrderMapper.to(order);
     }
 
     @Override
+    public Order findOrderByIdAndIsDeletedFalse(Long id){
+        return orderRepository.findByIdAndIsDeletedFalse(id)
+                .orElseThrow(() -> new CustomApiException("Order with id {"
+                        + id + "} not found!", CustomApiExceptionType.NOT_FOUND));
+    }
+
+    @Override
     public List<OrderResponse> findAllByIsDeletedFalse() {
-        return List.of();
-    }
-
-
-    @Override
-    public List<OrderResponse> findAll() {
         return orderRepository.findAllByIsDeletedFalse().stream()
-                .map(CustomOrderMapper::to).toList();
-    }
+                .map(CustomOrderMapper::to).toList();    }
+
 
     @Override
-    public List<OrderResponse> findByCustomerId(Long customerId) {
+    public List<OrderResponse> findByCustomerIdAndIsDeletedFalse(Long customerId) {
         return orderRepository.findByCustomerIdAndIsDeletedFalse(customerId).stream()
                 .map(CustomOrderMapper::to).toList();
     }
 
     @Override
-    public List<OrderResponse> findByExpertId(Long expertId) {
+    public List<OrderResponse> findByExpertIdAndIsDeletedFalse(Long expertId) {
         return orderRepository.findByExpertIdAndIsDeletedFalse(expertId).stream()
                 .map(CustomOrderMapper::to).toList();
     }
 
     @Override
-    public List<OrderResponse> findByStatus(OrderStatus status) {
+    public List<OrderResponse> findByStatusAndIsDeletedFalse(OrderStatus status) {
         return orderRepository.findByStatusAndIsDeletedFalse(status).stream()
                 .map(CustomOrderMapper::to).toList();
     }
@@ -139,7 +145,7 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void softDeleteById(Long id) {
         orderRepository.findByIdAndIsDeletedFalse(id)
                 .orElseThrow(() -> new CustomApiException("Order with id {" + id + "} not found!"
                         , CustomApiExceptionType.NOT_FOUND));

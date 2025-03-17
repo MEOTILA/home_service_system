@@ -54,7 +54,7 @@ public record CustomerUpdateRequest(
 
         List<Long> orderIds,
 
-        List<Long> customerCommentAndRateIds,
+        //List<Long> customerCommentAndRateIds,
 
         UserStatus userStatus,
 
