@@ -31,7 +31,6 @@ import java.util.Optional;
 public class AdminServiceImpl implements AdminService {
 
     private final AdminRepository adminRepository;
-    //private final AdminMapper adminMapper;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -86,8 +85,10 @@ public class AdminServiceImpl implements AdminService {
             updatingAdmin.setLastName(adminUpdateRequest.lastName());
         }
         if (StringUtils.hasText(adminUpdateRequest.username())) {
-            Optional<Admin> existingAdmin = adminRepository.findByUsername(adminUpdateRequest.username());
-            if (existingAdmin.isPresent() && !existingAdmin.get().getId().equals(updatingAdmin.getId())) {
+            Optional<Admin> existingAdmin = adminRepository
+                    .findByUsername(adminUpdateRequest.username());
+            if (existingAdmin.isPresent() && !existingAdmin.get()
+                    .getId().equals(updatingAdmin.getId())) {
                 throw new CustomApiException("Admin with username {"
                         + adminUpdateRequest.username() + "} already exists!",
                         CustomApiExceptionType.UNPROCESSABLE_ENTITY);
@@ -99,8 +100,10 @@ public class AdminServiceImpl implements AdminService {
             updatingAdmin.setPassword(hashedPassword);
         }
         if (StringUtils.hasText(adminUpdateRequest.nationalId())) {
-            Optional<Admin> existingAdmin = adminRepository.findByNationalId(adminUpdateRequest.nationalId());
-            if (existingAdmin.isPresent() && !existingAdmin.get().getId().equals(updatingAdmin.getId())) {
+            Optional<Admin> existingAdmin = adminRepository
+                    .findByNationalId(adminUpdateRequest.nationalId());
+            if (existingAdmin.isPresent() && !existingAdmin.get()
+                    .getId().equals(updatingAdmin.getId())) {
                 throw new CustomApiException("Admin with national ID {"
                         + adminUpdateRequest.nationalId() + "} already exists!",
                         CustomApiExceptionType.UNPROCESSABLE_ENTITY);
@@ -108,8 +111,10 @@ public class AdminServiceImpl implements AdminService {
             updatingAdmin.setNationalId(adminUpdateRequest.nationalId());
         }
         if (StringUtils.hasText(adminUpdateRequest.phoneNumber())) {
-            Optional<Admin> existingAdmin = adminRepository.findByPhoneNumber(adminUpdateRequest.phoneNumber());
-            if (existingAdmin.isPresent() && !existingAdmin.get().getId().equals(updatingAdmin.getId())) {
+            Optional<Admin> existingAdmin = adminRepository
+                    .findByPhoneNumber(adminUpdateRequest.phoneNumber());
+            if (existingAdmin.isPresent() && !existingAdmin.get()
+                    .getId().equals(updatingAdmin.getId())) {
                 throw new CustomApiException("Admin with phone number {"
                         + adminUpdateRequest.phoneNumber() + "} already exists!",
                         CustomApiExceptionType.UNPROCESSABLE_ENTITY);
@@ -120,8 +125,10 @@ public class AdminServiceImpl implements AdminService {
             updatingAdmin.setBirthday(adminUpdateRequest.birthday());
         }
         if (StringUtils.hasText(adminUpdateRequest.email())) {
-            Optional<Admin> existingAdmin = adminRepository.findByEmail(adminUpdateRequest.email());
-            if (existingAdmin.isPresent() && !existingAdmin.get().getId().equals(updatingAdmin.getId())) {
+            Optional<Admin> existingAdmin = adminRepository
+                    .findByEmail(adminUpdateRequest.email());
+            if (existingAdmin.isPresent() && !existingAdmin.get()
+                    .getId().equals(updatingAdmin.getId())) {
                 throw new CustomApiException("Admin with email {"
                         + adminUpdateRequest.email() + "} already exists!",
                         CustomApiExceptionType.UNPROCESSABLE_ENTITY);

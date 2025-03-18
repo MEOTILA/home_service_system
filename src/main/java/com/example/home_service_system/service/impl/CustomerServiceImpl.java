@@ -37,7 +37,6 @@ import java.util.Optional;
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
-    //private final CustomerMapper customerMapper;
     private final PasswordEncoder passwordEncoder;
 
     @Override
