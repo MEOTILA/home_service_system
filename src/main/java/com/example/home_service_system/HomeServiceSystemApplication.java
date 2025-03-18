@@ -8,12 +8,14 @@ import com.example.home_service_system.dto.customerDTO.CustomerSaveRequest;
 import com.example.home_service_system.dto.customerDTO.CustomerUpdateRequest;
 import com.example.home_service_system.dto.expertDTO.ExpertSaveRequest;
 import com.example.home_service_system.dto.expertSuggestionDTO.ExpertSuggestionSaveRequest;
+import com.example.home_service_system.dto.expertSuggestionDTO.ExpertSuggestionUpdateRequest;
 import com.example.home_service_system.dto.mainServiceDTO.MainServiceResponse;
 import com.example.home_service_system.dto.mainServiceDTO.MainServiceSaveRequest;
 import com.example.home_service_system.dto.mainServiceDTO.MainServiceUpdateRequest;
 import com.example.home_service_system.dto.orderDTO.OrderSaveRequest;
 import com.example.home_service_system.dto.orderDTO.OrderUpdateRequest;
 import com.example.home_service_system.dto.subServiceDTO.SubServiceUpdateRequest;
+import com.example.home_service_system.entity.Expert;
 import com.example.home_service_system.entity.MainService;
 import com.example.home_service_system.entity.Order;
 import com.example.home_service_system.entity.enums.OrderStatus;
@@ -234,18 +236,30 @@ public class HomeServiceSystemApplication {
         //customerCommentAndRateservice.findAllAndIsDeletedFalse();
        // orderService.findByIdAndIsDeletedFalse(2L);
 
-        Order order2 = orderService.findOrderByIdAndIsDeletedFalse(3L);
+        Order order3 = orderService.findOrderByIdAndIsDeletedFalse(3L);
         CustomerCommentAndRateUpdateRequest request2 = new CustomerCommentAndRateUpdateRequest(
-              3L,  order2, 39, "Well Doooone!"
+              3L,  order3, 39, "Well Doooone!"
         );
         //customerCommentAndRateservice.update(request2);
-
+        Expert expert1 =expertService.findExpertByIdAndIsDeletedFalse(1L);
         ExpertSuggestionSaveRequest request3 = new ExpertSuggestionSaveRequest(
-                order2,"Man miam",156451L, Duration.ofHours(3L)
+                order3,expert1,"Shine on you",15564671L
+                , Duration.ofHours(5L)
+                ,LocalDateTime.now().plusDays(4)
+        );
+       //expertSuggestionService.save(request3);
+        //System.out.println(expertSuggestionService.findAllByIsDeletedFalse());
+        //System.out.println(orderService.findByIdAndIsDeletedFalse(3L));
+
+        /*ExpertSuggestionUpdateRequest request4 = new ExpertSuggestionUpdateRequest(
+                2L,order3,"Man qweqweqwe",156451L, Duration.ofHours(3L)
                 ,LocalDateTime.now().plusDays(3)
         );
-        expertSuggestionService.save(request3);
+        expertSuggestionService.update(request4);*/
+
         System.out.println(expertSuggestionService.findAllByIsDeletedFalse());
+        System.out.println(orderService.findByIdAndIsDeletedFalse(3L));
+        System.out.println(expertService.findByUsername("David"));
 
 
     }

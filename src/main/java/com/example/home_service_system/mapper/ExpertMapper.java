@@ -15,20 +15,20 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface ExpertMapper {
-    ExpertResponse to(Expert expert);
+    //ExpertResponse to(Expert expert);
 
-    Expert fromSaveRequest(ExpertSaveRequest expertSaveRequest);
+    //Expert fromSaveRequest(ExpertSaveRequest expertSaveRequest);
 
-    Expert fromUpdateRequest(ExpertUpdateRequest expertUpdateRequest);
+    //Expert fromUpdateRequest(ExpertUpdateRequest expertUpdateRequest);
 
-    Expert toExpertFromResponse(ExpertResponse expertResponse);
+   // Expert toExpertFromResponse(ExpertResponse expertResponse);
 
-    @Mapping(target = "id", source = "id")
+    /*@Mapping(target = "id", source = "id")
     @Mapping(target = "expertImage", source = "expertImage")
     @Mapping(target = "rating", source = "rating")
     @Mapping(target = "userStatus", source = "userStatus")
     @Mapping(target = "balance", source = "balance")
-    ExpertUpdateRequest toUpdateRequest(Expert expert);
+    ExpertUpdateRequest toUpdateRequest(Expert expert);*/
 
 
 }

@@ -24,6 +24,9 @@ public class ExpertSuggestion extends BaseEntity<Long> {
     @ManyToOne
     Order order;
 
+    @ManyToOne
+    Expert expert;
+
     @Column(length = 500, nullable = false)
     String expertSuggestion;
 

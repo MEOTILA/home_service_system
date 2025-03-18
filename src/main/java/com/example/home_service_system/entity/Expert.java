@@ -32,6 +32,9 @@ public class Expert extends User {
     @OneToMany(mappedBy = "expert")
     List<Order> orderList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "expert")
+    List<ExpertSuggestion> expertSuggestionList;
+
     @ManyToMany
     @JoinTable(
             name = "expert_subservice",

@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 public record ExpertSuggestionResponse(
         Long id,
         Long orderId,
+        Long expertId,
         String expertSuggestion,
         LocalDateTime suggestionSubmitDate,
         Long expertOfferedCost,

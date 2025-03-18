@@ -1,5 +1,6 @@
 package com.example.home_service_system.dto.expertSuggestionDTO;
 
+import com.example.home_service_system.entity.Expert;
 import com.example.home_service_system.entity.Order;
 import jakarta.validation.constraints.*;
 
@@ -10,6 +11,9 @@ public record ExpertSuggestionSaveRequest(
 
         @NotNull(message = "Order cannot be null")
         Order order,
+
+        @NotNull(message = "Expert cannot be null")
+        Expert expert,
 
         @NotBlank(message = "Expert suggestion cannot be empty")
         @Size(max = 500, message = "Expert suggestion must be at most 500 characters")

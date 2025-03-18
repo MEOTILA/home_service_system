@@ -67,6 +67,8 @@ public record ExpertUpdateRequest(
 
         List<Long> orderListIds,
 
+        List<Long> expertSuggestionList,
+
         List<Long> expertServiceFieldIds
 
         //List<Long> customerCommentAndRateIds
