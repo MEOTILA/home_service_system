@@ -4,6 +4,7 @@ import com.example.home_service_system.dto.adminDTO.AdminSaveRequest;
 import com.example.home_service_system.dto.adminDTO.AdminUpdateRequest;
 import com.example.home_service_system.dto.customerDTO.CustomerResponse;
 import com.example.home_service_system.dto.customerDTO.CustomerSaveRequest;
+import com.example.home_service_system.dto.expertDTO.ExpertResponse;
 import com.example.home_service_system.dto.expertDTO.ExpertSaveRequest;
 import com.example.home_service_system.dto.expertSuggestionDTO.ExpertSuggestionSaveRequest;
 import com.example.home_service_system.dto.mainServiceDTO.MainServiceResponse;
@@ -66,7 +67,7 @@ public class HomeServiceSystemApplication {
                 "roger@example.com"
         );
         //adminService.save(adminRequest2);
-       // System.out.println(adminService.findByIdAndIsDeletedFalse(1L));
+        // System.out.println(adminService.findByIdAndIsDeletedFalse(1L));
 
         AdminSaveRequest adminRequest5 = new AdminSaveRequest(
                 "Sam",
@@ -141,7 +142,7 @@ public class HomeServiceSystemApplication {
                 LocalDate.of(1990, 5, 20),
                 "sam@example.com"
         );
-       // customerService.save(customer33);
+        // customerService.save(customer33);
 
 /*        CustomerUpdateRequest customer2 = new CustomerUpdateRequest(
                 3L,
@@ -201,7 +202,7 @@ public class HomeServiceSystemApplication {
         //System.out.println(subServiceService.findAllByIsDeletedFalse());
 
         //subServiceService.addExpertToSubService(3L,2L);
-       // subServiceService.addExpertToSubService(1L,2L);
+        // subServiceService.addExpertToSubService(1L,2L);
         //subServiceService.addExpertToSubService(4L,2L);
         //subServiceService.addExpertToSubService(4L,1L);
 
@@ -246,7 +247,7 @@ public class HomeServiceSystemApplication {
         customerCommentAndRateservice.save(request);*/
         //customerCommentAndRateservice.softDeleteById(2L);
         //customerCommentAndRateservice.findAllAndIsDeletedFalse();
-       // orderService.findByIdAndIsDeletedFalse(2L);
+        // orderService.findByIdAndIsDeletedFalse(2L);
 
         //Order order3 = orderService.findOrderByIdAndIsDeletedFalse(2L);
         /*CustomerCommentAndRateUpdateRequest request2 = new CustomerCommentAndRateUpdateRequest(
@@ -259,7 +260,7 @@ public class HomeServiceSystemApplication {
                 , Duration.ofHours(10L)
                 ,LocalDateTime.now().plusDays(4)
         );*/
-       //expertSuggestionService.save(request3);
+        //expertSuggestionService.save(request3);
         //System.out.println(expertSuggestionService.findAllByIsDeletedFalse());
         //System.out.println(orderService.findByIdAndIsDeletedFalse(3L));
 /*
@@ -275,7 +276,7 @@ public class HomeServiceSystemApplication {
         //System.out.println(orderService.findByIdAndIsDeletedFalse(3L));
         //System.out.println(expertService.findByUsername("David"));
 
-       //System.out.println(expertSuggestionService.findAllByExpertIdAndIsDeletedFalse(2L));
+        //System.out.println(expertSuggestionService.findAllByExpertIdAndIsDeletedFalse(2L));
         //System.out.println(expertSuggestionService.findAllByOrderIdAndIsDeletedFalse(3L));
 
 
@@ -294,7 +295,26 @@ public class HomeServiceSystemApplication {
                 0,
                 5
         );
-        customers.forEach(c -> System.out.println("Found Customer: " + c));
+        //customers.forEach(c -> System.out.println("Found Customers: " + c));
+
+        //todo: expert Specification
+        Page<ExpertResponse> experts = expertService.getFilteredExperts(
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                0,
+                5
+        );
+        experts.forEach(e -> System.out.println("Found Experts: " + e));
 
     }
 

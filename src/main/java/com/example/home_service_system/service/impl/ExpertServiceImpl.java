@@ -5,24 +5,27 @@ import com.example.home_service_system.dto.expertDTO.ExpertResponse;
 import com.example.home_service_system.dto.expertDTO.ExpertSaveRequest;
 import com.example.home_service_system.dto.expertDTO.ExpertUpdateRequest;
 import com.example.home_service_system.entity.Expert;
-import com.example.home_service_system.entity.SubService;
 import com.example.home_service_system.entity.enums.UserStatus;
 import com.example.home_service_system.exceptions.CustomApiException;
 import com.example.home_service_system.exceptions.CustomApiExceptionType;
-import com.example.home_service_system.mapper.ExpertMapper;
 import com.example.home_service_system.mapper.customMappers.CustomExpertMapper;
 import com.example.home_service_system.repository.ExpertRepository;
 import com.example.home_service_system.service.ExpertService;
-import com.example.home_service_system.service.SubServiceService;
+import com.example.home_service_system.specification.ExpertSpecification;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -216,5 +219,24 @@ public class ExpertServiceImpl implements ExpertService {
         expert.setPassword(hashedNewPassword);
         expertRepository.save(expert);
         log.info("Password changed successfully for expert with id {}", id);
+    }
+
+    @Override
+    public Page<ExpertResponse> getFilteredExperts(
+            String firstName, String lastName, String username,
+            String nationalId, String phoneNumber, String email,
+            Integer rating, UserStatus userStatus, Long balance,
+            LocalDate createdAt, LocalDate birthday,
+            Long subServiceId, int page, int size) {
+
+        Specification<Expert> spec = ExpertSpecification.filterExperts(
+                firstName, lastName, username, nationalId, phoneNumber,
+                email, rating, userStatus, balance, createdAt,
+                birthday, subServiceId);
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Expert> customerPage = expertRepository.findAll(spec, pageable);
+
+        return customerPage.map(CustomExpertMapper::to);
     }
 }

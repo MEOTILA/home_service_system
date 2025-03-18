@@ -1,21 +1,22 @@
 package com.example.home_service_system.specification;
 
-import com.example.home_service_system.entity.Customer;
+import com.example.home_service_system.entity.Expert;
 import com.example.home_service_system.entity.enums.UserStatus;
+import jakarta.persistence.criteria.Join;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
 
-public class CustomerSpecification {
-    public static Specification<Customer> filterCustomers(
+public class ExpertSpecification {
+    public static Specification<Expert> filterExperts(
             String firstName, String lastName, String username,
             String nationalId, String phoneNumber, String email,
-            UserStatus userStatus, Long balance,
-            LocalDate createdAt, LocalDate birthday) {
+            Integer rating, UserStatus userStatus, Long balance,
+            LocalDate createdAt, LocalDate birthday, Long subServiceId) {
 
-        Specification<Customer> spec = Specification.where((root, query, criteriaBuilder) ->
-                criteriaBuilder.equal(root.get("isDeleted"), false));
+        Specification<Expert> spec = (root, query, criteriaBuilder) ->
+                criteriaBuilder.equal(root.get("isDeleted"), false);
 
 
         if (StringUtils.hasText(firstName)) {
@@ -48,6 +49,11 @@ public class CustomerSpecification {
                     criteriaBuilder.equal(root.get("email"), email));
         }
 
+        if (rating != null) {
+            spec = spec.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.equal(root.get("rating"), rating));
+        }
+
         if (userStatus != null) {
             spec = spec.and((root, query, criteriaBuilder) ->
                     criteriaBuilder.equal(root.get("userStatus"), userStatus));
@@ -68,7 +74,15 @@ public class CustomerSpecification {
                     criteriaBuilder.equal(root.get("birthday"), birthday));
         }
 
+        if (subServiceId != null) {
+            spec = spec.and((root, query, criteriaBuilder) -> {
+                Join<Object, Object> subServiceJoin = root.join("expertServiceFields");
+                return criteriaBuilder.equal(subServiceJoin.get("id"), subServiceId);
+            });
+        }
+
         return spec;
     }
+
 }
 

@@ -208,13 +208,13 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Page<CustomerResponse> getFilteredCustomers(
-            String username, String firstName, String lastName,
+            String firstName, String lastName, String username,
             String nationalId, String phoneNumber, String email,
             UserStatus userStatus, Long balance, LocalDate createdAt,
             LocalDate birthday, int page, int size) {
 
         Specification<Customer> spec = CustomerSpecification.filterCustomers(
-                username, firstName, lastName, nationalId, phoneNumber,
+                firstName, lastName, username, nationalId, phoneNumber,
                 email, userStatus, balance, createdAt, birthday
         );
 

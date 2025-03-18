@@ -30,7 +30,7 @@ public interface CustomerService {
     void changePassword(Long id, @Valid CustomerChangePasswordRequest request);
 
     Page<CustomerResponse> getFilteredCustomers(
-            String username, String firstName, String lastName,
+            String firstName, String lastName, String username,
             String nationalId, String phoneNumber, String email,
             UserStatus userStatus, Long balance, LocalDate createdAt,
             LocalDate birthday, int page, int size);
