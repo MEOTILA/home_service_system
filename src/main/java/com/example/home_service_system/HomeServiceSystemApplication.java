@@ -2,29 +2,26 @@ package com.example.home_service_system;
 
 import com.example.home_service_system.dto.adminDTO.AdminSaveRequest;
 import com.example.home_service_system.dto.adminDTO.AdminUpdateRequest;
-import com.example.home_service_system.dto.customerCommentAndRateDTO.CustomerCommentAndRateSaveRequest;
-import com.example.home_service_system.dto.customerCommentAndRateDTO.CustomerCommentAndRateUpdateRequest;
+import com.example.home_service_system.dto.customerDTO.CustomerResponse;
 import com.example.home_service_system.dto.customerDTO.CustomerSaveRequest;
-import com.example.home_service_system.dto.customerDTO.CustomerUpdateRequest;
 import com.example.home_service_system.dto.expertDTO.ExpertSaveRequest;
 import com.example.home_service_system.dto.expertSuggestionDTO.ExpertSuggestionSaveRequest;
-import com.example.home_service_system.dto.expertSuggestionDTO.ExpertSuggestionUpdateRequest;
 import com.example.home_service_system.dto.mainServiceDTO.MainServiceResponse;
 import com.example.home_service_system.dto.mainServiceDTO.MainServiceSaveRequest;
 import com.example.home_service_system.dto.mainServiceDTO.MainServiceUpdateRequest;
-import com.example.home_service_system.dto.orderDTO.OrderSaveRequest;
-import com.example.home_service_system.dto.orderDTO.OrderUpdateRequest;
 import com.example.home_service_system.dto.subServiceDTO.SubServiceUpdateRequest;
+import com.example.home_service_system.entity.Customer;
 import com.example.home_service_system.entity.Expert;
 import com.example.home_service_system.entity.MainService;
 import com.example.home_service_system.entity.Order;
-import com.example.home_service_system.entity.enums.OrderStatus;
+import com.example.home_service_system.entity.enums.UserStatus;
 import com.example.home_service_system.mapper.MainServiceMapper;
 import com.example.home_service_system.mapper.customMappers.CustomMainServiceMapper;
 import com.example.home_service_system.service.*;
 import com.example.home_service_system.service.OrderService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.domain.Page;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -44,6 +41,7 @@ public class HomeServiceSystemApplication {
         var orderService = context.getBean(OrderService.class);
         var customerCommentAndRateservice = context.getBean(CustomerCommentAndRateService.class);
         var expertSuggestionService = context.getBean(ExpertSuggestionService.class);
+
 
         AdminSaveRequest adminRequest = new AdminSaveRequest(
                 "Sattar",
@@ -68,6 +66,7 @@ public class HomeServiceSystemApplication {
                 "roger@example.com"
         );
         //adminService.save(adminRequest2);
+       // System.out.println(adminService.findByIdAndIsDeletedFalse(1L));
 
         AdminSaveRequest adminRequest5 = new AdminSaveRequest(
                 "Sam",
@@ -129,6 +128,20 @@ public class HomeServiceSystemApplication {
                 LocalDate.of(1995, 5, 20),
                 "alan@example.com"
         );
+        //customerService.save(customer);
+        //System.out.println(customerService.findByIdAndIsDeletedFalse(1L));
+
+        CustomerSaveRequest customer33 = new CustomerSaveRequest(
+                "Sam",
+                "Samer",
+                "Sam",
+                "Sam@1234",
+                "0011035673",
+                "09220132074",
+                LocalDate.of(1990, 5, 20),
+                "sam@example.com"
+        );
+       // customerService.save(customer33);
 
 /*        CustomerUpdateRequest customer2 = new CustomerUpdateRequest(
                 3L,
@@ -146,7 +159,6 @@ public class HomeServiceSystemApplication {
                null
         );*/
 
-        //customerService.save(customer);
         //customerService.update(customer2);
         //System.out.println(customerService.findAll());
 
@@ -154,36 +166,36 @@ public class HomeServiceSystemApplication {
 
         ExpertSaveRequest expert = new ExpertSaveRequest(
                 "Tim",
-                "Timian",
+                "Burton",
                 "Tim",
-                "Tin@1234",
+                "Tim@1234",
                 "0019954327",
                 "09184032176",
-                LocalDate.of(1990, 8, 15),
+                LocalDate.of(1969, 8, 15),
                 "tim@example.com",
                 dummyImage
         );
-
         //expertService.save(expert);
+        //System.out.println(expertService.findByIdAndIsDeletedFalse(1L));
 
         //System.out.println(customerService.findAll());
         //System.out.println(expertService.findAll());
 
-        MainServiceSaveRequest mainServiceSaveRequest =
+      /*  MainServiceSaveRequest mainServiceSaveRequest =
                 new MainServiceSaveRequest("Electronic");
 
         MainServiceUpdateRequest mainServiceUpdateRequest =
-                new MainServiceUpdateRequest(2L, "Electronics", null);
+                new MainServiceUpdateRequest(2L, "Electronics", null);*/
         // mainServiceService.update(mainServiceUpdateRequest);
         //mainServiceService.save(mainServiceSaveRequest);
         //System.out.println(mainServiceService.findAll());
 
-        MainServiceResponse mainServiceResponse = mainServiceService.findById(2L);
+        /*MainServiceResponse mainServiceResponse = mainServiceService.findByIdAndIsDeletedFalse(2L);
         MainService mainService = CustomMainServiceMapper.toMainServiceFromResponse(mainServiceResponse);
 
         SubServiceUpdateRequest subServiceUpdateRequest =
                 new SubServiceUpdateRequest(4L, "Repairing Lights"
-                        , 510000L, "Full Repairing for Lightssss.", mainService, null);
+                        , 510000L, "Full Repairing for Lightssss.", mainService, null);*/
         //subServiceService.save(subServiceSaveRequest);
         //subServiceService.updateSubService(4L,subServiceUpdateRequest);
         //System.out.println(subServiceService.findAllByIsDeletedFalse());
@@ -236,17 +248,17 @@ public class HomeServiceSystemApplication {
         //customerCommentAndRateservice.findAllAndIsDeletedFalse();
        // orderService.findByIdAndIsDeletedFalse(2L);
 
-        Order order3 = orderService.findOrderByIdAndIsDeletedFalse(2L);
+        //Order order3 = orderService.findOrderByIdAndIsDeletedFalse(2L);
         /*CustomerCommentAndRateUpdateRequest request2 = new CustomerCommentAndRateUpdateRequest(
               3L,  order3, 39, "Well Doooone!"
         );*/
         //customerCommentAndRateservice.update(request2);
-        Expert expert1 =expertService.findExpertByIdAndIsDeletedFalse(2L);
+        /*Expert expert1 =expertService.findExpertByIdAndIsDeletedFalse(2L);
         ExpertSuggestionSaveRequest request3 = new ExpertSuggestionSaveRequest(
                 order3,expert1,"tim tim tim",133371L
                 , Duration.ofHours(10L)
                 ,LocalDateTime.now().plusDays(4)
-        );
+        );*/
        //expertSuggestionService.save(request3);
         //System.out.println(expertSuggestionService.findAllByIsDeletedFalse());
         //System.out.println(orderService.findByIdAndIsDeletedFalse(3L));
@@ -266,6 +278,23 @@ public class HomeServiceSystemApplication {
        //System.out.println(expertSuggestionService.findAllByExpertIdAndIsDeletedFalse(2L));
         //System.out.println(expertSuggestionService.findAllByOrderIdAndIsDeletedFalse(3L));
 
+
+        //todo: customer Specification
+        Page<CustomerResponse> customers = customerService.getFilteredCustomers(
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                UserStatus.NEW,
+                null,
+                null,
+                null,
+                0,
+                5
+        );
+        customers.forEach(c -> System.out.println("Found Customer: " + c));
 
     }
 
