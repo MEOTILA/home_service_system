@@ -18,11 +18,11 @@ public interface ExpertService {
 
     Expert findExpertByIdAndIsDeletedFalse(Long id);
 
-    List<ExpertResponse> findAll();
+    List<ExpertResponse> findAllByIsDeletedFalse();
 
-    ExpertResponse findByUsername(String username);
+    ExpertResponse findByUsernameAndIsDeletedFalse(String username);
 
-    void deleteById(Long id);
+    void softDeleteById(Long id);
 
     void changePassword(Long id, @Valid ExpertChangePasswordRequest request);
 }

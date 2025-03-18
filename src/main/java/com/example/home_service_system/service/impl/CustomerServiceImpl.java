@@ -162,7 +162,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<CustomerResponse> findAll() {
+    public List<CustomerResponse> findAllByIsDeletedFalse() {
         List<Customer> foundedCustomers = customerRepository.findAllByIsDeletedFalse();
         return foundedCustomers.stream()
                 .map(CustomCustomerMapper::to)
@@ -170,7 +170,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerResponse findByUsername(String username) {
+    public CustomerResponse findByUsernameAndIsDeletedFalse(String username) {
         Customer customer = customerRepository.findByUsernameAndIsDeletedFalse(username)
                 .orElseThrow(() -> new CustomApiException("Customer with username {" + username + "} not found!",
                         CustomApiExceptionType.NOT_FOUND));
@@ -178,7 +178,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void softDeleteById(Long id) {
         customerRepository.findByIdAndIsDeletedFalse(id)
                 .orElseThrow(() -> new CustomApiException("Customer with id {" + id + "} not found!",
                         CustomApiExceptionType.NOT_FOUND));

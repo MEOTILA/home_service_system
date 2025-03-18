@@ -1,7 +1,5 @@
 package com.example.home_service_system.service.impl;
 
-import com.example.home_service_system.dto.expertDTO.ExpertResponse;
-import com.example.home_service_system.dto.expertDTO.ExpertSaveRequest;
 import com.example.home_service_system.dto.expertDTO.ExpertUpdateRequest;
 import com.example.home_service_system.dto.mainServiceDTO.MainServiceResponse;
 import com.example.home_service_system.dto.subServiceDTO.SubServiceResponse;
@@ -12,9 +10,6 @@ import com.example.home_service_system.entity.MainService;
 import com.example.home_service_system.entity.SubService;
 import com.example.home_service_system.exceptions.CustomApiException;
 import com.example.home_service_system.exceptions.CustomApiExceptionType;
-import com.example.home_service_system.mapper.ExpertMapper;
-import com.example.home_service_system.mapper.MainServiceMapper;
-import com.example.home_service_system.mapper.SubServiceMapper;
 import com.example.home_service_system.mapper.customMappers.CustomExpertMapper;
 import com.example.home_service_system.mapper.customMappers.CustomMainServiceMapper;
 import com.example.home_service_system.mapper.customMappers.CustomSubServiceMapper;
@@ -24,7 +19,6 @@ import com.example.home_service_system.service.MainServiceService;
 import com.example.home_service_system.service.SubServiceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -205,7 +199,7 @@ public class SubServiceServiceImpl implements SubServiceService {
         }
 
         if (updateRequest.mainService() != null && updateRequest.mainService().getId() != null) {
-            MainServiceResponse mainServiceResponse = mainServiceService.findById(updateRequest.mainService().getId());
+            MainServiceResponse mainServiceResponse = mainServiceService.findByIdAndIsDeletedFalse(updateRequest.mainService().getId());
 
             MainService mainService = CustomMainServiceMapper.toMainServiceFromResponse(mainServiceResponse);
 

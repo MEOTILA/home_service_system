@@ -18,11 +18,11 @@ public interface CustomerService {
 
     Customer findCustomerByIdAndIsDeletedFalse(Long id);
 
-    List<CustomerResponse> findAll();
+    List<CustomerResponse> findAllByIsDeletedFalse();
 
-    CustomerResponse findByUsername(String username);
+    CustomerResponse findByUsernameAndIsDeletedFalse(String username);
 
-    void deleteById(Long id);
+    void softDeleteById(Long id);
 
     void changePassword(Long id, @Valid CustomerChangePasswordRequest request);
 }

@@ -13,7 +13,7 @@ public interface MainServiceService {
 
     void softDelete(Long id);
 
-    MainServiceResponse findById(Long id);
+    MainServiceResponse findByIdAndIsDeletedFalse(Long id);
 
-    List<MainServiceResponse> findAll();
+    List<MainServiceResponse> findAllByIsDeletedFalse();
 }

@@ -176,7 +176,7 @@ public class ExpertServiceImpl implements ExpertService {
     }
 
     @Override
-    public List<ExpertResponse> findAll() {
+    public List<ExpertResponse> findAllByIsDeletedFalse() {
         List<Expert> foundedExperts = expertRepository.findAllByIsDeletedFalse();
         return foundedExperts.stream()
                 .map(CustomExpertMapper::to)
@@ -184,7 +184,7 @@ public class ExpertServiceImpl implements ExpertService {
     }
 
     @Override
-    public ExpertResponse findByUsername(String username) {
+    public ExpertResponse findByUsernameAndIsDeletedFalse(String username) {
         Expert expert = expertRepository.findByUsernameAndIsDeletedFalse(username)
                 .orElseThrow(() -> new CustomApiException("Expert with username {"
                         + username + "} not found!",
@@ -194,7 +194,7 @@ public class ExpertServiceImpl implements ExpertService {
 
 
     @Override
-    public void deleteById(Long id) {
+    public void softDeleteById(Long id) {
         expertRepository.findByIdAndIsDeletedFalse(id)
                 .orElseThrow(() -> new CustomApiException("Expert with id {" + id + "} not found!",
                         CustomApiExceptionType.NOT_FOUND));

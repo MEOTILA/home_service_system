@@ -143,7 +143,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public List<AdminResponse> findAll() {
+    public List<AdminResponse> findAllByIsDeletedFalse() {
         List<Admin> foundedAdmins = adminRepository.findAllByIsDeletedFalse();
         return foundedAdmins.stream()
                 .map(CustomAdminMapper::to)
@@ -151,7 +151,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public AdminResponse findByUsername(String username) {
+    public AdminResponse findByUsernameAndIsDeletedFalse(String username) {
         Admin admin = adminRepository.findByUsernameAndIsDeletedFalse(username)
                 .orElseThrow(() -> new CustomApiException("Admin with username {"
                         + username + "} not found!",
@@ -160,7 +160,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void softDeleteById(Long id) {
         adminRepository.findByIdAndIsDeletedFalse(id)
                 .orElseThrow(() -> new CustomApiException("Admin with id {"
                         + id + "} not found!",

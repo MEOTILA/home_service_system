@@ -65,7 +65,7 @@ public class MainServiceServiceImpl implements MainServiceService {
     }
 
     @Override
-    public MainServiceResponse findById(Long id) {
+    public MainServiceResponse findByIdAndIsDeletedFalse(Long id) {
         MainService mainService = mainServiceRepository.findByIdAndIsDeletedFalse(id)
                 .orElseThrow(() -> new CustomApiException("MainService not found!"
                         , CustomApiExceptionType.NOT_FOUND));
@@ -74,7 +74,7 @@ public class MainServiceServiceImpl implements MainServiceService {
     }
 
     @Override
-    public List<MainServiceResponse> findAll() {
+    public List<MainServiceResponse> findAllByIsDeletedFalse() {
         List<MainService> mainServices = mainServiceRepository.findAllByIsDeletedFalse();
 
         if (mainServices.isEmpty()) {
