@@ -27,7 +27,7 @@ public record OrderUpdateRequest(
         @Size(min = 10, max = 500, message = "Description must be between 10 and 500 characters!")
         String customerDescription,
 
-        @Future(message = "Service date must be in the future!")
+        //@Future(message = "Service date must be in the future!")
         LocalDateTime serviceDate,
 
         @Size(min = 5, max = 250, message = "Address must be between 5 and 250 characters!")

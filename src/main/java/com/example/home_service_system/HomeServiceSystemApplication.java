@@ -188,9 +188,9 @@ public class HomeServiceSystemApplication {
         //subServiceService.updateSubService(4L,subServiceUpdateRequest);
         //System.out.println(subServiceService.findAllByIsDeletedFalse());
 
-        //subServiceService.addExpertToSubService(2L,2L);
-        //subServiceService.addExpertToSubService(1L,1L);
-        //subServiceService.addExpertToSubService(3L,1L);
+        //subServiceService.addExpertToSubService(3L,2L);
+       // subServiceService.addExpertToSubService(1L,2L);
+        //subServiceService.addExpertToSubService(4L,2L);
         //subServiceService.addExpertToSubService(4L,1L);
 
         //subServiceService.removeExpertFromSubService(1L,1L);
@@ -236,30 +236,35 @@ public class HomeServiceSystemApplication {
         //customerCommentAndRateservice.findAllAndIsDeletedFalse();
        // orderService.findByIdAndIsDeletedFalse(2L);
 
-        Order order3 = orderService.findOrderByIdAndIsDeletedFalse(3L);
-        CustomerCommentAndRateUpdateRequest request2 = new CustomerCommentAndRateUpdateRequest(
+        Order order3 = orderService.findOrderByIdAndIsDeletedFalse(2L);
+        /*CustomerCommentAndRateUpdateRequest request2 = new CustomerCommentAndRateUpdateRequest(
               3L,  order3, 39, "Well Doooone!"
-        );
+        );*/
         //customerCommentAndRateservice.update(request2);
-        Expert expert1 =expertService.findExpertByIdAndIsDeletedFalse(1L);
+        Expert expert1 =expertService.findExpertByIdAndIsDeletedFalse(2L);
         ExpertSuggestionSaveRequest request3 = new ExpertSuggestionSaveRequest(
-                order3,expert1,"Shine on you",15564671L
-                , Duration.ofHours(5L)
+                order3,expert1,"tim tim tim",133371L
+                , Duration.ofHours(10L)
                 ,LocalDateTime.now().plusDays(4)
         );
        //expertSuggestionService.save(request3);
         //System.out.println(expertSuggestionService.findAllByIsDeletedFalse());
         //System.out.println(orderService.findByIdAndIsDeletedFalse(3L));
-
-        /*ExpertSuggestionUpdateRequest request4 = new ExpertSuggestionUpdateRequest(
-                2L,order3,"Man qweqweqwe",156451L, Duration.ofHours(3L)
+/*
+        ExpertSuggestionUpdateRequest request4 = new ExpertSuggestionUpdateRequest(
+                3L,order3,"Man miammm",156451L, Duration.ofHours(3L)
                 ,LocalDateTime.now().plusDays(3)
-        );
-        expertSuggestionService.update(request4);*/
+        );*/
+        //expertSuggestionService.update(request4);
 
-        System.out.println(expertSuggestionService.findAllByIsDeletedFalse());
-        System.out.println(orderService.findByIdAndIsDeletedFalse(3L));
-        System.out.println(expertService.findByUsername("David"));
+        //expertSuggestionService.softDeleteById(3L);
+
+        //System.out.println(expertSuggestionService.findAllByIsDeletedFalse());
+        //System.out.println(orderService.findByIdAndIsDeletedFalse(3L));
+        //System.out.println(expertService.findByUsername("David"));
+
+       //System.out.println(expertSuggestionService.findAllByExpertIdAndIsDeletedFalse(2L));
+        //System.out.println(expertSuggestionService.findAllByOrderIdAndIsDeletedFalse(3L));
 
 
     }

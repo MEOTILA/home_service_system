@@ -22,6 +22,9 @@ public interface ExpertSuggestionRepository extends JpaRepository<ExpertSuggesti
     @Query("SELECT e FROM ExpertSuggestion e WHERE e.isDeleted = false")
     List<ExpertSuggestion> findAllByIsDeletedFalse();
 
+    @Query("SELECT e FROM ExpertSuggestion e WHERE e.expert.id = :expertId AND e.isDeleted = false")
+    List<ExpertSuggestion> findAllByExpertIdAndIsDeletedFalse(Long expertId);
+
     @Query("UPDATE ExpertSuggestion e SET e.isDeleted = true WHERE e.id = :id")
     @Modifying
     void softDeleteById(Long id);

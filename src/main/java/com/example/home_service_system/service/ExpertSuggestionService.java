@@ -14,4 +14,10 @@ public interface ExpertSuggestionService {
     ExpertSuggestionResponse update(@Valid ExpertSuggestionUpdateRequest request);
 
     List<ExpertSuggestionResponse> findAllByIsDeletedFalse();
+
+    List<ExpertSuggestionResponse> findAllByExpertIdAndIsDeletedFalse(Long id);
+
+    List<ExpertSuggestionResponse> findAllByOrderIdAndIsDeletedFalse(Long id);
+
+    void softDeleteById(Long id);
 }
