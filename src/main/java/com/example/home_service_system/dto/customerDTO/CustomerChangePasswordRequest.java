@@ -1,10 +1,14 @@
 package com.example.home_service_system.dto.customerDTO;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public record CustomerChangePasswordRequest(
+        @NotNull(message = "Id is required for change password!")
+        Long id,
+
         @NotBlank(message = "Current password is required")
         String currentPassword,
 

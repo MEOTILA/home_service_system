@@ -4,6 +4,7 @@ import com.example.home_service_system.dto.adminDTO.AdminSaveRequest;
 import com.example.home_service_system.dto.adminDTO.AdminUpdateRequest;
 import com.example.home_service_system.dto.customerCommentAndRateDTO.CustomerCommentAndRateSaveRequest;
 import com.example.home_service_system.dto.customerCommentAndRateDTO.CustomerCommentAndRateUpdateRequest;
+import com.example.home_service_system.dto.customerDTO.CustomerChangePasswordRequest;
 import com.example.home_service_system.dto.customerDTO.CustomerResponse;
 import com.example.home_service_system.dto.customerDTO.CustomerSaveRequest;
 import com.example.home_service_system.dto.expertDTO.ExpertResponse;
@@ -135,6 +136,9 @@ public class HomeServiceSystemApplication {
         );
         //customerService.save(customer);
         //System.out.println(customerService.findByIdAndIsDeletedFalse(1L));
+        CustomerChangePasswordRequest request5 = new CustomerChangePasswordRequest(
+                10L,"Alan@123456","Alan@1234");
+        customerService.changePassword(request5);
 
         CustomerSaveRequest customer33 = new CustomerSaveRequest(
                 "Sam",
@@ -166,6 +170,7 @@ public class HomeServiceSystemApplication {
 
         //customerService.update(customer2);
         //System.out.println(customerService.findAll());
+        //customerService.softDeleteById(1L);
 
         byte[] dummyImage = new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 
@@ -276,7 +281,7 @@ public class HomeServiceSystemApplication {
                 Duration.ofDays(2L), LocalDateTime.now().plusDays(7)
         );
         //expertSuggestionService.update(request3);
-        expertSuggestionService.softDeleteById(3L);
+        //expertSuggestionService.softDeleteById(3L);
 
         //orderService.softDeleteOrderAndExpertSuggestionsAndCommentAndRateByOrderId(1L);
         //System.out.println(expertSuggestionService.findAllByIsDeletedFalse());

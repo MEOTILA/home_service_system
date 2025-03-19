@@ -40,36 +40,36 @@ public class CustomerServiceImpl implements CustomerService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public CustomerResponse save(@Valid CustomerSaveRequest customerSaveRequest) {
+    public CustomerResponse save(@Valid CustomerSaveRequest request) {
         Optional<Customer> optionalCustomerByUsername =
-                customerRepository.findByUsername(customerSaveRequest.username());
+                customerRepository.findByUsername(request.username());
         if (optionalCustomerByUsername.isPresent()) {
-            throw new CustomApiException("Customer with username {" + customerSaveRequest.username() + "} already exists!",
+            throw new CustomApiException("Customer with username {" + request.username() + "} already exists!",
                     CustomApiExceptionType.UNPROCESSABLE_ENTITY);
         }
         Optional<Customer> optionalCustomerByPhoneNumber =
-                customerRepository.findByPhoneNumber(customerSaveRequest.phoneNumber());
+                customerRepository.findByPhoneNumber(request.phoneNumber());
         if (optionalCustomerByPhoneNumber.isPresent()) {
             throw new CustomApiException("Customer with phone number {"
-                    + customerSaveRequest.phoneNumber() + "} already exists!",
+                    + request.phoneNumber() + "} already exists!",
                     CustomApiExceptionType.UNPROCESSABLE_ENTITY);
         }
         Optional<Customer> optionalCustomerByNationalId =
-                customerRepository.findByNationalId(customerSaveRequest.nationalId());
+                customerRepository.findByNationalId(request.nationalId());
         if (optionalCustomerByNationalId.isPresent()) {
             throw new CustomApiException("Customer with national ID {"
-                    + customerSaveRequest.nationalId() + "} already exists!",
+                    + request.nationalId() + "} already exists!",
                     CustomApiExceptionType.UNPROCESSABLE_ENTITY);
         }
         Optional<Customer> optionalCustomerByEmail =
-                customerRepository.findByEmail(customerSaveRequest.email());
+                customerRepository.findByEmail(request.email());
         if (optionalCustomerByEmail.isPresent()) {
             throw new CustomApiException("Customer with email {"
-                    + customerSaveRequest.email() + "} already exists!",
+                    + request.email() + "} already exists!",
                     CustomApiExceptionType.UNPROCESSABLE_ENTITY);
         }
-        String hashedPassword = passwordEncoder.encode(customerSaveRequest.password());
-        Customer customer = CustomCustomerMapper.fromSaveRequest(customerSaveRequest);
+        String hashedPassword = passwordEncoder.encode(request.password());
+        Customer customer = CustomCustomerMapper.fromSaveRequest(request);
         customer.setPassword(hashedPassword);
         customer.setUserStatus(UserStatus.NEW);
         customerRepository.save(customer);
@@ -78,70 +78,71 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerResponse update(@Valid CustomerUpdateRequest customerUpdateRequest) {
-        Customer updatingCustomer = customerRepository.findByIdAndIsDeletedFalse(customerUpdateRequest.id())
-                .orElseThrow(() -> new CustomApiException("Customer with id {"
-                        + customerUpdateRequest.id() + "} not found!",
-                        CustomApiExceptionType.NOT_FOUND));
+    public CustomerResponse update(@Valid CustomerUpdateRequest request) {
+        Customer updatingCustomer =
+                findCustomerByIdAndIsDeletedFalse(request.id());
 
-        if (StringUtils.hasText(customerUpdateRequest.firstName())) {
-            updatingCustomer.setFirstName(customerUpdateRequest.firstName());
+        if (StringUtils.hasText(request.firstName())) {
+            updatingCustomer.setFirstName(request.firstName());
         }
-        if (StringUtils.hasText(customerUpdateRequest.lastName())) {
-            updatingCustomer.setLastName(customerUpdateRequest.lastName());
+        if (StringUtils.hasText(request.lastName())) {
+            updatingCustomer.setLastName(request.lastName());
         }
-        if (StringUtils.hasText(customerUpdateRequest.username())) {
+        if (StringUtils.hasText(request.username())) {
             Optional<Customer> existingCustomer = customerRepository
-                    .findByUsername(customerUpdateRequest.username());
-            if (existingCustomer.isPresent() && !existingCustomer.get().getId().equals(updatingCustomer.getId())) {
+                    .findByUsername(request.username());
+            if (existingCustomer.isPresent() && !existingCustomer.get()
+                    .getId().equals(updatingCustomer.getId())) {
                 throw new CustomApiException("Customer with username {"
-                        + customerUpdateRequest.username() + "} already exists!",
+                        + request.username() + "} already exists!",
                         CustomApiExceptionType.UNPROCESSABLE_ENTITY);
             }
-            updatingCustomer.setUsername(customerUpdateRequest.username());
+            updatingCustomer.setUsername(request.username());
         }
-        if (StringUtils.hasText(customerUpdateRequest.password())) {
-            String hashedPassword = passwordEncoder.encode(customerUpdateRequest.password());
+        if (StringUtils.hasText(request.password())) {
+            String hashedPassword = passwordEncoder.encode(request.password());
             updatingCustomer.setPassword(hashedPassword);
         }
-        if (StringUtils.hasText(customerUpdateRequest.nationalId())) {
+        if (StringUtils.hasText(request.nationalId())) {
             Optional<Customer> existingCustomer = customerRepository
-                    .findByNationalId(customerUpdateRequest.nationalId());
-            if (existingCustomer.isPresent() && !existingCustomer.get().getId().equals(updatingCustomer.getId())) {
+                    .findByNationalId(request.nationalId());
+            if (existingCustomer.isPresent() && !existingCustomer.get()
+                    .getId().equals(updatingCustomer.getId())) {
                 throw new CustomApiException("Customer with national ID {"
-                        + customerUpdateRequest.nationalId() + "} already exists!",
+                        + request.nationalId() + "} already exists!",
                         CustomApiExceptionType.UNPROCESSABLE_ENTITY);
             }
-            updatingCustomer.setNationalId(customerUpdateRequest.nationalId());
+            updatingCustomer.setNationalId(request.nationalId());
         }
-        if (StringUtils.hasText(customerUpdateRequest.phoneNumber())) {
+        if (StringUtils.hasText(request.phoneNumber())) {
             Optional<Customer> existingCustomer = customerRepository
-                    .findByPhoneNumber(customerUpdateRequest.phoneNumber());
+                    .findByPhoneNumber(request.phoneNumber());
             if (existingCustomer.isPresent() && !existingCustomer.get().getId().equals(updatingCustomer.getId())) {
                 throw new CustomApiException("Customer with phone number {"
-                        + customerUpdateRequest.phoneNumber() + "} already exists!",
+                        + request.phoneNumber() + "} already exists!",
                         CustomApiExceptionType.UNPROCESSABLE_ENTITY);
             }
-            updatingCustomer.setPhoneNumber(customerUpdateRequest.phoneNumber());
+            updatingCustomer.setPhoneNumber(request.phoneNumber());
         }
-        if (customerUpdateRequest.birthday() != null) {
-            updatingCustomer.setBirthday(customerUpdateRequest.birthday());
+        if (request.birthday() != null) {
+            updatingCustomer.setBirthday(request.birthday());
         }
-        if (StringUtils.hasText(customerUpdateRequest.email())) {
+        if (StringUtils.hasText(request.email())) {
             Optional<Customer> existingCustomer = customerRepository
-                    .findByEmail(customerUpdateRequest.email());
-            if (existingCustomer.isPresent() && !existingCustomer.get().getId().equals(updatingCustomer.getId())) {
+                    .findByEmail(request.email());
+            if (existingCustomer.isPresent() && !existingCustomer.get()
+                    .getId().equals(updatingCustomer.getId())) {
                 throw new CustomApiException("Customer with email {"
-                        + customerUpdateRequest.email() + "} already exists!",
+                        + request.email() + "} already exists!",
                         CustomApiExceptionType.UNPROCESSABLE_ENTITY);
             }
-            updatingCustomer.setEmail(customerUpdateRequest.email());
+            updatingCustomer.setEmail(request.email());
         }
-        if (customerUpdateRequest.userStatus() != null) {
-            updatingCustomer.setUserStatus(customerUpdateRequest.userStatus());
+        if (request.userStatus() != null) {
+            updatingCustomer.setUserStatus(request.userStatus());
         }
-        if (customerUpdateRequest.balance() != null) {
-            updatingCustomer.setBalance(customerUpdateRequest.balance());
+        if (request.balance() != null) {
+            updatingCustomer.setBalance(request.balance());
         }
 
         Customer updatedCustomer = customerRepository.save(updatingCustomer);
@@ -153,16 +154,16 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerResponse findByIdAndIsDeletedFalse(Long id) {
         Customer customer = customerRepository.findByIdAndIsDeletedFalse(id)
-                .orElseThrow(() -> new CustomApiException("Customer with id {" + id + "} not found!",
-                        CustomApiExceptionType.NOT_FOUND));
+                .orElseThrow(() -> new CustomApiException("Customer with id {"
+                        + id + "} not found!", CustomApiExceptionType.NOT_FOUND));
         return CustomCustomerMapper.to(customer);
     }
 
     @Override
     public Customer findCustomerByIdAndIsDeletedFalse(Long id) {
         return customerRepository.findByIdAndIsDeletedFalse(id)
-                .orElseThrow(() -> new CustomApiException("Customer with id {" + id + "} not found!",
-                        CustomApiExceptionType.NOT_FOUND));
+                .orElseThrow(() -> new CustomApiException("Customer with id {"
+                        + id + "} not found!", CustomApiExceptionType.NOT_FOUND));
     }
 
     @Override
@@ -176,33 +177,30 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerResponse findByUsernameAndIsDeletedFalse(String username) {
         Customer customer = customerRepository.findByUsernameAndIsDeletedFalse(username)
-                .orElseThrow(() -> new CustomApiException("Customer with username {" + username + "} not found!",
-                        CustomApiExceptionType.NOT_FOUND));
+                .orElseThrow(() -> new CustomApiException("Customer with username {"
+                        + username + "} not found!", CustomApiExceptionType.NOT_FOUND));
         return CustomCustomerMapper.to(customer);
     }
 
     @Override
-    public void softDeleteById(Long id) {
-        customerRepository.findByIdAndIsDeletedFalse(id)
-                .orElseThrow(() -> new CustomApiException("Customer with id {" + id + "} not found!",
-                        CustomApiExceptionType.NOT_FOUND));
-        customerRepository.softDeleteById(id);
-        log.info("Customer with id {} deleted", id);
-    }
-
-    @Override
-    public void changePassword(Long id, @Valid CustomerChangePasswordRequest request) {
-        Customer customer = customerRepository.findByIdAndIsDeletedFalse(id)
-                .orElseThrow(() -> new CustomApiException("Customer with id {"
-                        + id + "} not found!", CustomApiExceptionType.NOT_FOUND));
+    public void changePassword(@Valid CustomerChangePasswordRequest request) {
+        Customer customer = findCustomerByIdAndIsDeletedFalse(request.id());
 
         if (!passwordEncoder.matches(request.currentPassword(), customer.getPassword())) {
-            throw new CustomApiException("Current password is incorrect!", CustomApiExceptionType.UNAUTHORIZED);
+            throw new CustomApiException("Current password is incorrect!"
+                    , CustomApiExceptionType.UNAUTHORIZED);
         }
         String hashedNewPassword = passwordEncoder.encode(request.newPassword());
         customer.setPassword(hashedNewPassword);
         customerRepository.save(customer);
-        log.info("Password changed successfully for customer with id {}", id);
+        log.info("Password changed successfully for customer with id {}", request.id());
+    }
+
+    @Override
+    public void softDeleteById(Long id) {
+        findCustomerByIdAndIsDeletedFalse(id);
+        customerRepository.softDeleteById(id);
+        log.info("Customer with id {} deleted", id);
     }
 
     @Override

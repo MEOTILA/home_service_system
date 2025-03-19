@@ -25,9 +25,9 @@ public interface CustomerService {
 
     CustomerResponse findByUsernameAndIsDeletedFalse(String username);
 
-    void softDeleteById(Long id);
+    void changePassword(@Valid CustomerChangePasswordRequest request);
 
-    void changePassword(Long id, @Valid CustomerChangePasswordRequest request);
+    void softDeleteById(Long id);
 
     Page<CustomerResponse> getFilteredCustomers(
             String firstName, String lastName, String username,

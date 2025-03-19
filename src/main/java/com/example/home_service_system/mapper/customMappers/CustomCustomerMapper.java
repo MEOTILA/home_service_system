@@ -1,5 +1,6 @@
 package com.example.home_service_system.mapper.customMappers;
 
+import com.example.home_service_system.dto.customerDTO.CustomerChangePasswordRequest;
 import com.example.home_service_system.dto.customerDTO.CustomerResponse;
 import com.example.home_service_system.dto.customerDTO.CustomerSaveRequest;
 import com.example.home_service_system.dto.customerDTO.CustomerUpdateRequest;
@@ -64,6 +65,16 @@ public class CustomCustomerMapper {
         customer.setEmail(request.email());
         customer.setUserStatus(request.userStatus());
         customer.setBalance(request.balance());
+        return customer;
+    }
+
+    public static Customer fromChangePasswordRequest(CustomerChangePasswordRequest request) {
+        if (request == null) {
+            return null;
+        }
+        Customer customer = new Customer();
+        customer.setId(request.id());
+        customer.setPassword(request.newPassword());
         return customer;
     }
 }

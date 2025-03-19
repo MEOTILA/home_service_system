@@ -19,9 +19,6 @@ public class Customer extends User {
     @OneToMany(mappedBy = "customer")
     List<Order> orderList = new ArrayList<>();
 
-    /*@OneToMany(mappedBy = "customer")
-    List<CustomerCommentAndRate> customerCommentAndRateList = new ArrayList<>();*/
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     UserStatus userStatus;
