@@ -1,16 +1,11 @@
-package com.example.home_service_system.mapper.customMappers;
+package com.example.home_service_system.mapper;
 
-import com.example.home_service_system.dto.expertDTO.ExpertUpdateRequest;
 import com.example.home_service_system.dto.expertSuggestionDTO.ExpertSuggestionResponse;
 import com.example.home_service_system.dto.expertSuggestionDTO.ExpertSuggestionSaveRequest;
 import com.example.home_service_system.dto.expertSuggestionDTO.ExpertSuggestionUpdateRequest;
 import com.example.home_service_system.entity.ExpertSuggestion;
-import jakarta.validation.constraints.Future;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
 
-public class CustomExpertSuggestionMapper {
+public class ExpertSuggestionMapper {
     public static ExpertSuggestionResponse to(ExpertSuggestion expertSuggestion) {
         if (expertSuggestion == null) {
             return null;

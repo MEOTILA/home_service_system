@@ -11,8 +11,6 @@ import com.example.home_service_system.dto.customerDTO.CustomerSaveRequest;
 import com.example.home_service_system.dto.expertDTO.ExpertChangePasswordRequest;
 import com.example.home_service_system.dto.expertDTO.ExpertResponse;
 import com.example.home_service_system.dto.expertDTO.ExpertSaveRequest;
-import com.example.home_service_system.dto.expertDTO.ExpertUpdateRequest;
-import com.example.home_service_system.dto.expertSuggestionDTO.ExpertSuggestionSaveRequest;
 import com.example.home_service_system.dto.expertSuggestionDTO.ExpertSuggestionUpdateRequest;
 import com.example.home_service_system.dto.mainServiceDTO.MainServiceResponse;
 import com.example.home_service_system.dto.mainServiceDTO.MainServiceSaveRequest;
@@ -20,12 +18,10 @@ import com.example.home_service_system.dto.mainServiceDTO.MainServiceUpdateReque
 import com.example.home_service_system.dto.orderDTO.OrderSaveRequest;
 import com.example.home_service_system.dto.orderDTO.OrderUpdateRequest;
 import com.example.home_service_system.dto.subServiceDTO.SubServiceUpdateRequest;
-import com.example.home_service_system.entity.Expert;
 import com.example.home_service_system.entity.MainService;
 import com.example.home_service_system.entity.Order;
 import com.example.home_service_system.entity.enums.OrderStatus;
 import com.example.home_service_system.mapper.MainServiceMapper;
-import com.example.home_service_system.mapper.customMappers.CustomMainServiceMapper;
 import com.example.home_service_system.service.*;
 import com.example.home_service_system.service.OrderService;
 import org.springframework.boot.SpringApplication;
@@ -46,7 +42,6 @@ public class HomeServiceSystemApplication {
         var expertService = context.getBean(ExpertService.class);
         var mainServiceService = context.getBean(MainServiceService.class);
         var subServiceService = context.getBean(SubServiceService.class);
-        var mainServiceMapper = context.getBean(MainServiceMapper.class);
         var orderService = context.getBean(OrderService.class);
         var customerCommentAndRateservice = context.getBean(CustomerCommentAndRateService.class);
         var expertSuggestionService = context.getBean(ExpertSuggestionService.class);
@@ -228,7 +223,7 @@ public class HomeServiceSystemApplication {
 
         //subServiceService.removeExpertFromSubService(1L,1L);
         MainServiceResponse mainServiceResponse3 = mainServiceService.findByIdAndIsDeletedFalse(2L);
-        MainService mainService3 = CustomMainServiceMapper.toMainServiceFromResponse(mainServiceResponse3);
+        MainService mainService3 = MainServiceMapper.toMainServiceFromResponse(mainServiceResponse3);
         SubServiceUpdateRequest subServiceUpdateRequest =
                 new SubServiceUpdateRequest(3L, "Kitchen Cleaning",
                         2000000L, "Full cleaning for Kitchens."

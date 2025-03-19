@@ -7,13 +7,12 @@ import com.example.home_service_system.entity.*;
 import com.example.home_service_system.entity.enums.OrderStatus;
 import com.example.home_service_system.exceptions.CustomApiException;
 import com.example.home_service_system.exceptions.CustomApiExceptionType;
-import com.example.home_service_system.mapper.customMappers.CustomOrderMapper;
+import com.example.home_service_system.mapper.OrderMapper;
 import com.example.home_service_system.repository.OrderRepository;
 import com.example.home_service_system.service.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -36,7 +35,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderResponse save(@Valid OrderSaveRequest request) {
-        Order order = CustomOrderMapper.fromSaveRequest(request);
+        Order order = OrderMapper.fromSaveRequest(request);
 
         Customer customer = customerService
                 .findCustomerByIdAndIsDeletedFalse(request.customerId());
@@ -50,7 +49,7 @@ public class OrderServiceImpl implements OrderService {
 
         orderRepository.save(order);
         log.info("Order with id {} saved", order.getId());
-        return CustomOrderMapper.to(order);
+        return OrderMapper.to(order);
     }
 
     @Override
@@ -88,7 +87,7 @@ public class OrderServiceImpl implements OrderService {
         }
         orderRepository.save(order);
         log.info("Order with id {} updated", order.getId());
-        return CustomOrderMapper.to(order);
+        return OrderMapper.to(order);
     }
 
     @Override
@@ -96,7 +95,7 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository.findByIdAndIsDeletedFalse(id)
                 .orElseThrow(() -> new CustomApiException("Order with id {"
                         + id + "} not found!", CustomApiExceptionType.NOT_FOUND));
-        return CustomOrderMapper.to(order);
+        return OrderMapper.to(order);
     }
 
     @Override
@@ -109,33 +108,33 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderResponse> findAllByIsDeletedFalse() {
         return orderRepository.findAllByIsDeletedFalse().stream()
-                .map(CustomOrderMapper::to).toList();
+                .map(OrderMapper::to).toList();
     }
 
 
     @Override
     public List<OrderResponse> findByCustomerIdAndIsDeletedFalse(Long customerId) {
         return orderRepository.findByCustomerIdAndIsDeletedFalse(customerId).stream()
-                .map(CustomOrderMapper::to).toList();
+                .map(OrderMapper::to).toList();
     }
 
     @Override
     public List<OrderResponse> findByExpertIdAndIsDeletedFalse(Long expertId) {
         return orderRepository.findByExpertIdAndIsDeletedFalse(expertId).stream()
-                .map(CustomOrderMapper::to).toList();
+                .map(OrderMapper::to).toList();
     }
 
     @Override
     public List<OrderResponse> findByStatusAndIsDeletedFalse(OrderStatus status) {
         return orderRepository.findByStatusAndIsDeletedFalse(status).stream()
-                .map(CustomOrderMapper::to).toList();
+                .map(OrderMapper::to).toList();
     }
 
     @Override
     public List<OrderResponse> findByServiceDateBetween(LocalDateTime startDate,
                                                         LocalDateTime endDate) {
         return orderRepository.findByServiceDateBetweenAndIsDeletedFalse(startDate, endDate)
-                .stream().map(CustomOrderMapper::to).toList();
+                .stream().map(OrderMapper::to).toList();
     }
 
     @Override

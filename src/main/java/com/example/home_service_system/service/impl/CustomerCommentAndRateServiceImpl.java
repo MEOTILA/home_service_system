@@ -3,14 +3,13 @@ package com.example.home_service_system.service.impl;
 import com.example.home_service_system.dto.customerCommentAndRateDTO.CustomerCommentAndRateResponse;
 import com.example.home_service_system.dto.customerCommentAndRateDTO.CustomerCommentAndRateSaveRequest;
 import com.example.home_service_system.dto.customerCommentAndRateDTO.CustomerCommentAndRateUpdateRequest;
-import com.example.home_service_system.dto.expertDTO.ExpertUpdateRequest;
 import com.example.home_service_system.entity.CustomerCommentAndRate;
 import com.example.home_service_system.entity.Expert;
 import com.example.home_service_system.entity.Order;
 import com.example.home_service_system.exceptions.CustomApiException;
 import com.example.home_service_system.exceptions.CustomApiExceptionType;
-import com.example.home_service_system.mapper.customMappers.CustomCustomerCommentAndRateMapper;
-import com.example.home_service_system.mapper.customMappers.CustomExpertMapper;
+import com.example.home_service_system.mapper.CustomerCommentAndRateMapper;
+import com.example.home_service_system.mapper.ExpertMapper;
 import com.example.home_service_system.repository.CustomerCommentAndRateRepository;
 import com.example.home_service_system.service.CustomerCommentAndRateService;
 import com.example.home_service_system.service.ExpertService;
@@ -48,7 +47,7 @@ public class CustomerCommentAndRateServiceImpl implements CustomerCommentAndRate
             throw new CustomApiException("A comment for this order already exists!",
                     CustomApiExceptionType.BAD_REQUEST);
 
-        CustomerCommentAndRate commentAndRate = CustomCustomerCommentAndRateMapper
+        CustomerCommentAndRate commentAndRate = CustomerCommentAndRateMapper
                 .fromSaveRequest(request);
         commentAndRate.setOrder(order);
         order.setCustomerCommentAndRate(commentAndRate);
@@ -58,10 +57,10 @@ public class CustomerCommentAndRateServiceImpl implements CustomerCommentAndRate
                 .findExpertByIdAndIsDeletedFalse(commentAndRate.getOrder().getExpert().getId());
         Integer averageRating = repository.calculateAverageRatingByExpertId(expert.getId());
         expert.setRating(averageRating);
-        expertService.update(CustomExpertMapper.toUpdateRequest(expert));
+        expertService.update(ExpertMapper.toUpdateRequest(expert));
 
         log.info("customer comment and rate with id {} is saved", commentAndRate.getId());
-        return CustomCustomerCommentAndRateMapper.to(repository.save(commentAndRate));
+        return CustomerCommentAndRateMapper.to(repository.save(commentAndRate));
     }
 
     @Override
@@ -86,12 +85,12 @@ public class CustomerCommentAndRateServiceImpl implements CustomerCommentAndRate
         Expert expert = expertService.findExpertByIdAndIsDeletedFalse(order.getExpert().getId());
         Integer averageRating = repository.calculateAverageRatingByExpertId(expert.getId());
         expert.setRating(averageRating);
-        expertService.update(CustomExpertMapper.toUpdateRequest(expert));
+        expertService.update(ExpertMapper.toUpdateRequest(expert));
 
         log.info("customer comment and rate with id {} is updated"
                 , existingCommentAndRate.getId());
 
-        return CustomCustomerCommentAndRateMapper
+        return CustomerCommentAndRateMapper
                 .to(repository.save(existingCommentAndRate));
     }
 
@@ -108,7 +107,7 @@ public class CustomerCommentAndRateServiceImpl implements CustomerCommentAndRate
         CustomerCommentAndRate commentAndRate = repository.findByIdAndIsDeletedFalse(id)
                 .orElseThrow(() -> new CustomApiException("Comment and Rate with id {"
                         + id +"} not found!", CustomApiExceptionType.NOT_FOUND));
-        return CustomCustomerCommentAndRateMapper.to(commentAndRate);
+        return CustomerCommentAndRateMapper.to(commentAndRate);
     }
 
     @Override
@@ -126,7 +125,7 @@ public class CustomerCommentAndRateServiceImpl implements CustomerCommentAndRate
                     , CustomApiExceptionType.NOT_FOUND);
         }
         return comments.stream()
-                .map(CustomCustomerCommentAndRateMapper::to)
+                .map(CustomerCommentAndRateMapper::to)
                 .collect(Collectors.toList());
     }
 }

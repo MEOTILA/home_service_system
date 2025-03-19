@@ -8,7 +8,7 @@ import com.example.home_service_system.entity.Expert;
 import com.example.home_service_system.entity.enums.UserStatus;
 import com.example.home_service_system.exceptions.CustomApiException;
 import com.example.home_service_system.exceptions.CustomApiExceptionType;
-import com.example.home_service_system.mapper.customMappers.CustomExpertMapper;
+import com.example.home_service_system.mapper.ExpertMapper;
 import com.example.home_service_system.repository.ExpertRepository;
 import com.example.home_service_system.service.ExpertService;
 import com.example.home_service_system.specification.ExpertSpecification;
@@ -70,12 +70,12 @@ public class ExpertServiceImpl implements ExpertService {
                     CustomApiExceptionType.UNPROCESSABLE_ENTITY);
         }
         String hashedPassword = passwordEncoder.encode(request.password());
-        Expert expert = CustomExpertMapper.fromSaveRequest(request);
+        Expert expert = ExpertMapper.fromSaveRequest(request);
         expert.setPassword(hashedPassword);
         expert.setUserStatus(UserStatus.NEW);
         expertRepository.save(expert);
         log.info("Expert with id {} saved", expert.getId());
-        return CustomExpertMapper.to(expert);
+        return ExpertMapper.to(expert);
     }
 
     @Override
@@ -155,7 +155,7 @@ public class ExpertServiceImpl implements ExpertService {
 
         Expert updatedExpert = expertRepository.save(updatingExpert);
         log.info("Expert with id {} updated", updatedExpert.getId());
-        return CustomExpertMapper.to(updatedExpert);
+        return ExpertMapper.to(updatedExpert);
     }
 
 
@@ -164,7 +164,7 @@ public class ExpertServiceImpl implements ExpertService {
         Expert expert = expertRepository.findByIdAndIsDeletedFalse(id)
                 .orElseThrow(() -> new CustomApiException("Expert with id {"
                         + id + "} not found!", CustomApiExceptionType.NOT_FOUND));
-        return CustomExpertMapper.to(expert);
+        return ExpertMapper.to(expert);
     }
 
     @Override
@@ -178,7 +178,7 @@ public class ExpertServiceImpl implements ExpertService {
     public List<ExpertResponse> findAllByIsDeletedFalse() {
         List<Expert> foundedExperts = expertRepository.findAllByIsDeletedFalse();
         return foundedExperts.stream()
-                .map(CustomExpertMapper::to)
+                .map(ExpertMapper::to)
                 .toList();
     }
 
@@ -187,7 +187,7 @@ public class ExpertServiceImpl implements ExpertService {
         Expert expert = expertRepository.findByUsernameAndIsDeletedFalse(username)
                 .orElseThrow(() -> new CustomApiException("Expert with username {"
                         + username + "} not found!", CustomApiExceptionType.NOT_FOUND));
-        return CustomExpertMapper.to(expert);
+        return ExpertMapper.to(expert);
     }
 
 
@@ -228,6 +228,6 @@ public class ExpertServiceImpl implements ExpertService {
         Pageable pageable = PageRequest.of(page, size);
         Page<Expert> customerPage = expertRepository.findAll(spec, pageable);
 
-        return customerPage.map(CustomExpertMapper::to);
+        return customerPage.map(ExpertMapper::to);
     }
 }

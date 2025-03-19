@@ -1,18 +1,13 @@
-package com.example.home_service_system.mapper.customMappers;
+package com.example.home_service_system.mapper;
 
 import com.example.home_service_system.dto.orderDTO.OrderResponse;
 import com.example.home_service_system.dto.orderDTO.OrderSaveRequest;
 import com.example.home_service_system.dto.orderDTO.OrderUpdateRequest;
-import com.example.home_service_system.entity.CustomerCommentAndRate;
 import com.example.home_service_system.entity.Order;
-import com.example.home_service_system.entity.enums.OrderStatus;
-import jakarta.validation.constraints.Future;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Size;
 
 import java.util.stream.Collectors;
 
-public class CustomOrderMapper {
+public class OrderMapper {
     public static OrderResponse to(Order order) {
         return new OrderResponse(
                 order.getId(),

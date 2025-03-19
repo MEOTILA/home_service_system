@@ -1,11 +1,11 @@
-package com.example.home_service_system.mapper.customMappers;
+package com.example.home_service_system.mapper;
 
 import com.example.home_service_system.dto.customerCommentAndRateDTO.CustomerCommentAndRateResponse;
 import com.example.home_service_system.dto.customerCommentAndRateDTO.CustomerCommentAndRateSaveRequest;
 import com.example.home_service_system.dto.customerCommentAndRateDTO.CustomerCommentAndRateUpdateRequest;
 import com.example.home_service_system.entity.CustomerCommentAndRate;
 
-public class CustomCustomerCommentAndRateMapper {
+public class CustomerCommentAndRateMapper {
     public static CustomerCommentAndRateResponse to(CustomerCommentAndRate commentAndRate) {
         return new CustomerCommentAndRateResponse(
                 commentAndRate.getId(),

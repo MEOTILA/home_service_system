@@ -8,8 +8,8 @@ import com.example.home_service_system.entity.ExpertSuggestion;
 import com.example.home_service_system.entity.Order;
 import com.example.home_service_system.exceptions.CustomApiException;
 import com.example.home_service_system.exceptions.CustomApiExceptionType;
-import com.example.home_service_system.mapper.customMappers.CustomExpertSuggestionMapper;
-import com.example.home_service_system.mapper.customMappers.CustomOrderMapper;
+import com.example.home_service_system.mapper.ExpertSuggestionMapper;
+import com.example.home_service_system.mapper.OrderMapper;
 import com.example.home_service_system.repository.ExpertSuggestionRepository;
 import com.example.home_service_system.service.ExpertService;
 import com.example.home_service_system.service.ExpertSuggestionService;
@@ -56,15 +56,15 @@ public class ExpertSuggestionServiceImpl implements ExpertSuggestionService {
             throw new CustomApiException("This order has already been assigned to an expert."
                     , CustomApiExceptionType.BAD_REQUEST);
 
-        ExpertSuggestion expertSuggestion = CustomExpertSuggestionMapper.fromSaveRequest(request);
+        ExpertSuggestion expertSuggestion = ExpertSuggestionMapper.fromSaveRequest(request);
         expertSuggestion.setOrder(order);
         order.getExpertSuggestionList().add(expertSuggestion);
 
-        orderService.update(CustomOrderMapper.toUpdateRequest(order));
+        orderService.update(OrderMapper.toUpdateRequest(order));
 
         repository.save(expertSuggestion);
         log.info("ExpertSuggestion with id {} saved", expertSuggestion.getId());
-        return CustomExpertSuggestionMapper.to(expertSuggestion);
+        return ExpertSuggestionMapper.to(expertSuggestion);
     }
 
     @Override
@@ -85,13 +85,13 @@ public class ExpertSuggestionServiceImpl implements ExpertSuggestionService {
 
         repository.save(existingSuggestion);
         log.info("ExpertSuggestion with id {} updated", existingSuggestion.getId());
-        return CustomExpertSuggestionMapper.to(existingSuggestion);
+        return ExpertSuggestionMapper.to(existingSuggestion);
     }
 
     @Override
     public List<ExpertSuggestionResponse> findAllAndIsDeletedFalse() {
         List<ExpertSuggestion> foundedItems = repository.findAllAndIsDeletedFalse();
-        return foundedItems.stream().map(CustomExpertSuggestionMapper::to).toList();
+        return foundedItems.stream().map(ExpertSuggestionMapper::to).toList();
     }
 
     @Override
@@ -104,13 +104,13 @@ public class ExpertSuggestionServiceImpl implements ExpertSuggestionService {
     @Override
     public List<ExpertSuggestionResponse> findAllByExpertIdAndIsDeletedFalse(Long id) {
         List<ExpertSuggestion> foundedItems = repository.findAllByExpertIdAndIsDeletedFalse(id);
-        return foundedItems.stream().map(CustomExpertSuggestionMapper::to).toList();
+        return foundedItems.stream().map(ExpertSuggestionMapper::to).toList();
     }
 
     @Override
     public List<ExpertSuggestionResponse> findAllByOrderIdAndIsDeletedFalse(Long id) {
         List<ExpertSuggestion> foundedItems = repository.findAllByOrderIdAndIsDeletedFalse(id);
-        return foundedItems.stream().map(CustomExpertSuggestionMapper::to).toList();
+        return foundedItems.stream().map(ExpertSuggestionMapper::to).toList();
     }
 
     @Override

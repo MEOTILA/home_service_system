@@ -7,7 +7,7 @@ import com.example.home_service_system.dto.adminDTO.AdminUpdateRequest;
 import com.example.home_service_system.entity.Admin;
 import com.example.home_service_system.exceptions.CustomApiException;
 import com.example.home_service_system.exceptions.CustomApiExceptionType;
-import com.example.home_service_system.mapper.customMappers.CustomAdminMapper;
+import com.example.home_service_system.mapper.AdminMapper;
 import com.example.home_service_system.repository.AdminRepository;
 import com.example.home_service_system.service.AdminService;
 import jakarta.validation.Valid;
@@ -63,11 +63,11 @@ public class AdminServiceImpl implements AdminService {
                     CustomApiExceptionType.UNPROCESSABLE_ENTITY);
         }
         String hashedPassword = passwordEncoder.encode(request.password());
-        Admin admin = CustomAdminMapper.fromSaveRequest(request);
+        Admin admin = AdminMapper.fromSaveRequest(request);
         admin.setPassword(hashedPassword);
         adminRepository.save(admin);
         log.info("Admin with id {} saved", admin.getId());
-        return CustomAdminMapper.to(admin);
+        return AdminMapper.to(admin);
     }
 
     @Override
@@ -133,7 +133,7 @@ public class AdminServiceImpl implements AdminService {
         }
         Admin updatedAdmin = adminRepository.save(updatingAdmin);
         log.info("Admin with id {} updated", updatedAdmin.getId());
-        return CustomAdminMapper.to(updatedAdmin);
+        return AdminMapper.to(updatedAdmin);
     }
 
     @Override
@@ -141,7 +141,7 @@ public class AdminServiceImpl implements AdminService {
         Admin admin = adminRepository.findByIdAndIsDeletedFalse(id)
                 .orElseThrow(() -> new CustomApiException("Admin with id {"
                         + id + "} not found!", CustomApiExceptionType.NOT_FOUND));
-        return CustomAdminMapper.to(admin);
+        return AdminMapper.to(admin);
     }
 
     @Override
@@ -155,7 +155,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public List<AdminResponse> findAllByIsDeletedFalse() {
         List<Admin> foundedAdmins = adminRepository.findAllByIsDeletedFalse();
-        return foundedAdmins.stream().map(CustomAdminMapper::to).toList();
+        return foundedAdmins.stream().map(AdminMapper::to).toList();
     }
 
     @Override
@@ -163,7 +163,7 @@ public class AdminServiceImpl implements AdminService {
         Admin admin = adminRepository.findByUsernameAndIsDeletedFalse(username)
                 .orElseThrow(() -> new CustomApiException("Admin with username {"
                         + username + "} not found!", CustomApiExceptionType.NOT_FOUND));
-        return CustomAdminMapper.to(admin);
+        return AdminMapper.to(admin);
     }
 
     @Override
