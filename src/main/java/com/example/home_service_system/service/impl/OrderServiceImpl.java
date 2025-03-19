@@ -3,22 +3,17 @@ package com.example.home_service_system.service.impl;
 import com.example.home_service_system.dto.orderDTO.OrderResponse;
 import com.example.home_service_system.dto.orderDTO.OrderSaveRequest;
 import com.example.home_service_system.dto.orderDTO.OrderUpdateRequest;
-import com.example.home_service_system.entity.Customer;
-import com.example.home_service_system.entity.Expert;
-import com.example.home_service_system.entity.Order;
-import com.example.home_service_system.entity.SubService;
+import com.example.home_service_system.entity.*;
 import com.example.home_service_system.entity.enums.OrderStatus;
 import com.example.home_service_system.exceptions.CustomApiException;
 import com.example.home_service_system.exceptions.CustomApiExceptionType;
 import com.example.home_service_system.mapper.customMappers.CustomOrderMapper;
 import com.example.home_service_system.repository.OrderRepository;
-import com.example.home_service_system.service.CustomerService;
-import com.example.home_service_system.service.ExpertService;
-import com.example.home_service_system.service.OrderService;
-import com.example.home_service_system.service.SubServiceService;
+import com.example.home_service_system.service.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -26,7 +21,6 @@ import org.springframework.validation.annotation.Validated;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -61,9 +55,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderResponse update(@Valid OrderUpdateRequest request) {
-        Order order = orderRepository.findByIdAndIsDeletedFalse(request.id())
-                .orElseThrow(() -> new CustomApiException("Order with id {"
-                        + request.id() + "} not found!", CustomApiExceptionType.NOT_FOUND));
+        Order order = findOrderByIdAndIsDeletedFalse(request.id());
 
         if (request.subServiceId() != null) {
             SubService subService = subServiceService
@@ -108,7 +100,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order findOrderByIdAndIsDeletedFalse(Long id){
+    public Order findOrderByIdAndIsDeletedFalse(Long id) {
         return orderRepository.findByIdAndIsDeletedFalse(id)
                 .orElseThrow(() -> new CustomApiException("Order with id {"
                         + id + "} not found!", CustomApiExceptionType.NOT_FOUND));
@@ -117,7 +109,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderResponse> findAllByIsDeletedFalse() {
         return orderRepository.findAllByIsDeletedFalse().stream()
-                .map(CustomOrderMapper::to).toList();    }
+                .map(CustomOrderMapper::to).toList();
+    }
 
 
     @Override
@@ -139,16 +132,17 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderResponse> findByServiceDateBetween(LocalDateTime startDate, LocalDateTime endDate) {
-        return orderRepository.findByServiceDateBetweenAndIsDeletedFalse(startDate, endDate).stream()
-                .map(CustomOrderMapper::to).toList();
+    public List<OrderResponse> findByServiceDateBetween(LocalDateTime startDate,
+                                                        LocalDateTime endDate) {
+        return orderRepository.findByServiceDateBetweenAndIsDeletedFalse(startDate, endDate)
+                .stream().map(CustomOrderMapper::to).toList();
     }
 
     @Override
-    public void softDeleteById(Long id) {
-        orderRepository.findByIdAndIsDeletedFalse(id)
-                .orElseThrow(() -> new CustomApiException("Order with id {" + id + "} not found!"
-                        , CustomApiExceptionType.NOT_FOUND));
+    public void softDeleteOrderAndExpertSuggestionsByOrderId(Long id) {
+        Order order = findOrderByIdAndIsDeletedFalse(id);
+        order.getExpertSuggestionList()
+                .forEach(suggestion -> suggestion.setDeleted(true));
         orderRepository.softDeleteById(id);
         log.info("Order with id {} deleted", id);
     }

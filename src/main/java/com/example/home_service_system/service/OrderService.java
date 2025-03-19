@@ -9,7 +9,6 @@ import jakarta.validation.Valid;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 public interface OrderService {
     OrderResponse save(@Valid OrderSaveRequest orderSaveRequest);
@@ -30,5 +29,5 @@ public interface OrderService {
 
     List<OrderResponse> findByServiceDateBetween(LocalDateTime startDate, LocalDateTime endDate);
 
-    void softDeleteById(Long id);
+    void softDeleteOrderAndExpertSuggestionsByOrderId(Long id);
 }

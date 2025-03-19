@@ -10,12 +10,13 @@ import com.example.home_service_system.dto.expertSuggestionDTO.ExpertSuggestionS
 import com.example.home_service_system.dto.mainServiceDTO.MainServiceResponse;
 import com.example.home_service_system.dto.mainServiceDTO.MainServiceSaveRequest;
 import com.example.home_service_system.dto.mainServiceDTO.MainServiceUpdateRequest;
+import com.example.home_service_system.dto.orderDTO.OrderSaveRequest;
+import com.example.home_service_system.dto.orderDTO.OrderUpdateRequest;
 import com.example.home_service_system.dto.subServiceDTO.SubServiceUpdateRequest;
-import com.example.home_service_system.entity.Customer;
 import com.example.home_service_system.entity.Expert;
 import com.example.home_service_system.entity.MainService;
 import com.example.home_service_system.entity.Order;
-import com.example.home_service_system.entity.enums.UserStatus;
+import com.example.home_service_system.entity.enums.OrderStatus;
 import com.example.home_service_system.mapper.MainServiceMapper;
 import com.example.home_service_system.mapper.customMappers.CustomMainServiceMapper;
 import com.example.home_service_system.service.*;
@@ -166,14 +167,14 @@ public class HomeServiceSystemApplication {
         byte[] dummyImage = new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 
         ExpertSaveRequest expert = new ExpertSaveRequest(
-                "Tim",
-                "Burton",
-                "Tim",
-                "Tim@1234",
-                "0019954327",
-                "09184032176",
-                LocalDate.of(1969, 8, 15),
-                "tim@example.com",
+                "Brad",
+                "Bradly",
+                "Brad",
+                "Brad@1234",
+                "0019934327",
+                "09184232176",
+                LocalDate.of(1950, 8, 15),
+                "brad@example.com",
                 dummyImage
         );
         //expertService.save(expert);
@@ -182,60 +183,65 @@ public class HomeServiceSystemApplication {
         //System.out.println(customerService.findAll());
         //System.out.println(expertService.findAll());
 
-      /*  MainServiceSaveRequest mainServiceSaveRequest =
+        MainServiceSaveRequest mainServiceSaveRequest =
                 new MainServiceSaveRequest("Electronic");
 
         MainServiceUpdateRequest mainServiceUpdateRequest =
-                new MainServiceUpdateRequest(2L, "Electronics", null);*/
-        // mainServiceService.update(mainServiceUpdateRequest);
+                new MainServiceUpdateRequest(1L, "Electronic", null);
+        //mainServiceService.update(mainServiceUpdateRequest);
         //mainServiceService.save(mainServiceSaveRequest);
         //System.out.println(mainServiceService.findAll());
 
-        /*MainServiceResponse mainServiceResponse = mainServiceService.findByIdAndIsDeletedFalse(2L);
-        MainService mainService = CustomMainServiceMapper.toMainServiceFromResponse(mainServiceResponse);
+        //MainServiceResponse mainServiceResponse = mainServiceService.findByIdAndIsDeletedFalse(1L);
+        //MainService mainService = CustomMainServiceMapper.toMainServiceFromResponse(mainServiceResponse);
 
-        SubServiceUpdateRequest subServiceUpdateRequest =
-                new SubServiceUpdateRequest(4L, "Repairing Lights"
-                        , 510000L, "Full Repairing for Lightssss.", mainService, null);*/
+        /*SubServiceSaveRequest subServiceSaveRequest =
+                new SubServiceSaveRequest("Fixing laptops"
+                        , 910000L, "Full Fixing for laptops.",
+                        mainService);*/
         //subServiceService.save(subServiceSaveRequest);
-        //subServiceService.updateSubService(4L,subServiceUpdateRequest);
+        //subServiceService.updateSubService(1L,subServiceUpdateRequest);
         //System.out.println(subServiceService.findAllByIsDeletedFalse());
 
-        //subServiceService.addExpertToSubService(3L,2L);
+        //subServiceService.addExpertToSubService(1L,2L);
+        //subServiceService.removeExpertFromSubService(1L,2L);
         // subServiceService.addExpertToSubService(1L,2L);
         //subServiceService.addExpertToSubService(4L,2L);
         //subServiceService.addExpertToSubService(4L,1L);
 
         //subServiceService.removeExpertFromSubService(1L,1L);
-
-        /*SubServiceUpdateRequest subServiceUpdateRequest =
-                new SubServiceUpdateRequest(1L,"Kitchen Cleaning",
-                        2000000L,"Full cleaning for Kitchen."
-                        , mainService,null);*/
-        //subServiceService.updateSubService(1L,subServiceUpdateRequest);
+        MainServiceResponse mainServiceResponse3 = mainServiceService.findByIdAndIsDeletedFalse(2L);
+        MainService mainService3 = CustomMainServiceMapper.toMainServiceFromResponse(mainServiceResponse3);
+        SubServiceUpdateRequest subServiceUpdateRequest =
+                new SubServiceUpdateRequest(3L,"Kitchen Cleaning",
+                        2000000L,"Full cleaning for Kitchens."
+                        , mainService3,null);
+        //subServiceService.update(subServiceUpdateRequest);
 
         //System.out.println(subServiceService.findAllSubServicesByIsDeletedFalse());
         //mainServiceService.softDelete(1L);
-        //subServiceService.softDeleteAllByMainServiceId(1L);
+        //subServiceService.softDeleteAllSubServicesByMainServiceId(1L);
+        //subServiceService.softDeleteById(1L);
+
 
         // System.out.println(expertService.findAll());
         //System.out.println(expertService.findByUsername("David"));
 
 
-        /*OrderSaveRequest orderSaveRequest1 = new OrderSaveRequest(
-                1L, 3L, 400L
-                , "i need help to fix my sssss",
-                LocalDateTime.now().plusDays(1L), "ssss , sss, as azssi"
-        );*/
+        OrderSaveRequest orderSaveRequest1 = new OrderSaveRequest(
+                2L, 1L, 987654L
+                , "i need help to fix my apple laptop",
+                LocalDateTime.now().plusDays(3L), "New York 33th Street"
+        );
         //orderService.save(orderSaveRequest1);
 
-        /*OrderUpdateRequest orderUpdateRequest = new OrderUpdateRequest(
-                3L, 3L, 2L, 1L, 800000L
+        OrderUpdateRequest orderUpdateRequest = new OrderUpdateRequest(
+                1L, 3L, 2L, 2L, 800000L
                 , "wqehjiqwejiqwjeqwie",
                 LocalDateTime.now().plusDays(1L), "qwjeiqwjeiqwjeqwe",
                 OrderStatus.WAITING_FOR_EXPERT_TO_ARRIVE, null
                 , null
-        );*/
+        );
         //orderService.update(orderUpdateRequest);
         //orderService.softDeleteById(3L);
         //System.out.println(orderService.findAllByIsDeletedFalse());
@@ -249,18 +255,20 @@ public class HomeServiceSystemApplication {
         //customerCommentAndRateservice.findAllAndIsDeletedFalse();
         // orderService.findByIdAndIsDeletedFalse(2L);
 
-        //Order order3 = orderService.findOrderByIdAndIsDeletedFalse(2L);
+        Order order1 = orderService.findOrderByIdAndIsDeletedFalse(1L);
         /*CustomerCommentAndRateUpdateRequest request2 = new CustomerCommentAndRateUpdateRequest(
               3L,  order3, 39, "Well Doooone!"
         );*/
         //customerCommentAndRateservice.update(request2);
-        /*Expert expert1 =expertService.findExpertByIdAndIsDeletedFalse(2L);
+
+        Expert expert1 =expertService.findExpertByIdAndIsDeletedFalse(2L);
         ExpertSuggestionSaveRequest request3 = new ExpertSuggestionSaveRequest(
-                order3,expert1,"tim tim tim",133371L
-                , Duration.ofHours(10L)
-                ,LocalDateTime.now().plusDays(4)
-        );*/
+                order1,expert1,"Man miam",5421321L
+                , Duration.ofHours(3L),LocalDateTime.now().plusDays(7)
+        );
         //expertSuggestionService.save(request3);
+
+        //orderService.softDeleteById(1L);
         //System.out.println(expertSuggestionService.findAllByIsDeletedFalse());
         //System.out.println(orderService.findByIdAndIsDeletedFalse(3L));
 /*
@@ -288,7 +296,7 @@ public class HomeServiceSystemApplication {
                 null,
                 null,
                 null,
-                UserStatus.NEW,
+                null,
                 null,
                 null,
                 null,
@@ -299,7 +307,7 @@ public class HomeServiceSystemApplication {
 
         //todo: expert Specification
         Page<ExpertResponse> experts = expertService.getFilteredExperts(
-                null,
+                "",
                 null,
                 null,
                 null,
@@ -314,7 +322,7 @@ public class HomeServiceSystemApplication {
                 0,
                 5
         );
-        experts.forEach(e -> System.out.println("Found Experts: " + e));
+        //experts.forEach(e -> System.out.println("Found Experts: " + e));
 
     }
 

@@ -1,8 +1,5 @@
 package com.example.home_service_system.dto.orderDTO;
 
-import com.example.home_service_system.entity.Customer;
-import com.example.home_service_system.entity.SubService;
-import com.example.home_service_system.entity.enums.OrderStatus;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDateTime;

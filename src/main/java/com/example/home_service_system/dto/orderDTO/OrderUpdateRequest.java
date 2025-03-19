@@ -1,9 +1,7 @@
 package com.example.home_service_system.dto.orderDTO;
 
 import com.example.home_service_system.entity.CustomerCommentAndRate;
-import com.example.home_service_system.entity.ExpertSuggestion;
 import com.example.home_service_system.entity.enums.OrderStatus;
-import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
