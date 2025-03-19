@@ -26,4 +26,11 @@ public interface CustomerCommentAndRateRepository
     @Modifying
     @Query("UPDATE CustomerCommentAndRate c SET c.isDeleted = true WHERE c.id = :id")
     void softDeleteById(Long id);
+
+    @Query("""
+            SELECT COALESCE(CAST(AVG(c.rating) AS INTEGER), 0) FROM CustomerCommentAndRate c
+            WHERE c.order.expert.id = :expertId AND c.isDeleted = false
+            """)
+    Integer calculateAverageRatingByExpertId(Long expertId);
+
 }

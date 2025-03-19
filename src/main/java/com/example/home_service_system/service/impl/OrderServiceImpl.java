@@ -139,10 +139,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void softDeleteOrderAndExpertSuggestionsByOrderId(Long id) {
+    public void softDeleteOrderAndExpertSuggestionsAndCommentAndRateByOrderId(Long id) {
         Order order = findOrderByIdAndIsDeletedFalse(id);
         order.getExpertSuggestionList()
                 .forEach(suggestion -> suggestion.setDeleted(true));
+        order.getCustomerCommentAndRate().setDeleted(true);
         orderRepository.softDeleteById(id);
         log.info("Order with id {} deleted", id);
     }

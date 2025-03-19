@@ -2,6 +2,8 @@ package com.example.home_service_system;
 
 import com.example.home_service_system.dto.adminDTO.AdminSaveRequest;
 import com.example.home_service_system.dto.adminDTO.AdminUpdateRequest;
+import com.example.home_service_system.dto.customerCommentAndRateDTO.CustomerCommentAndRateSaveRequest;
+import com.example.home_service_system.dto.customerCommentAndRateDTO.CustomerCommentAndRateUpdateRequest;
 import com.example.home_service_system.dto.customerDTO.CustomerResponse;
 import com.example.home_service_system.dto.customerDTO.CustomerSaveRequest;
 import com.example.home_service_system.dto.expertDTO.ExpertResponse;
@@ -246,19 +248,19 @@ public class HomeServiceSystemApplication {
         //orderService.softDeleteById(3L);
         //System.out.println(orderService.findAllByIsDeletedFalse());
         //System.out.println(expertService.findByIdAndIsDeletedFalse(1L));
-/*        Order order = orderService.findOrderByIdAndIsDeletedFalse(3L);
+        Order order = orderService.findOrderByIdAndIsDeletedFalse(3L);
         CustomerCommentAndRateSaveRequest request = new CustomerCommentAndRateSaveRequest(
-                order, 30, "Well done!"
+                order, 75, "Good job!"
         );
-        customerCommentAndRateservice.save(request);*/
-        //customerCommentAndRateservice.softDeleteById(2L);
+        //customerCommentAndRateservice.save(request);
+        customerCommentAndRateservice.softDeleteById(20L);
         //customerCommentAndRateservice.findAllAndIsDeletedFalse();
         // orderService.findByIdAndIsDeletedFalse(2L);
 
         Order order1 = orderService.findOrderByIdAndIsDeletedFalse(1L);
-        /*CustomerCommentAndRateUpdateRequest request2 = new CustomerCommentAndRateUpdateRequest(
-              3L,  order3, 39, "Well Doooone!"
-        );*/
+        CustomerCommentAndRateUpdateRequest request2 = new CustomerCommentAndRateUpdateRequest(
+              1L,  order1, 39, "Well Doooone!"
+        );
         //customerCommentAndRateservice.update(request2);
 
         Expert expert1 =expertService.findExpertByIdAndIsDeletedFalse(2L);
@@ -268,7 +270,7 @@ public class HomeServiceSystemApplication {
         );
         //expertSuggestionService.save(request3);
 
-        //orderService.softDeleteById(1L);
+        //orderService.softDeleteOrderAndExpertSuggestionsAndCommentAndRateByOrderId(1L);
         //System.out.println(expertSuggestionService.findAllByIsDeletedFalse());
         //System.out.println(orderService.findByIdAndIsDeletedFalse(3L));
 /*

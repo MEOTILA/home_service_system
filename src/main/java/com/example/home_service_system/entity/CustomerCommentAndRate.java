@@ -25,10 +25,4 @@ public class CustomerCommentAndRate extends BaseEntity<Long> {
     @Column(nullable = false)
     boolean isDeleted = false;
 
-
-    /* @ManyToOne
-     Customer customer;
-
-     @ManyToOne
-     Expert expert;*/
 }

@@ -29,5 +29,5 @@ public interface OrderService {
 
     List<OrderResponse> findByServiceDateBetween(LocalDateTime startDate, LocalDateTime endDate);
 
-    void softDeleteOrderAndExpertSuggestionsByOrderId(Long id);
+    void softDeleteOrderAndExpertSuggestionsAndCommentAndRateByOrderId(Long id);
 }
