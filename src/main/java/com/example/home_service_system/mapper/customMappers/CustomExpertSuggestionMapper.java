@@ -58,7 +58,7 @@ public class CustomExpertSuggestionMapper {
     public static ExpertSuggestionUpdateRequest toUpdateRequest(ExpertSuggestion expertSuggestion) {
        return new ExpertSuggestionUpdateRequest(
                expertSuggestion.getId(),
-               expertSuggestion.getOrder(),
+               expertSuggestion.getOrder() != null ? expertSuggestion.getOrder() : null,
                expertSuggestion.getExpertSuggestion(),
                expertSuggestion.getExpertOfferedCost(),
                expertSuggestion.getServiceTimeDuration(),

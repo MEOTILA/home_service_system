@@ -24,8 +24,6 @@ public class CustomCustomerMapper {
                 customer.getEmail(),
                 customer.getOrderList() != null ? customer.getOrderList().stream()
                         .map(order -> order.getId()).toList() : new ArrayList<>(),
-                /*customer.getCustomerCommentAndRateList() != null ? customer.getCustomerCommentAndRateList()
-                        .stream().map(comment -> comment.getId()).toList() : new ArrayList<>(),*/
                 customer.getCreatedAt(),
                 customer.getUpdatedAt(),
                 customer.getUserStatus(),

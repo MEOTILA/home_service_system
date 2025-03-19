@@ -1,5 +1,6 @@
 package com.example.home_service_system;
 
+import com.example.home_service_system.dto.adminDTO.AdminChangePasswordRequest;
 import com.example.home_service_system.dto.adminDTO.AdminSaveRequest;
 import com.example.home_service_system.dto.adminDTO.AdminUpdateRequest;
 import com.example.home_service_system.dto.customerCommentAndRateDTO.CustomerCommentAndRateSaveRequest;
@@ -7,8 +8,10 @@ import com.example.home_service_system.dto.customerCommentAndRateDTO.CustomerCom
 import com.example.home_service_system.dto.customerDTO.CustomerChangePasswordRequest;
 import com.example.home_service_system.dto.customerDTO.CustomerResponse;
 import com.example.home_service_system.dto.customerDTO.CustomerSaveRequest;
+import com.example.home_service_system.dto.expertDTO.ExpertChangePasswordRequest;
 import com.example.home_service_system.dto.expertDTO.ExpertResponse;
 import com.example.home_service_system.dto.expertDTO.ExpertSaveRequest;
+import com.example.home_service_system.dto.expertDTO.ExpertUpdateRequest;
 import com.example.home_service_system.dto.expertSuggestionDTO.ExpertSuggestionSaveRequest;
 import com.example.home_service_system.dto.expertSuggestionDTO.ExpertSuggestionUpdateRequest;
 import com.example.home_service_system.dto.mainServiceDTO.MainServiceResponse;
@@ -104,9 +107,10 @@ public class HomeServiceSystemApplication {
         //System.out.println(adminService.findAll());
 
         //todo: Admin change Password
-		/*AdminChangePasswordRequest adminChangePasswordRequest =
-				new AdminChangePasswordRequest ("Sattar@12345","Sattar@1234");
-		adminService.changePassword(1L,adminChangePasswordRequest);*/
+		AdminChangePasswordRequest adminChangePasswordRequest =
+				new AdminChangePasswordRequest(1L,
+                        "Roger@12345","Roger@1234");
+		//adminService.changePassword(adminChangePasswordRequest);
 
         //adminService.deleteById(3L);
 
@@ -138,7 +142,7 @@ public class HomeServiceSystemApplication {
         //System.out.println(customerService.findByIdAndIsDeletedFalse(1L));
         CustomerChangePasswordRequest request5 = new CustomerChangePasswordRequest(
                 10L,"Alan@123456","Alan@1234");
-        customerService.changePassword(request5);
+        //customerService.changePassword(request5);
 
         CustomerSaveRequest customer33 = new CustomerSaveRequest(
                 "Sam",
@@ -175,14 +179,14 @@ public class HomeServiceSystemApplication {
         byte[] dummyImage = new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 
         ExpertSaveRequest expert = new ExpertSaveRequest(
-                "Brad",
-                "Bradly",
-                "Brad",
-                "Brad@1234",
-                "0019934327",
-                "09184232176",
-                LocalDate.of(1950, 8, 15),
-                "brad@example.com",
+                "Angel",
+                "Angel",
+                "Angel",
+                "Angel@1234",
+                "0019234327",
+                "09124232176",
+                LocalDate.of(1930, 8, 15),
+                "angel@example.com",
                 dummyImage
         );
         //expertService.save(expert);
@@ -190,6 +194,11 @@ public class HomeServiceSystemApplication {
 
         //System.out.println(customerService.findAll());
         //System.out.println(expertService.findAll());
+
+        ExpertChangePasswordRequest request6 = new ExpertChangePasswordRequest(
+                6L,"Angel@12345","Angel@12344"
+        );
+        //expertService.changePassword(request6);
 
         MainServiceSaveRequest mainServiceSaveRequest =
                 new MainServiceSaveRequest("Electronic");
@@ -286,11 +295,12 @@ public class HomeServiceSystemApplication {
         //orderService.softDeleteOrderAndExpertSuggestionsAndCommentAndRateByOrderId(1L);
         //System.out.println(expertSuggestionService.findAllByIsDeletedFalse());
         //System.out.println(orderService.findByIdAndIsDeletedFalse(3L));
-/*
+
+        Order order4 = orderService.findOrderByIdAndIsDeletedFalse(1L);
         ExpertSuggestionUpdateRequest request4 = new ExpertSuggestionUpdateRequest(
-                3L,order3,"Man miammm",156451L, Duration.ofHours(3L)
+                3L,order4,"testttt",133451L, Duration.ofHours(8L)
                 ,LocalDateTime.now().plusDays(3)
-        );*/
+        );
         //expertSuggestionService.update(request4);
 
         //expertSuggestionService.softDeleteById(3L);

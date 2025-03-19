@@ -12,6 +12,8 @@ import java.util.stream.Collectors;
 
 public class CustomExpertMapper {
     public static ExpertResponse to(Expert expert) {
+        if (expert == null)
+            return null;
         return new ExpertResponse(
                 expert.getId(),
                 expert.getFirstName(),
@@ -27,28 +29,24 @@ public class CustomExpertMapper {
                 expert.getRating(),
                 expert.getUserStatus(),
                 expert.getBalance(),
-                /*expert.getOrderList().stream().map(order -> order.getId())
-                        .collect(Collectors.toList()),
-                expert.getExpertSuggestionList().stream().map(e -> e.getId())
-                        .collect(Collectors.toList()),
-                expert.getExpertServiceFields().stream().map(SubService::getId)
-                        .collect(Collectors.toList())*/
                 expert.getOrderList() != null
-                        ? expert.getOrderList().stream().map(order -> order.getId()).collect(Collectors.toList())
+                        ? expert.getOrderList().stream()
+                        .map(order -> order.getId()).collect(Collectors.toList())
                         : Collections.emptyList(),
                 expert.getExpertSuggestionList() != null
                         ? expert.getExpertSuggestionList().stream()
-                        .map(e -> e.getId())
-                        .collect(Collectors.toList()) : Collections.emptyList(),
+                        .map(e -> e.getId()).collect(Collectors.toList())
+                        : Collections.emptyList(),
                 expert.getExpertServiceFields() != null
-                        ? expert.getExpertServiceFields().stream().map(SubService::getId).collect(Collectors.toList())
+                        ? expert.getExpertServiceFields().stream()
+                        .map(SubService::getId).collect(Collectors.toList())
                         : Collections.emptyList()
-               /* expert.getCustomerCommentAndRateList().stream().map(comment -> comment.getId())
-                        .collect(Collectors.toList())*/
         );
     }
 
     public static Expert fromSaveRequest(ExpertSaveRequest request) {
+        if (request == null)
+            return null;
         Expert expert = new Expert();
         expert.setFirstName(request.firstName());
         expert.setLastName(request.lastName());
@@ -65,6 +63,8 @@ public class CustomExpertMapper {
     }
 
     public static Expert fromUpdateRequest(ExpertUpdateRequest request) {
+        if (request == null)
+            return null;
         Expert expert = new Expert();
         expert.setId(request.id());
         expert.setFirstName(request.firstName());
@@ -83,6 +83,8 @@ public class CustomExpertMapper {
     }
 
     public static Expert toExpertFromResponse(ExpertResponse response) {
+        if (response == null)
+            return null;
         Expert expert = new Expert();
         expert.setId(response.id());
         expert.setFirstName(response.firstName());
@@ -102,6 +104,8 @@ public class CustomExpertMapper {
     }
 
     public static ExpertUpdateRequest toUpdateRequest(Expert expert) {
+        if (expert == null)
+            return null;
         return new ExpertUpdateRequest(
                 expert.getId(),
                 expert.getFirstName(),
@@ -116,24 +120,18 @@ public class CustomExpertMapper {
                 expert.getRating(),
                 expert.getUserStatus(),
                 expert.getBalance(),
-                /*expert.getOrderList().stream().map(order -> order.getId())
-                        .collect(Collectors.toList()),
-                expert.getExpertSuggestionList().stream().map(e -> e.getId())
-                        .collect(Collectors.toList()),
-                expert.getExpertServiceFields().stream().map(SubService::getId)
-                        .collect(Collectors.toList())*/
                 expert.getOrderList() != null
-                        ? expert.getOrderList().stream().map(order -> order.getId()).collect(Collectors.toList())
+                        ? expert.getOrderList().stream()
+                        .map(order -> order.getId()).collect(Collectors.toList())
                         : Collections.emptyList(),
                 expert.getExpertSuggestionList() != null
                         ? expert.getExpertSuggestionList().stream()
-                        .map(e -> e.getId())
-                        .collect(Collectors.toList()) : Collections.emptyList(),
+                        .map(e -> e.getId()).collect(Collectors.toList())
+                        : Collections.emptyList(),
                 expert.getExpertServiceFields() != null
-                        ? expert.getExpertServiceFields().stream().map(SubService::getId).collect(Collectors.toList())
+                        ? expert.getExpertServiceFields().stream()
+                        .map(SubService::getId).collect(Collectors.toList())
                         : Collections.emptyList()
-                /*expert.getCustomerCommentAndRateList().stream().map(comment -> comment.getId())
-                        .collect(Collectors.toList())*/
         );
     }
 
