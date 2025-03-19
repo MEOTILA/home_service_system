@@ -1,7 +1,6 @@
 package com.example.home_service_system.repository;
 
 import com.example.home_service_system.entity.ExpertSuggestion;
-import com.example.home_service_system.entity.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -20,7 +19,7 @@ public interface ExpertSuggestionRepository extends JpaRepository<ExpertSuggesti
     List<ExpertSuggestion> findAllByOrderIdAndIsDeletedFalse(Long orderId);
 
     @Query("SELECT e FROM ExpertSuggestion e WHERE e.isDeleted = false")
-    List<ExpertSuggestion> findAllByIsDeletedFalse();
+    List<ExpertSuggestion> findAllAndIsDeletedFalse();
 
     @Query("SELECT e FROM ExpertSuggestion e WHERE e.expert.id = :expertId AND e.isDeleted = false")
     List<ExpertSuggestion> findAllByExpertIdAndIsDeletedFalse(Long expertId);

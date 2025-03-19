@@ -9,6 +9,7 @@ import com.example.home_service_system.dto.customerDTO.CustomerSaveRequest;
 import com.example.home_service_system.dto.expertDTO.ExpertResponse;
 import com.example.home_service_system.dto.expertDTO.ExpertSaveRequest;
 import com.example.home_service_system.dto.expertSuggestionDTO.ExpertSuggestionSaveRequest;
+import com.example.home_service_system.dto.expertSuggestionDTO.ExpertSuggestionUpdateRequest;
 import com.example.home_service_system.dto.mainServiceDTO.MainServiceResponse;
 import com.example.home_service_system.dto.mainServiceDTO.MainServiceSaveRequest;
 import com.example.home_service_system.dto.mainServiceDTO.MainServiceUpdateRequest;
@@ -215,9 +216,9 @@ public class HomeServiceSystemApplication {
         MainServiceResponse mainServiceResponse3 = mainServiceService.findByIdAndIsDeletedFalse(2L);
         MainService mainService3 = CustomMainServiceMapper.toMainServiceFromResponse(mainServiceResponse3);
         SubServiceUpdateRequest subServiceUpdateRequest =
-                new SubServiceUpdateRequest(3L,"Kitchen Cleaning",
-                        2000000L,"Full cleaning for Kitchens."
-                        , mainService3,null);
+                new SubServiceUpdateRequest(3L, "Kitchen Cleaning",
+                        2000000L, "Full cleaning for Kitchens."
+                        , mainService3, null);
         //subServiceService.update(subServiceUpdateRequest);
 
         //System.out.println(subServiceService.findAllSubServicesByIsDeletedFalse());
@@ -253,22 +254,29 @@ public class HomeServiceSystemApplication {
                 order, 75, "Good job!"
         );
         //customerCommentAndRateservice.save(request);
-        customerCommentAndRateservice.softDeleteById(20L);
+        //customerCommentAndRateservice.softDeleteById(20L);
         //customerCommentAndRateservice.findAllAndIsDeletedFalse();
         // orderService.findByIdAndIsDeletedFalse(2L);
 
         Order order1 = orderService.findOrderByIdAndIsDeletedFalse(1L);
         CustomerCommentAndRateUpdateRequest request2 = new CustomerCommentAndRateUpdateRequest(
-              1L,  order1, 39, "Well Doooone!"
+                1L, order1, 39, "Well Doooone!"
         );
         //customerCommentAndRateservice.update(request2);
 
-        Expert expert1 =expertService.findExpertByIdAndIsDeletedFalse(2L);
+        /*Expert expert1 = expertService.findExpertByIdAndIsDeletedFalse(5L);
         ExpertSuggestionSaveRequest request3 = new ExpertSuggestionSaveRequest(
-                order1,expert1,"Man miam",5421321L
-                , Duration.ofHours(3L),LocalDateTime.now().plusDays(7)
+                order1, expert1, "Meeeeee", 1321L
+                , Duration.ofHours(4L), LocalDateTime.now().plusDays(7)
+        );*/
+       // expertSuggestionService.save(request3);
+
+        ExpertSuggestionUpdateRequest request3 = new ExpertSuggestionUpdateRequest(
+                3L, order1,"Helloooo",652L,
+                Duration.ofDays(2L), LocalDateTime.now().plusDays(7)
         );
-        //expertSuggestionService.save(request3);
+        //expertSuggestionService.update(request3);
+        expertSuggestionService.softDeleteById(3L);
 
         //orderService.softDeleteOrderAndExpertSuggestionsAndCommentAndRateByOrderId(1L);
         //System.out.println(expertSuggestionService.findAllByIsDeletedFalse());
