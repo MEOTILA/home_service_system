@@ -24,13 +24,11 @@ public interface SubServiceService {
 
     void softDeleteById(Long id);
 
-    void softDeleteAllByMainServiceId(Long mainServiceId);
+    void softDeleteAllSubServicesByMainServiceId(Long mainServiceId);
 
     void addExpertToSubService(Long subServiceId, Long expertId);
 
     void removeExpertFromSubService(Long subServiceId, Long expertId);
-
-    SubServiceResponse updateSubService(Long subServiceId, SubServiceUpdateRequest updateRequest);
 
 
 }

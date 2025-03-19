@@ -1,7 +1,5 @@
 package com.example.home_service_system.service.impl;
 
-import com.example.home_service_system.dto.expertDTO.ExpertUpdateRequest;
-import com.example.home_service_system.dto.mainServiceDTO.MainServiceResponse;
 import com.example.home_service_system.dto.subServiceDTO.SubServiceResponse;
 import com.example.home_service_system.dto.subServiceDTO.SubServiceSaveRequest;
 import com.example.home_service_system.dto.subServiceDTO.SubServiceUpdateRequest;
@@ -11,7 +9,6 @@ import com.example.home_service_system.entity.SubService;
 import com.example.home_service_system.exceptions.CustomApiException;
 import com.example.home_service_system.exceptions.CustomApiExceptionType;
 import com.example.home_service_system.mapper.customMappers.CustomExpertMapper;
-import com.example.home_service_system.mapper.customMappers.CustomMainServiceMapper;
 import com.example.home_service_system.mapper.customMappers.CustomSubServiceMapper;
 import com.example.home_service_system.repository.SubServiceRepository;
 import com.example.home_service_system.service.ExpertService;
@@ -33,9 +30,6 @@ import java.util.Optional;
 @Validated
 public class SubServiceServiceImpl implements SubServiceService {
     private final SubServiceRepository subServiceRepository;
-    //private final SubServiceMapper subServiceMapper;
-    //private final ExpertMapper expertMapper;
-    //private final MainServiceMapper mainServiceMapper;
     private final ExpertService expertService;
     private final MainServiceService mainServiceService;
 
@@ -43,22 +37,24 @@ public class SubServiceServiceImpl implements SubServiceService {
     public SubServiceResponse save(SubServiceSaveRequest request) {
         Optional<SubService> existingSubService = subServiceRepository.findByName(request.name());
         if (existingSubService.isPresent()) {
-            throw new CustomApiException("SubService with name {" + request.name() + "} already exists!",
+            throw new CustomApiException("SubService with name {" + request.name()
+                    + "} is already exists!",
                     CustomApiExceptionType.UNPROCESSABLE_ENTITY);
         }
+        mainServiceService.
+                findMainServiceByIdAndIsDeletedFalse(request.mainService().getId());
 
         SubService subService = CustomSubServiceMapper.fromSaveRequest(request);
-        SubService savedSubService = subServiceRepository.save(subService);
-        log.info("SubService with id {} created", savedSubService.getId());
+        subServiceRepository.save(subService);
+        log.info("SubService with id {} created", subService.getId());
 
-        return CustomSubServiceMapper.to(savedSubService);
+        return CustomSubServiceMapper.to(subService);
     }
 
     @Override
     public SubServiceResponse update(SubServiceUpdateRequest request) {
-        SubService existingSubService = subServiceRepository.findByIdAndIsDeletedFalse(request.id())
-                .orElseThrow(() -> new CustomApiException("SubService with id {" + request.id() + "} not found!",
-                        CustomApiExceptionType.NOT_FOUND));
+
+        SubService existingSubService = findSubServiceByIdAndIsDeletedFalse(request.id());
 
         if (request.name() != null && !request.name().isBlank()) {
             existingSubService.setName(request.name());
@@ -70,6 +66,14 @@ public class SubServiceServiceImpl implements SubServiceService {
             existingSubService.setDescription(request.description());
         }
 
+        if (request.mainService() != null && request.mainService().getId() != null) {
+            MainService newMainService = mainServiceService.
+                    findMainServiceByIdAndIsDeletedFalse(request.mainService().getId());
+            if (!newMainService.getId().equals(existingSubService.getMainService().getId())) {
+                existingSubService.setMainService(newMainService);
+            }
+        }
+
         SubService updatedSubService = subServiceRepository.save(existingSubService);
         log.info("SubService with id {} updated", updatedSubService.getId());
 
@@ -79,16 +83,16 @@ public class SubServiceServiceImpl implements SubServiceService {
     @Override
     public SubServiceResponse findByIdAndIsDeletedFalse(Long id) {
         SubService subService = subServiceRepository.findByIdAndIsDeletedFalse(id)
-                .orElseThrow(() -> new CustomApiException("SubService with id {" + id + "} not found!",
-                        CustomApiExceptionType.NOT_FOUND));
+                .orElseThrow(() -> new CustomApiException("SubService with id {"
+                        + id + "} not found!", CustomApiExceptionType.NOT_FOUND));
         return CustomSubServiceMapper.to(subService);
     }
 
     @Override
-    public SubService findSubServiceByIdAndIsDeletedFalse(Long id){
+    public SubService findSubServiceByIdAndIsDeletedFalse(Long id) {
         return subServiceRepository.findByIdAndIsDeletedFalse(id)
-                .orElseThrow(() -> new CustomApiException("SubService with id {" + id + "} not found!",
-                        CustomApiExceptionType.NOT_FOUND));
+                .orElseThrow(() -> new CustomApiException("SubService with id {"
+                        + id + "} not found!", CustomApiExceptionType.NOT_FOUND));
     }
 
     @Override
@@ -104,32 +108,37 @@ public class SubServiceServiceImpl implements SubServiceService {
 
     @Override
     public List<SubServiceResponse> findAllByMainServiceId(Long mainServiceId) {
-        List<SubService> subServices = subServiceRepository.findAllByMainServiceIdAndIsDeletedFalse(mainServiceId);
+        List<SubService> subServices = subServiceRepository.
+                findAllByMainServiceIdAndIsDeletedFalse(mainServiceId);
         return subServices.stream().map(CustomSubServiceMapper::to).toList();
     }
 
     @Override
     public void softDeleteById(Long id) {
-        subServiceRepository.findByIdAndIsDeletedFalse(id)
-                .orElseThrow(() -> new CustomApiException("SubService with id {" + id + "} not found!",
-                        CustomApiExceptionType.NOT_FOUND));
+        SubService deletingSubService = findSubServiceByIdAndIsDeletedFalse(id);
+
+        for (Expert expert : deletingSubService.getExpertList()) {
+            expert.getExpertServiceFields().remove(deletingSubService);
+            expertService.update(CustomExpertMapper.toUpdateRequest(expert));
+        }
 
         subServiceRepository.softDeleteById(id);
         log.info("SubService with id {} deleted", id);
     }
 
     @Override
-    public void softDeleteAllByMainServiceId(Long mainServiceId) {
+    public void softDeleteAllSubServicesByMainServiceId(Long mainServiceId) {
         List<SubService> subServices = subServiceRepository
                 .findAllByMainServiceIdAndIsDeletedFalse(mainServiceId);
-        subServices.forEach(subService -> softDeleteById(subService.getId()));
-        /*for (SubService subService : subServices) {
+        //subServices.forEach(subService -> softDeleteById(subService.getId()));
+
+        for (SubService subService : subServices) {
             for (Expert expert : subService.getExpertList()) {
                 expert.getExpertServiceFields().remove(subService);
-                expertService.update(expertMapper.toUpdateRequest(expert));
+                expertService.update(CustomExpertMapper.toUpdateRequest(expert));
             }
             softDeleteById(subService.getId());
-        }*/
+        }
         mainServiceService.softDelete(mainServiceId);
         log.info("All SubServices related to MainService with ID {} were soft deleted"
                 , mainServiceId);
@@ -137,10 +146,7 @@ public class SubServiceServiceImpl implements SubServiceService {
 
     @Override
     public void addExpertToSubService(Long subServiceId, Long expertId) {
-        SubService subService = subServiceRepository.findByIdAndIsDeletedFalse(subServiceId)
-                .orElseThrow(() -> new CustomApiException("SubService with id {" + subServiceId + "} not found!",
-                        CustomApiExceptionType.NOT_FOUND));
-
+        SubService subService = findSubServiceByIdAndIsDeletedFalse(subServiceId);
         Expert expert = expertService.findExpertByIdAndIsDeletedFalse(expertId);
 
         if (subService.getExpertList().contains(expert)) {
@@ -152,19 +158,14 @@ public class SubServiceServiceImpl implements SubServiceService {
         expert.getExpertServiceFields().add(subService);
         subService.getExpertList().add(expert);
 
-        ExpertUpdateRequest expertUpdateRequest = CustomExpertMapper.toUpdateRequest(expert);
-        expertService.update(expertUpdateRequest);
+        expertService.update(CustomExpertMapper.toUpdateRequest(expert));
 
         log.info("Expert with id {} added to SubService with id {}", expertId, subServiceId);
     }
 
     @Override
     public void removeExpertFromSubService(Long subServiceId, Long expertId) {
-        SubService subService = subServiceRepository.findByIdAndIsDeletedFalse(subServiceId)
-                .orElseThrow(() -> new CustomApiException("SubService with id {"
-                        + subServiceId + "} not found!",
-                        CustomApiExceptionType.NOT_FOUND));
-
+        SubService subService = findSubServiceByIdAndIsDeletedFalse(subServiceId);
         Expert expert = expertService.findExpertByIdAndIsDeletedFalse(expertId);
 
         if (!subService.getExpertList().contains(expert)) {
@@ -175,48 +176,8 @@ public class SubServiceServiceImpl implements SubServiceService {
         expert.getExpertServiceFields().remove(subService);
         subService.getExpertList().remove(expert);
         expertService.update(CustomExpertMapper.toUpdateRequest(expert));
-        //subServiceRepository.save(subService);
         log.info("Expert with id {} removed from SubService with id {}", expertId, subServiceId);
     }
-
-    @Override
-    public SubServiceResponse updateSubService(Long subServiceId, SubServiceUpdateRequest updateRequest) {
-        SubService subService = subServiceRepository.findByIdAndIsDeletedFalse(subServiceId)
-                .orElseThrow(() -> new CustomApiException("SubService with id {"
-                        + subServiceId + "} not found!",
-                        CustomApiExceptionType.NOT_FOUND));
-
-        if (updateRequest.name() != null && !updateRequest.name().isEmpty()) {
-            subService.setName(updateRequest.name());
-        }
-
-        if (updateRequest.baseCost() != null) {
-            subService.setBaseCost(updateRequest.baseCost());
-        }
-
-        if (updateRequest.description() != null && !updateRequest.description().isEmpty()) {
-            subService.setDescription(updateRequest.description());
-        }
-
-        if (updateRequest.mainService() != null && updateRequest.mainService().getId() != null) {
-            MainServiceResponse mainServiceResponse = mainServiceService.findByIdAndIsDeletedFalse(updateRequest.mainService().getId());
-
-            MainService mainService = CustomMainServiceMapper.toMainServiceFromResponse(mainServiceResponse);
-
-            if (mainService == null) {
-                throw new CustomApiException(
-                        "MainService with id {" + updateRequest.mainService().getId() + "} not found!",
-                        CustomApiExceptionType.NOT_FOUND);
-            }
-
-            subService.setMainService(mainService);
-        }
-
-        SubService updatedSubService = subServiceRepository.save(subService);
-        log.info("SubService with id {} updated", updatedSubService.getId());
-        return CustomSubServiceMapper.to(updatedSubService);
-    }
-
 
 }
 
