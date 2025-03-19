@@ -40,37 +40,37 @@ public class ExpertServiceImpl implements ExpertService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public ExpertResponse save(@Valid ExpertSaveRequest expertSaveRequest) {
+    public ExpertResponse save(@Valid ExpertSaveRequest request) {
         Optional<Expert> optionalExpertByUsername =
-                expertRepository.findByUsername(expertSaveRequest.username());
+                expertRepository.findByUsername(request.username());
         if (optionalExpertByUsername.isPresent()) {
             throw new CustomApiException("Expert with username {"
-                    + expertSaveRequest.username() + "} already exists!",
+                    + request.username() + "} already exists!",
                     CustomApiExceptionType.UNPROCESSABLE_ENTITY);
         }
         Optional<Expert> optionalExpertByPhoneNumber =
-                expertRepository.findByPhoneNumber(expertSaveRequest.phoneNumber());
+                expertRepository.findByPhoneNumber(request.phoneNumber());
         if (optionalExpertByPhoneNumber.isPresent()) {
             throw new CustomApiException("Expert with phone number {"
-                    + expertSaveRequest.phoneNumber() + "} already exists!",
+                    + request.phoneNumber() + "} already exists!",
                     CustomApiExceptionType.UNPROCESSABLE_ENTITY);
         }
         Optional<Expert> optionalExpertByNationalId =
-                expertRepository.findByNationalId(expertSaveRequest.nationalId());
+                expertRepository.findByNationalId(request.nationalId());
         if (optionalExpertByNationalId.isPresent()) {
             throw new CustomApiException("Expert with national ID {"
-                    + expertSaveRequest.nationalId() + "} already exists!",
+                    + request.nationalId() + "} already exists!",
                     CustomApiExceptionType.UNPROCESSABLE_ENTITY);
         }
         Optional<Expert> optionalExpertByEmail =
-                expertRepository.findByEmail(expertSaveRequest.email());
+                expertRepository.findByEmail(request.email());
         if (optionalExpertByEmail.isPresent()) {
             throw new CustomApiException("Expert with email {"
-                    + expertSaveRequest.email() + "} already exists!",
+                    + request.email() + "} already exists!",
                     CustomApiExceptionType.UNPROCESSABLE_ENTITY);
         }
-        String hashedPassword = passwordEncoder.encode(expertSaveRequest.password());
-        Expert expert = CustomExpertMapper.fromSaveRequest(expertSaveRequest);
+        String hashedPassword = passwordEncoder.encode(request.password());
+        Expert expert = CustomExpertMapper.fromSaveRequest(request);
         expert.setPassword(hashedPassword);
         expert.setUserStatus(UserStatus.NEW);
         expertRepository.save(expert);
@@ -79,82 +79,78 @@ public class ExpertServiceImpl implements ExpertService {
     }
 
     @Override
-    public ExpertResponse update(@Valid ExpertUpdateRequest expertUpdateRequest) {
-        Expert updatingExpert = expertRepository
-                .findByIdAndIsDeletedFalse(expertUpdateRequest.id())
-                .orElseThrow(() -> new CustomApiException("Expert with id {"
-                        + expertUpdateRequest.id() + "} not found!",
-                        CustomApiExceptionType.NOT_FOUND));
+    public ExpertResponse update(@Valid ExpertUpdateRequest request) {
+        Expert updatingExpert = findExpertByIdAndIsDeletedFalse(request.id());
 
-        if (StringUtils.hasText(expertUpdateRequest.firstName())) {
-            updatingExpert.setFirstName(expertUpdateRequest.firstName());
+        if (StringUtils.hasText(request.firstName())) {
+            updatingExpert.setFirstName(request.firstName());
         }
-        if (StringUtils.hasText(expertUpdateRequest.lastName())) {
-            updatingExpert.setLastName(expertUpdateRequest.lastName());
+        if (StringUtils.hasText(request.lastName())) {
+            updatingExpert.setLastName(request.lastName());
         }
-        if (StringUtils.hasText(expertUpdateRequest.username())) {
+        if (StringUtils.hasText(request.username())) {
             Optional<Expert> existingExpert = expertRepository
-                    .findByUsername(expertUpdateRequest.username());
+                    .findByUsername(request.username());
             if (existingExpert.isPresent() && !existingExpert.get().getId()
                     .equals(updatingExpert.getId())) {
                 throw new CustomApiException("Expert with username {"
-                        + expertUpdateRequest.username() + "} already exists!",
+                        + request.username() + "} already exists!",
                         CustomApiExceptionType.UNPROCESSABLE_ENTITY);
             }
-            updatingExpert.setUsername(expertUpdateRequest.username());
+            updatingExpert.setUsername(request.username());
         }
-        if (StringUtils.hasText(expertUpdateRequest.password())) {
-            String hashedPassword = passwordEncoder.encode(expertUpdateRequest.password());
+        if (StringUtils.hasText(request.password())) {
+            String hashedPassword = passwordEncoder.encode(request.password());
             updatingExpert.setPassword(hashedPassword);
         }
-        if (StringUtils.hasText(expertUpdateRequest.nationalId())) {
+        if (StringUtils.hasText(request.nationalId())) {
             Optional<Expert> existingExpert = expertRepository
-                    .findByNationalId(expertUpdateRequest.nationalId());
+                    .findByNationalId(request.nationalId());
             if (existingExpert.isPresent() && !existingExpert.get().getId().
                     equals(updatingExpert.getId())) {
                 throw new CustomApiException("Expert with national ID {"
-                        + expertUpdateRequest.nationalId() + "} already exists!",
+                        + request.nationalId() + "} already exists!",
                         CustomApiExceptionType.UNPROCESSABLE_ENTITY);
             }
-            updatingExpert.setNationalId(expertUpdateRequest.nationalId());
+            updatingExpert.setNationalId(request.nationalId());
         }
-        if (StringUtils.hasText(expertUpdateRequest.phoneNumber())) {
+        if (StringUtils.hasText(request.phoneNumber())) {
             Optional<Expert> existingExpert = expertRepository
-                    .findByPhoneNumber(expertUpdateRequest.phoneNumber());
+                    .findByPhoneNumber(request.phoneNumber());
             if (existingExpert.isPresent() && !existingExpert.get().getId()
                     .equals(updatingExpert.getId())) {
                 throw new CustomApiException("Expert with phone number {"
-                        + expertUpdateRequest.phoneNumber() + "} already exists!",
+                        + request.phoneNumber() + "} already exists!",
                         CustomApiExceptionType.UNPROCESSABLE_ENTITY);
             }
-            updatingExpert.setPhoneNumber(expertUpdateRequest.phoneNumber());
+            updatingExpert.setPhoneNumber(request.phoneNumber());
         }
-        if (expertUpdateRequest.birthday() != null) {
-            updatingExpert.setBirthday(expertUpdateRequest.birthday());
+        if (request.birthday() != null) {
+            updatingExpert.setBirthday(request.birthday());
         }
-        if (StringUtils.hasText(expertUpdateRequest.email())) {
+        if (StringUtils.hasText(request.email())) {
             Optional<Expert> existingExpert = expertRepository
-                    .findByEmail(expertUpdateRequest.email());
+                    .findByEmail(request.email());
             if (existingExpert.isPresent() && !existingExpert.get().getId()
                     .equals(updatingExpert.getId())) {
                 throw new CustomApiException("Expert with email {"
-                        + expertUpdateRequest.email() + "} already exists!",
+                        + request.email() + "} already exists!",
                         CustomApiExceptionType.UNPROCESSABLE_ENTITY);
             }
-            updatingExpert.setEmail(expertUpdateRequest.email());
+            updatingExpert.setEmail(request.email());
         }
-        if (expertUpdateRequest.expertImage() != null &&
-                expertUpdateRequest.expertImage().length > 0) {
-            updatingExpert.setExpertImage(expertUpdateRequest.expertImage());
+        if (request.expertImage() != null &&
+                request.expertImage().length > 0) {
+            updatingExpert.setExpertImage(request.expertImage());
         }
-        if (expertUpdateRequest.rating() != null) {
-            updatingExpert.setRating(expertUpdateRequest.rating());
+        if (request.rating() != null) {
+            updatingExpert.setRating(request.rating());
         }
-        if (expertUpdateRequest.userStatus() != null) {
-            updatingExpert.setUserStatus(expertUpdateRequest.userStatus());
+        if (request.userStatus() != null) {
+            updatingExpert.setUserStatus(request.userStatus());
         }
-        if (expertUpdateRequest.balance() != null) {
-            updatingExpert.setBalance(expertUpdateRequest.balance());
+        if (request.balance() != null) {
+            updatingExpert.setBalance(request.balance());
         }
 
         Expert updatedExpert = expertRepository.save(updatingExpert);
@@ -167,8 +163,7 @@ public class ExpertServiceImpl implements ExpertService {
     public ExpertResponse findByIdAndIsDeletedFalse(Long id) {
         Expert expert = expertRepository.findByIdAndIsDeletedFalse(id)
                 .orElseThrow(() -> new CustomApiException("Expert with id {"
-                        + id + "} not found!",
-                        CustomApiExceptionType.NOT_FOUND));
+                        + id + "} not found!", CustomApiExceptionType.NOT_FOUND));
         return CustomExpertMapper.to(expert);
     }
 
@@ -176,8 +171,7 @@ public class ExpertServiceImpl implements ExpertService {
     public Expert findExpertByIdAndIsDeletedFalse(Long id) {
         return expertRepository.findByIdAndIsDeletedFalse(id)
                 .orElseThrow(() -> new CustomApiException("Expert with id {"
-                        + id + "} not found!",
-                        CustomApiExceptionType.NOT_FOUND));
+                        + id + "} not found!", CustomApiExceptionType.NOT_FOUND));
     }
 
     @Override
@@ -192,27 +186,14 @@ public class ExpertServiceImpl implements ExpertService {
     public ExpertResponse findByUsernameAndIsDeletedFalse(String username) {
         Expert expert = expertRepository.findByUsernameAndIsDeletedFalse(username)
                 .orElseThrow(() -> new CustomApiException("Expert with username {"
-                        + username + "} not found!",
-                        CustomApiExceptionType.NOT_FOUND));
+                        + username + "} not found!", CustomApiExceptionType.NOT_FOUND));
         return CustomExpertMapper.to(expert);
     }
 
 
     @Override
-    public void softDeleteById(Long id) {
-        expertRepository.findByIdAndIsDeletedFalse(id)
-                .orElseThrow(() -> new CustomApiException("Expert with id {"
-                        + id + "} not found!",
-                        CustomApiExceptionType.NOT_FOUND));
-        expertRepository.softDeleteById(id);
-        log.info("Expert with id {} deleted", id);
-    }
-
-    @Override
-    public void changePassword(Long id, @Valid ExpertChangePasswordRequest request) {
-        Expert expert = expertRepository.findByIdAndIsDeletedFalse(id)
-                .orElseThrow(() -> new CustomApiException("Expert with id {"
-                        + id + "} not found!", CustomApiExceptionType.NOT_FOUND));
+    public void changePassword(@Valid ExpertChangePasswordRequest request) {
+        Expert expert = findExpertByIdAndIsDeletedFalse(request.id());
 
         if (!passwordEncoder.matches(request.currentPassword(), expert.getPassword())) {
             throw new CustomApiException("Current password is incorrect!",
@@ -221,7 +202,14 @@ public class ExpertServiceImpl implements ExpertService {
         String hashedNewPassword = passwordEncoder.encode(request.newPassword());
         expert.setPassword(hashedNewPassword);
         expertRepository.save(expert);
-        log.info("Password changed successfully for expert with id {}", id);
+        log.info("Password changed successfully for expert with id {}", request.id());
+    }
+
+    @Override
+    public void softDeleteById(Long id) {
+        findExpertByIdAndIsDeletedFalse(id);
+        expertRepository.softDeleteById(id);
+        log.info("Expert with id {} deleted", id);
     }
 
     @Override

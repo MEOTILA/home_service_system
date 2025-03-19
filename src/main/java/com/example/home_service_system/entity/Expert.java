@@ -43,9 +43,6 @@ public class Expert extends User {
     )
     List<SubService> expertServiceFields = new ArrayList<>();
 
-    /*@OneToMany(mappedBy = "expert")
-    List<CustomerCommentAndRate> customerCommentAndRateList = new ArrayList<>();*/
-
     @Column(nullable = false)
     boolean isDeleted = false;
 }

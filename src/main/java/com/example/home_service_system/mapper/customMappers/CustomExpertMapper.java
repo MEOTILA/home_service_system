@@ -1,5 +1,6 @@
 package com.example.home_service_system.mapper.customMappers;
 
+import com.example.home_service_system.dto.expertDTO.ExpertChangePasswordRequest;
 import com.example.home_service_system.dto.expertDTO.ExpertResponse;
 import com.example.home_service_system.dto.expertDTO.ExpertSaveRequest;
 import com.example.home_service_system.dto.expertDTO.ExpertUpdateRequest;
@@ -134,5 +135,15 @@ public class CustomExpertMapper {
                 /*expert.getCustomerCommentAndRateList().stream().map(comment -> comment.getId())
                         .collect(Collectors.toList())*/
         );
+    }
+
+    public static Expert fromChangePasswordRequest(ExpertChangePasswordRequest request) {
+        if (request == null) {
+            return null;
+        }
+        Expert expert = new Expert();
+        expert.setId(request.id());
+        expert.setPassword(request.newPassword());
+        return expert;
     }
 }

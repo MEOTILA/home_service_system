@@ -7,7 +7,6 @@ import com.example.home_service_system.dto.adminDTO.AdminUpdateRequest;
 import com.example.home_service_system.entity.Admin;
 import com.example.home_service_system.exceptions.CustomApiException;
 import com.example.home_service_system.exceptions.CustomApiExceptionType;
-import com.example.home_service_system.mapper.AdminMapper;
 import com.example.home_service_system.mapper.customMappers.CustomAdminMapper;
 import com.example.home_service_system.repository.AdminRepository;
 import com.example.home_service_system.service.AdminService;
@@ -34,37 +33,37 @@ public class AdminServiceImpl implements AdminService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public AdminResponse save(@Valid AdminSaveRequest adminSaveRequest) {
+    public AdminResponse save(@Valid AdminSaveRequest request) {
         Optional<Admin> optionalAdminByUsername =
-                adminRepository.findByUsername(adminSaveRequest.username());
+                adminRepository.findByUsername(request.username());
         if (optionalAdminByUsername.isPresent()) {
             throw new CustomApiException("Admin with username {"
-                    + adminSaveRequest.username() + "} already exists!",
+                    + request.username() + "} already exists!",
                     CustomApiExceptionType.UNPROCESSABLE_ENTITY);
         }
         Optional<Admin> optionalAdminByPhoneNumber =
-                adminRepository.findByPhoneNumber(adminSaveRequest.phoneNumber());
+                adminRepository.findByPhoneNumber(request.phoneNumber());
         if (optionalAdminByPhoneNumber.isPresent()) {
             throw new CustomApiException("Admin with phone number {"
-                    + adminSaveRequest.phoneNumber() + "} already exists!",
+                    + request.phoneNumber() + "} already exists!",
                     CustomApiExceptionType.UNPROCESSABLE_ENTITY);
         }
         Optional<Admin> optionalAdminByNationalId =
-                adminRepository.findByNationalId(adminSaveRequest.nationalId());
+                adminRepository.findByNationalId(request.nationalId());
         if (optionalAdminByNationalId.isPresent()) {
             throw new CustomApiException("Admin with national ID {"
-                    + adminSaveRequest.nationalId() + "} already exists!",
+                    + request.nationalId() + "} already exists!",
                     CustomApiExceptionType.UNPROCESSABLE_ENTITY);
         }
         Optional<Admin> optionalAdminByEmail =
-                adminRepository.findByEmail(adminSaveRequest.email());
+                adminRepository.findByEmail(request.email());
         if (optionalAdminByEmail.isPresent()) {
             throw new CustomApiException("Admin with email {"
-                    + adminSaveRequest.email() + "} already exists!",
+                    + request.email() + "} already exists!",
                     CustomApiExceptionType.UNPROCESSABLE_ENTITY);
         }
-        String hashedPassword = passwordEncoder.encode(adminSaveRequest.password());
-        Admin admin = CustomAdminMapper.fromSaveRequest(adminSaveRequest);
+        String hashedPassword = passwordEncoder.encode(request.password());
+        Admin admin = CustomAdminMapper.fromSaveRequest(request);
         admin.setPassword(hashedPassword);
         adminRepository.save(admin);
         log.info("Admin with id {} saved", admin.getId());
@@ -72,68 +71,65 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public AdminResponse update(@Valid AdminUpdateRequest adminUpdateRequest) {
-        Admin updatingAdmin = adminRepository.findByIdAndIsDeletedFalse(adminUpdateRequest.id())
-                .orElseThrow(() -> new CustomApiException("Admin with id {"
-                        + adminUpdateRequest.id() + "} not found!",
-                        CustomApiExceptionType.NOT_FOUND));
+    public AdminResponse update(@Valid AdminUpdateRequest request) {
+        Admin updatingAdmin = findAdminByIdAndIsDeletedFalse(request.id());
 
-        if (StringUtils.hasText(adminUpdateRequest.firstName())) {
-            updatingAdmin.setFirstName(adminUpdateRequest.firstName());
+        if (StringUtils.hasText(request.firstName())) {
+            updatingAdmin.setFirstName(request.firstName());
         }
-        if (StringUtils.hasText(adminUpdateRequest.lastName())) {
-            updatingAdmin.setLastName(adminUpdateRequest.lastName());
+        if (StringUtils.hasText(request.lastName())) {
+            updatingAdmin.setLastName(request.lastName());
         }
-        if (StringUtils.hasText(adminUpdateRequest.username())) {
+        if (StringUtils.hasText(request.username())) {
             Optional<Admin> existingAdmin = adminRepository
-                    .findByUsername(adminUpdateRequest.username());
+                    .findByUsername(request.username());
             if (existingAdmin.isPresent() && !existingAdmin.get()
                     .getId().equals(updatingAdmin.getId())) {
                 throw new CustomApiException("Admin with username {"
-                        + adminUpdateRequest.username() + "} already exists!",
+                        + request.username() + "} already exists!",
                         CustomApiExceptionType.UNPROCESSABLE_ENTITY);
             }
-            updatingAdmin.setUsername(adminUpdateRequest.username());
+            updatingAdmin.setUsername(request.username());
         }
-        if (StringUtils.hasText(adminUpdateRequest.password())) {
-            String hashedPassword = passwordEncoder.encode(adminUpdateRequest.password());
+        if (StringUtils.hasText(request.password())) {
+            String hashedPassword = passwordEncoder.encode(request.password());
             updatingAdmin.setPassword(hashedPassword);
         }
-        if (StringUtils.hasText(adminUpdateRequest.nationalId())) {
+        if (StringUtils.hasText(request.nationalId())) {
             Optional<Admin> existingAdmin = adminRepository
-                    .findByNationalId(adminUpdateRequest.nationalId());
+                    .findByNationalId(request.nationalId());
             if (existingAdmin.isPresent() && !existingAdmin.get()
                     .getId().equals(updatingAdmin.getId())) {
                 throw new CustomApiException("Admin with national ID {"
-                        + adminUpdateRequest.nationalId() + "} already exists!",
+                        + request.nationalId() + "} already exists!",
                         CustomApiExceptionType.UNPROCESSABLE_ENTITY);
             }
-            updatingAdmin.setNationalId(adminUpdateRequest.nationalId());
+            updatingAdmin.setNationalId(request.nationalId());
         }
-        if (StringUtils.hasText(adminUpdateRequest.phoneNumber())) {
+        if (StringUtils.hasText(request.phoneNumber())) {
             Optional<Admin> existingAdmin = adminRepository
-                    .findByPhoneNumber(adminUpdateRequest.phoneNumber());
+                    .findByPhoneNumber(request.phoneNumber());
             if (existingAdmin.isPresent() && !existingAdmin.get()
                     .getId().equals(updatingAdmin.getId())) {
                 throw new CustomApiException("Admin with phone number {"
-                        + adminUpdateRequest.phoneNumber() + "} already exists!",
+                        + request.phoneNumber() + "} already exists!",
                         CustomApiExceptionType.UNPROCESSABLE_ENTITY);
             }
-            updatingAdmin.setPhoneNumber(adminUpdateRequest.phoneNumber());
+            updatingAdmin.setPhoneNumber(request.phoneNumber());
         }
-        if (adminUpdateRequest.birthday() != null) {
-            updatingAdmin.setBirthday(adminUpdateRequest.birthday());
+        if (request.birthday() != null) {
+            updatingAdmin.setBirthday(request.birthday());
         }
-        if (StringUtils.hasText(adminUpdateRequest.email())) {
+        if (StringUtils.hasText(request.email())) {
             Optional<Admin> existingAdmin = adminRepository
-                    .findByEmail(adminUpdateRequest.email());
+                    .findByEmail(request.email());
             if (existingAdmin.isPresent() && !existingAdmin.get()
                     .getId().equals(updatingAdmin.getId())) {
                 throw new CustomApiException("Admin with email {"
-                        + adminUpdateRequest.email() + "} already exists!",
+                        + request.email() + "} already exists!",
                         CustomApiExceptionType.UNPROCESSABLE_ENTITY);
             }
-            updatingAdmin.setEmail(adminUpdateRequest.email());
+            updatingAdmin.setEmail(request.email());
         }
         Admin updatedAdmin = adminRepository.save(updatingAdmin);
         log.info("Admin with id {} updated", updatedAdmin.getId());
@@ -144,45 +140,35 @@ public class AdminServiceImpl implements AdminService {
     public AdminResponse findByIdAndIsDeletedFalse(Long id) {
         Admin admin = adminRepository.findByIdAndIsDeletedFalse(id)
                 .orElseThrow(() -> new CustomApiException("Admin with id {"
-                        + id + "} not found!",
-                        CustomApiExceptionType.NOT_FOUND));
+                        + id + "} not found!", CustomApiExceptionType.NOT_FOUND));
         return CustomAdminMapper.to(admin);
+    }
+
+    @Override
+    public Admin findAdminByIdAndIsDeletedFalse(Long id) {
+        return adminRepository.findByIdAndIsDeletedFalse(id)
+                .orElseThrow(() -> new CustomApiException("Admin with id {"
+                        + id + "} not found!", CustomApiExceptionType.NOT_FOUND));
+
     }
 
     @Override
     public List<AdminResponse> findAllByIsDeletedFalse() {
         List<Admin> foundedAdmins = adminRepository.findAllByIsDeletedFalse();
-        return foundedAdmins.stream()
-                .map(CustomAdminMapper::to)
-                .toList();
+        return foundedAdmins.stream().map(CustomAdminMapper::to).toList();
     }
 
     @Override
     public AdminResponse findByUsernameAndIsDeletedFalse(String username) {
         Admin admin = adminRepository.findByUsernameAndIsDeletedFalse(username)
                 .orElseThrow(() -> new CustomApiException("Admin with username {"
-                        + username + "} not found!",
-                        CustomApiExceptionType.NOT_FOUND));
+                        + username + "} not found!", CustomApiExceptionType.NOT_FOUND));
         return CustomAdminMapper.to(admin);
     }
 
     @Override
-    public void softDeleteById(Long id) {
-        adminRepository.findByIdAndIsDeletedFalse(id)
-                .orElseThrow(() -> new CustomApiException("Admin with id {"
-                        + id + "} not found!",
-                        CustomApiExceptionType.NOT_FOUND));
-
-        adminRepository.softDeleteById(id);
-
-        log.info("Admin with id {} deleted", id);
-    }
-
-    @Override
-    public void changePassword(Long id, @Valid AdminChangePasswordRequest request) {
-        Admin admin = adminRepository.findByIdAndIsDeletedFalse(id)
-                .orElseThrow(() -> new CustomApiException("Admin with id {"
-                        + id + "} not found!", CustomApiExceptionType.NOT_FOUND));
+    public void changePassword(@Valid AdminChangePasswordRequest request) {
+        Admin admin = findAdminByIdAndIsDeletedFalse(request.id());
 
         if (!passwordEncoder.matches(request.currentPassword(), admin.getPassword())) {
             throw new CustomApiException("Current password is incorrect!",
@@ -191,7 +177,14 @@ public class AdminServiceImpl implements AdminService {
         String hashedNewPassword = passwordEncoder.encode(request.newPassword());
         admin.setPassword(hashedNewPassword);
         adminRepository.save(admin);
-        log.info("Password changed successfully for admin with id {}", id);
+        log.info("Password changed successfully for admin with id {}", request.id());
+    }
+
+    @Override
+    public void softDeleteById(Long id) {
+        findAdminByIdAndIsDeletedFalse(id);
+        adminRepository.softDeleteById(id);
+        log.info("Admin with id {} deleted", id);
     }
 
 }

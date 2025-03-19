@@ -25,9 +25,9 @@ public interface ExpertService {
 
     ExpertResponse findByUsernameAndIsDeletedFalse(String username);
 
-    void softDeleteById(Long id);
+    void changePassword(@Valid ExpertChangePasswordRequest request);
 
-    void changePassword(Long id, @Valid ExpertChangePasswordRequest request);
+    void softDeleteById(Long id);
 
     Page<ExpertResponse> getFilteredExperts(
             String firstName, String lastName, String username,

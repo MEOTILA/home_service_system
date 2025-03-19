@@ -1,6 +1,9 @@
 package com.example.home_service_system.mapper.customMappers;
 
-import com.example.home_service_system.dto.adminDTO.*;
+import com.example.home_service_system.dto.adminDTO.AdminChangePasswordRequest;
+import com.example.home_service_system.dto.adminDTO.AdminResponse;
+import com.example.home_service_system.dto.adminDTO.AdminSaveRequest;
+import com.example.home_service_system.dto.adminDTO.AdminUpdateRequest;
 import com.example.home_service_system.entity.Admin;
 
 public class CustomAdminMapper {
@@ -53,6 +56,16 @@ public class CustomAdminMapper {
         admin.setPhoneNumber(adminUpdateRequest.phoneNumber());
         admin.setBirthday(adminUpdateRequest.birthday());
         admin.setEmail(adminUpdateRequest.email());
+        return admin;
+    }
+
+    public static Admin fromChangePasswordRequest(AdminChangePasswordRequest request) {
+        if (request == null) {
+            return null;
+        }
+        Admin admin = new Admin();
+        admin.setId(request.id());
+        admin.setPassword(request.newPassword());
         return admin;
     }
 }

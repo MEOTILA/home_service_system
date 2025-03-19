@@ -4,6 +4,7 @@ import com.example.home_service_system.dto.adminDTO.AdminChangePasswordRequest;
 import com.example.home_service_system.dto.adminDTO.AdminResponse;
 import com.example.home_service_system.dto.adminDTO.AdminSaveRequest;
 import com.example.home_service_system.dto.adminDTO.AdminUpdateRequest;
+import com.example.home_service_system.entity.Admin;
 import jakarta.validation.Valid;
 
 import java.util.List;
@@ -15,11 +16,13 @@ public interface AdminService {
 
     AdminResponse findByIdAndIsDeletedFalse(Long id);
 
+    Admin findAdminByIdAndIsDeletedFalse(Long id);
+
     List<AdminResponse> findAllByIsDeletedFalse();
 
     AdminResponse findByUsernameAndIsDeletedFalse(String username);
 
-    void softDeleteById(Long id);
+    void changePassword(@Valid AdminChangePasswordRequest request);
 
-    void changePassword(Long id, @Valid AdminChangePasswordRequest request);
+    void softDeleteById(Long id);
 }
