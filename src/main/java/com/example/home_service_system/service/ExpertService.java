@@ -27,6 +27,8 @@ public interface ExpertService {
 
     void changePassword(@Valid ExpertChangePasswordRequest request);
 
+    void softDeleteExpertAndOrdersAndSuggestionsAndCommentAndRatesById(Long id);
+
     void softDeleteById(Long id);
 
     Page<ExpertResponse> getFilteredExperts(

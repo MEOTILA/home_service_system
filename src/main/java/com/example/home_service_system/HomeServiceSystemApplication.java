@@ -186,6 +186,7 @@ public class HomeServiceSystemApplication {
         );
         //expertService.save(expert);
         //System.out.println(expertService.findByIdAndIsDeletedFalse(1L));
+        expertService.softDeleteExpertAndOrdersAndSuggestionsAndCommentAndRatesById(1L);
 
         //System.out.println(customerService.findAll());
         //System.out.println(expertService.findAll());
@@ -258,10 +259,10 @@ public class HomeServiceSystemApplication {
         //orderService.softDeleteById(3L);
         //System.out.println(orderService.findAllByIsDeletedFalse());
         //System.out.println(expertService.findByIdAndIsDeletedFalse(1L));
-        Order order = orderService.findOrderByIdAndIsDeletedFalse(3L);
-        CustomerCommentAndRateSaveRequest request = new CustomerCommentAndRateSaveRequest(
+        //Order order = orderService.findOrderByIdAndIsDeletedFalse(3L);
+        /*CustomerCommentAndRateSaveRequest request = new CustomerCommentAndRateSaveRequest(
                 order, 75, "Good job!"
-        );
+        );*/
         //customerCommentAndRateservice.save(request);
         //customerCommentAndRateservice.softDeleteById(20L);
         //customerCommentAndRateservice.findAllAndIsDeletedFalse();

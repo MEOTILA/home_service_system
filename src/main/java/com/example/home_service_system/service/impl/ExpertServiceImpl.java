@@ -206,6 +206,26 @@ public class ExpertServiceImpl implements ExpertService {
     }
 
     @Override
+    public void softDeleteExpertAndOrdersAndSuggestionsAndCommentAndRatesById(Long id) {
+        Expert expert = findExpertByIdAndIsDeletedFalse(id);
+
+        //expert.getOrderList().forEach(order -> order.setDeleted(true));
+        expert.getOrderList().forEach(order -> {
+            if (order.getCustomerCommentAndRate() != null) {
+                order.getCustomerCommentAndRate().setDeleted(true);
+            }
+            order.setDeleted(true);
+        });
+
+        expert.getExpertSuggestionList().forEach(suggestion -> suggestion.setDeleted(true));
+        //expert.getExpertServiceFields().clear();
+
+        expert.setDeleted(true);
+        expertRepository.save(expert);
+        log.info("Expert with id {} deleted", id);
+    }
+
+    @Override
     public void softDeleteById(Long id) {
         findExpertByIdAndIsDeletedFalse(id);
         expertRepository.softDeleteById(id);
