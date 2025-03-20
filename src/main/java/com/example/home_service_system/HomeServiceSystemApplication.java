@@ -186,6 +186,8 @@ public class HomeServiceSystemApplication {
         );
         //expertService.save(expert);
         //System.out.println(expertService.findByIdAndIsDeletedFalse(1L));
+
+        //todo: deleteeeeeeeeeeeeeeeee
         //expertService.softDeleteExpertAndOrdersAndSuggestionsAndCommentAndRatesById(1L);
         customerService.softDeleteCustomerAndOrdesrAndSuggestionsAndCommentAndRateById(2L);
 

@@ -204,9 +204,6 @@ public class CustomerServiceImpl implements CustomerService {
             if (order.getCustomerCommentAndRate() != null) {
                 order.getCustomerCommentAndRate().setDeleted(true);
             }
-            if (order.getExpert() != null) {
-                order.getExpert().getOrderList().remove(order);
-            }
             order.getExpertSuggestionList().forEach(suggestion -> suggestion.setDeleted(true));
             //order.getExpertSuggestionList().clear();
             order.setDeleted(true);
