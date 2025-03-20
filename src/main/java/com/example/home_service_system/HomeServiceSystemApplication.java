@@ -186,7 +186,8 @@ public class HomeServiceSystemApplication {
         );
         //expertService.save(expert);
         //System.out.println(expertService.findByIdAndIsDeletedFalse(1L));
-        expertService.softDeleteExpertAndOrdersAndSuggestionsAndCommentAndRatesById(1L);
+        //expertService.softDeleteExpertAndOrdersAndSuggestionsAndCommentAndRatesById(1L);
+        customerService.softDeleteCustomerAndOrdesrAndSuggestionsAndCommentAndRateById(2L);
 
         //System.out.println(customerService.findAll());
         //System.out.println(expertService.findAll());
@@ -268,10 +269,10 @@ public class HomeServiceSystemApplication {
         //customerCommentAndRateservice.findAllAndIsDeletedFalse();
         // orderService.findByIdAndIsDeletedFalse(2L);
 
-        Order order1 = orderService.findOrderByIdAndIsDeletedFalse(1L);
-        CustomerCommentAndRateUpdateRequest request2 = new CustomerCommentAndRateUpdateRequest(
+        //Order order1 = orderService.findOrderByIdAndIsDeletedFalse(1L);
+        /*CustomerCommentAndRateUpdateRequest request2 = new CustomerCommentAndRateUpdateRequest(
                 1L, order1, 39, "Well Doooone!"
-        );
+        );*/
         //customerCommentAndRateservice.update(request2);
 
         /*Expert expert1 = expertService.findExpertByIdAndIsDeletedFalse(5L);
@@ -281,10 +282,10 @@ public class HomeServiceSystemApplication {
         );*/
        // expertSuggestionService.save(request3);
 
-        ExpertSuggestionUpdateRequest request3 = new ExpertSuggestionUpdateRequest(
+        /*ExpertSuggestionUpdateRequest request3 = new ExpertSuggestionUpdateRequest(
                 3L, order1,"Helloooo",652L,
                 Duration.ofDays(2L), LocalDateTime.now().plusDays(7)
-        );
+        );*/
         //expertSuggestionService.update(request3);
         //expertSuggestionService.softDeleteById(3L);
 
@@ -292,11 +293,11 @@ public class HomeServiceSystemApplication {
         //System.out.println(expertSuggestionService.findAllByIsDeletedFalse());
         //System.out.println(orderService.findByIdAndIsDeletedFalse(3L));
 
-        Order order4 = orderService.findOrderByIdAndIsDeletedFalse(1L);
+       /* Order order4 = orderService.findOrderByIdAndIsDeletedFalse(1L);
         ExpertSuggestionUpdateRequest request4 = new ExpertSuggestionUpdateRequest(
                 3L,order4,"testttt",133451L, Duration.ofHours(8L)
                 ,LocalDateTime.now().plusDays(3)
-        );
+        );*/
         //expertSuggestionService.update(request4);
 
         //expertSuggestionService.softDeleteById(3L);

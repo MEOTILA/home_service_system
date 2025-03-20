@@ -27,6 +27,8 @@ public interface CustomerService {
 
     void changePassword(@Valid CustomerChangePasswordRequest request);
 
+    void softDeleteCustomerAndOrdesrAndSuggestionsAndCommentAndRateById(Long id);
+
     void softDeleteById(Long id);
 
     Page<CustomerResponse> getFilteredCustomers(

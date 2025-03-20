@@ -197,6 +197,26 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    public void softDeleteCustomerAndOrdesrAndSuggestionsAndCommentAndRateById(Long id) {
+       Customer customer = findCustomerByIdAndIsDeletedFalse(id);
+
+        customer.getOrderList().forEach(order -> {
+            if (order.getCustomerCommentAndRate() != null) {
+                order.getCustomerCommentAndRate().setDeleted(true);
+            }
+            if (order.getExpert() != null) {
+                order.getExpert().getOrderList().remove(order);
+            }
+            order.getExpertSuggestionList().forEach(suggestion -> suggestion.setDeleted(true));
+            //order.getExpertSuggestionList().clear();
+            order.setDeleted(true);
+        });
+        customer.setDeleted(true);
+        customerRepository.save(customer);
+        log.info("Customer with id {} deleted", id);
+    }
+
+    @Override
     public void softDeleteById(Long id) {
         findCustomerByIdAndIsDeletedFalse(id);
         customerRepository.softDeleteById(id);
