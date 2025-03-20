@@ -57,8 +57,31 @@ public class MainServiceServiceImpl implements MainServiceService {
     }
 
     @Override
-    public void softDelete(Long id) {
+    public void softDeleteMainServiceAndSubServicesAndOrdersAndSuggestionsAndCommentAndRate(Long id) {
+        MainService mainService = mainServiceRepository.findByIdAndIsDeletedFalse(id)
+                .orElseThrow(() -> new CustomApiException("MainService with id {" +
+                        id + "} not found!", CustomApiExceptionType.NOT_FOUND));
 
+        mainService.getSubServices().forEach(subService -> {
+            subService.setDeleted(true);
+
+            subService.getOrderList().forEach(order -> {
+                order.setDeleted(true);
+
+                order.getExpertSuggestionList().forEach(suggestion -> suggestion.setDeleted(true));
+
+                if (order.getCustomerCommentAndRate() != null) {
+                    order.getCustomerCommentAndRate().setDeleted(true);
+                }
+            });
+        });
+
+        log.info("MainService with id {} is deleted", id);
+        mainServiceRepository.softDeleteById(id);
+    }
+
+    @Override
+    public void softDelete(Long id) {
         mainServiceRepository.findByIdAndIsDeletedFalse(id)
                 .orElseThrow(() -> new CustomApiException("MainService with id {" +
                         id + "} not found!", CustomApiExceptionType.NOT_FOUND));

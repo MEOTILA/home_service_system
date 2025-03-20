@@ -12,6 +12,8 @@ public interface MainServiceService {
 
     MainServiceResponse update(MainServiceUpdateRequest request);
 
+    void softDeleteMainServiceAndSubServicesAndOrdersAndSuggestionsAndCommentAndRate(Long id);
+
     void softDelete(Long id);
 
     MainServiceResponse findByIdAndIsDeletedFalse(Long id);

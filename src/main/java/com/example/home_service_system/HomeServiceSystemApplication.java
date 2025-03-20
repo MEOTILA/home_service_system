@@ -189,21 +189,23 @@ public class HomeServiceSystemApplication {
 
         //todo: deleteeeeeeeeeeeeeeeee
         //expertService.softDeleteExpertAndOrdersAndSuggestionsAndCommentAndRatesById(1L);
-        customerService.softDeleteCustomerAndOrdesrAndSuggestionsAndCommentAndRateById(2L);
+        //customerService.softDeleteCustomerAndOrdesrAndSuggestionsAndCommentAndRateById(2L);
+        /*mainServiceService
+                .softDeleteMainServiceAndSubServicesAndOrdersAndSuggestionsAndCommentAndRate(2L);*/
 
         //System.out.println(customerService.findAll());
         //System.out.println(expertService.findAll());
-
+/*
         ExpertChangePasswordRequest request6 = new ExpertChangePasswordRequest(
                 6L,"Angel@12345","Angel@12344"
-        );
+        );*/
         //expertService.changePassword(request6);
 
-        MainServiceSaveRequest mainServiceSaveRequest =
-                new MainServiceSaveRequest("Electronic");
+        /*MainServiceSaveRequest mainServiceSaveRequest =
+                new MainServiceSaveRequest("Electronic");*/
 
-        MainServiceUpdateRequest mainServiceUpdateRequest =
-                new MainServiceUpdateRequest(1L, "Electronic", null);
+       /* MainServiceUpdateRequest mainServiceUpdateRequest =
+                new MainServiceUpdateRequest(1L, "Electronic", null);*/
         //mainServiceService.update(mainServiceUpdateRequest);
         //mainServiceService.save(mainServiceSaveRequest);
         //System.out.println(mainServiceService.findAll());
@@ -226,12 +228,12 @@ public class HomeServiceSystemApplication {
         //subServiceService.addExpertToSubService(4L,1L);
 
         //subServiceService.removeExpertFromSubService(1L,1L);
-        MainServiceResponse mainServiceResponse3 = mainServiceService.findByIdAndIsDeletedFalse(2L);
+        /*MainServiceResponse mainServiceResponse3 = mainServiceService.findByIdAndIsDeletedFalse(2L);
         MainService mainService3 = MainServiceMapper.toMainServiceFromResponse(mainServiceResponse3);
         SubServiceUpdateRequest subServiceUpdateRequest =
                 new SubServiceUpdateRequest(3L, "Kitchen Cleaning",
                         2000000L, "Full cleaning for Kitchens."
-                        , mainService3, null);
+                        , mainService3, null);*/
         //subServiceService.update(subServiceUpdateRequest);
 
         //System.out.println(subServiceService.findAllSubServicesByIsDeletedFalse());
@@ -243,21 +245,21 @@ public class HomeServiceSystemApplication {
         // System.out.println(expertService.findAll());
         //System.out.println(expertService.findByUsername("David"));
 
-
+/*
         OrderSaveRequest orderSaveRequest1 = new OrderSaveRequest(
                 2L, 1L, 987654L
                 , "i need help to fix my apple laptop",
                 LocalDateTime.now().plusDays(3L), "New York 33th Street"
-        );
+        );*/
         //orderService.save(orderSaveRequest1);
 
-        OrderUpdateRequest orderUpdateRequest = new OrderUpdateRequest(
+        /*OrderUpdateRequest orderUpdateRequest = new OrderUpdateRequest(
                 1L, 3L, 2L, 2L, 800000L
                 , "wqehjiqwejiqwjeqwie",
                 LocalDateTime.now().plusDays(1L), "qwjeiqwjeiqwjeqwe",
                 OrderStatus.WAITING_FOR_EXPERT_TO_ARRIVE, null
                 , null
-        );
+        );*/
         //orderService.update(orderUpdateRequest);
         //orderService.softDeleteById(3L);
         //System.out.println(orderService.findAllByIsDeletedFalse());
