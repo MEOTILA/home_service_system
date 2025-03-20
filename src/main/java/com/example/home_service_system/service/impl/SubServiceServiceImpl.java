@@ -5,6 +5,7 @@ import com.example.home_service_system.dto.subServiceDTO.SubServiceSaveRequest;
 import com.example.home_service_system.dto.subServiceDTO.SubServiceUpdateRequest;
 import com.example.home_service_system.entity.Expert;
 import com.example.home_service_system.entity.MainService;
+import com.example.home_service_system.entity.Order;
 import com.example.home_service_system.entity.SubService;
 import com.example.home_service_system.exceptions.CustomApiException;
 import com.example.home_service_system.exceptions.CustomApiExceptionType;
@@ -111,6 +112,31 @@ public class SubServiceServiceImpl implements SubServiceService {
         List<SubService> subServices = subServiceRepository.
                 findAllByMainServiceIdAndIsDeletedFalse(mainServiceId);
         return subServices.stream().map(SubServiceMapper::to).toList();
+    }
+
+    @Override
+    public void softDeleteSubServiceAndExpertFieldsAndOrdersAndCommentAndRateAndSuggestionsById(Long id) {
+        SubService deletingSubService = findSubServiceByIdAndIsDeletedFalse(id);
+
+        for (Order order : deletingSubService.getOrderList()) {
+            order.setDeleted(true);
+
+            order.getExpertSuggestionList().forEach(suggestion -> suggestion.setDeleted(true));
+
+            if (order.getCustomerCommentAndRate() != null) {
+                order.getCustomerCommentAndRate().setDeleted(true);
+            }
+        }
+
+        for (Expert expert : deletingSubService.getExpertList()) {
+            expert.getExpertServiceFields().remove(deletingSubService);
+            expertService.update(ExpertMapper.toUpdateRequest(expert));
+        }
+
+        deletingSubService.setDeleted(true);
+        subServiceRepository.save(deletingSubService);
+
+        log.info("SubService with id {} and all related entities deleted", id);
     }
 
     @Override

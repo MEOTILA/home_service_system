@@ -22,6 +22,8 @@ public interface SubServiceService {
 
     List<SubServiceResponse> findAllByMainServiceId(Long mainServiceId);
 
+    void softDeleteSubServiceAndExpertFieldsAndOrdersAndCommentAndRateAndSuggestionsById(Long id);
+
     void softDeleteById(Long id);
 
     void softDeleteAllSubServicesByMainServiceId(Long mainServiceId);

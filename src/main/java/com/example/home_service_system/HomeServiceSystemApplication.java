@@ -192,6 +192,10 @@ public class HomeServiceSystemApplication {
         //customerService.softDeleteCustomerAndOrdesrAndSuggestionsAndCommentAndRateById(2L);
         /*mainServiceService
                 .softDeleteMainServiceAndSubServicesAndOrdersAndSuggestionsAndCommentAndRate(2L);*/
+        /*subServiceService
+                .softDeleteSubServiceAndExpertFieldsAndOrdersAndCommentAndRateAndSuggestionsById(3L);*/
+
+
 
         //System.out.println(customerService.findAll());
         //System.out.println(expertService.findAll());
