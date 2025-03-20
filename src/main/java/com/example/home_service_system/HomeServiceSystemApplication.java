@@ -194,6 +194,7 @@ public class HomeServiceSystemApplication {
                 .softDeleteMainServiceAndSubServicesAndOrdersAndSuggestionsAndCommentAndRate(2L);*/
         /*subServiceService
                 .softDeleteSubServiceAndExpertFieldsAndOrdersAndCommentAndRateAndSuggestionsById(3L);*/
+        orderService.softDeleteOrderAndExpertSuggestionsAndCommentAndRateByOrderId(3L);
 
 
 

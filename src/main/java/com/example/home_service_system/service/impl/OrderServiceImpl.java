@@ -142,7 +142,11 @@ public class OrderServiceImpl implements OrderService {
         Order order = findOrderByIdAndIsDeletedFalse(id);
         order.getExpertSuggestionList()
                 .forEach(suggestion -> suggestion.setDeleted(true));
-        order.getCustomerCommentAndRate().setDeleted(true);
+
+        if (order.getCustomerCommentAndRate() != null) {
+            order.getCustomerCommentAndRate().setDeleted(true);
+        }
+
         orderRepository.softDeleteById(id);
         log.info("Order with id {} deleted", id);
     }
