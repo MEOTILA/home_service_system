@@ -26,8 +26,6 @@ public interface SubServiceService {
 
     void softDeleteById(Long id);
 
-    void softDeleteAllSubServicesByMainServiceId(Long mainServiceId);
-
     void addExpertToSubService(Long subServiceId, Long expertId);
 
     void removeExpertFromSubService(Long subServiceId, Long expertId);

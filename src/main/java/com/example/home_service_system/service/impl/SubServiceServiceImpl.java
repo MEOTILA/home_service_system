@@ -153,24 +153,6 @@ public class SubServiceServiceImpl implements SubServiceService {
     }
 
     @Override
-    public void softDeleteAllSubServicesByMainServiceId(Long mainServiceId) {
-        List<SubService> subServices = subServiceRepository
-                .findAllByMainServiceIdAndIsDeletedFalse(mainServiceId);
-        //subServices.forEach(subService -> softDeleteById(subService.getId()));
-
-        for (SubService subService : subServices) {
-            for (Expert expert : subService.getExpertList()) {
-                expert.getExpertServiceFields().remove(subService);
-                expertService.update(ExpertMapper.toUpdateRequest(expert));
-            }
-            softDeleteById(subService.getId());
-        }
-        mainServiceService.softDelete(mainServiceId);
-        log.info("All SubServices related to MainService with ID {} were soft deleted"
-                , mainServiceId);
-    }
-
-    @Override
     public void addExpertToSubService(Long subServiceId, Long expertId) {
         SubService subService = findSubServiceByIdAndIsDeletedFalse(subServiceId);
         Expert expert = expertService.findExpertByIdAndIsDeletedFalse(expertId);
