@@ -190,11 +190,11 @@ public class HomeServiceSystemApplication {
         //todo: deleteeeeeeeeeeeeeeeee
         //expertService.softDeleteExpertAndOrdersAndSuggestionsAndCommentAndRatesById(1L);
         //customerService.softDeleteCustomerAndOrdesrAndSuggestionsAndCommentAndRateById(2L);
-        /*mainServiceService
-                .softDeleteMainServiceAndSubServicesAndOrdersAndSuggestionsAndCommentAndRate(2L);*/
+        mainServiceService
+                .softDeleteMainServiceAndSubServicesAndOrdersAndSuggestionsAndCommentAndRate(2L);
         /*subServiceService
                 .softDeleteSubServiceAndExpertFieldsAndOrdersAndCommentAndRateAndSuggestionsById(3L);*/
-        orderService.softDeleteOrderAndExpertSuggestionsAndCommentAndRateByOrderId(3L);
+        //orderService.softDeleteOrderAndExpertSuggestionsAndCommentAndRateByOrderId(3L);
 
 
 
