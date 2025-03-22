@@ -221,7 +221,8 @@ public class ExpertServiceImpl implements ExpertService {
         //expert.getExpertServiceFields().clear();
 
         expert.setDeleted(true);
-        expertRepository.save(expert);
+        //expertRepository.save(expert);
+        expertRepository.softDeleteById(expert.getId());
         log.info("Expert with id {} deleted", id);
     }
 

@@ -54,7 +54,6 @@ public class SubServiceServiceImpl implements SubServiceService {
 
     @Override
     public SubServiceResponse update(SubServiceUpdateRequest request) {
-
         SubService existingSubService = findSubServiceByIdAndIsDeletedFalse(request.id());
 
         if (request.name() != null && !request.name().isBlank()) {
@@ -133,21 +132,15 @@ public class SubServiceServiceImpl implements SubServiceService {
             expertService.update(ExpertMapper.toUpdateRequest(expert));
         }
 
-        deletingSubService.setDeleted(true);
-        subServiceRepository.save(deletingSubService);
-
+        //deletingSubService.setDeleted(true);
+        //subServiceRepository.save(deletingSubService);
+        subServiceRepository.softDeleteById(deletingSubService.getId());
         log.info("SubService with id {} and all related entities deleted", id);
     }
 
     @Override
     public void softDeleteById(Long id) {
-        SubService deletingSubService = findSubServiceByIdAndIsDeletedFalse(id);
-
-        for (Expert expert : deletingSubService.getExpertList()) {
-            expert.getExpertServiceFields().remove(deletingSubService);
-            expertService.update(ExpertMapper.toUpdateRequest(expert));
-        }
-
+        findSubServiceByIdAndIsDeletedFalse(id);
         subServiceRepository.softDeleteById(id);
         log.info("SubService with id {} deleted", id);
     }

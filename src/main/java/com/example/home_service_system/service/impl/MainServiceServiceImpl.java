@@ -29,7 +29,6 @@ public class MainServiceServiceImpl implements MainServiceService {
 
     @Override
     public MainServiceResponse save(MainServiceSaveRequest request) {
-
         if (mainServiceRepository.findByName(request.name()).isPresent()) {
             throw new CustomApiException("MainService with this name {"
                     + request.name() + "} already exists!"
@@ -44,11 +43,7 @@ public class MainServiceServiceImpl implements MainServiceService {
 
     @Override
     public MainServiceResponse update(MainServiceUpdateRequest request) {
-
-        MainService mainService = mainServiceRepository.findByIdAndIsDeletedFalse(request.id())
-                .orElseThrow(() -> new CustomApiException("MainService with id {" +
-                        request.id()+ "} not found!"
-                        , CustomApiExceptionType.NOT_FOUND));
+        MainService mainService = findMainServiceByIdAndIsDeletedFalse(request.id());
 
         if (request.name() != null && !request.name().isBlank()) {
             mainService.setName(request.name());
@@ -60,9 +55,7 @@ public class MainServiceServiceImpl implements MainServiceService {
 
     @Override
     public void softDeleteMainServiceAndSubServicesAndOrdersAndSuggestionsAndCommentAndRate(Long id) {
-        MainService mainService = mainServiceRepository.findByIdAndIsDeletedFalse(id)
-                .orElseThrow(() -> new CustomApiException("MainService with id {" +
-                        id + "} not found!", CustomApiExceptionType.NOT_FOUND));
+        MainService mainService = findMainServiceByIdAndIsDeletedFalse(id);
 
         mainService.getSubServices().forEach(subService -> {
             subService.setDeleted(true);
@@ -88,9 +81,7 @@ public class MainServiceServiceImpl implements MainServiceService {
 
     @Override
     public void softDelete(Long id) {
-        mainServiceRepository.findByIdAndIsDeletedFalse(id)
-                .orElseThrow(() -> new CustomApiException("MainService with id {" +
-                        id + "} not found!", CustomApiExceptionType.NOT_FOUND));
+        findMainServiceByIdAndIsDeletedFalse(id);
         log.info("MainService with id {} is deleted", id);
         mainServiceRepository.softDeleteById(id);
     }

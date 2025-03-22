@@ -44,7 +44,8 @@ public class CustomerServiceImpl implements CustomerService {
         Optional<Customer> optionalCustomerByUsername =
                 customerRepository.findByUsername(request.username());
         if (optionalCustomerByUsername.isPresent()) {
-            throw new CustomApiException("Customer with username {" + request.username() + "} already exists!",
+            throw new CustomApiException("Customer with username {"
+                    + request.username() + "} already exists!",
                     CustomApiExceptionType.UNPROCESSABLE_ENTITY);
         }
         Optional<Customer> optionalCustomerByPhoneNumber =
@@ -117,7 +118,8 @@ public class CustomerServiceImpl implements CustomerService {
         if (StringUtils.hasText(request.phoneNumber())) {
             Optional<Customer> existingCustomer = customerRepository
                     .findByPhoneNumber(request.phoneNumber());
-            if (existingCustomer.isPresent() && !existingCustomer.get().getId().equals(updatingCustomer.getId())) {
+            if (existingCustomer.isPresent() && !existingCustomer.get()
+                    .getId().equals(updatingCustomer.getId())) {
                 throw new CustomApiException("Customer with phone number {"
                         + request.phoneNumber() + "} already exists!",
                         CustomApiExceptionType.UNPROCESSABLE_ENTITY);
@@ -209,7 +211,8 @@ public class CustomerServiceImpl implements CustomerService {
             order.setDeleted(true);
         });
         customer.setDeleted(true);
-        customerRepository.save(customer);
+        //customerRepository.save(customer);
+        customerRepository.softDeleteById(customer.getId());
         log.info("Customer with id {} deleted", id);
     }
 
