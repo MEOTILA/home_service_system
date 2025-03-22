@@ -25,12 +25,12 @@ public class CustomerCommentAndRateMapper {
         return commentAndRate;
     }
 
-    public static CustomerCommentAndRate fromUpdateRequest(CustomerCommentAndRateUpdateRequest request) {
+    /*public static CustomerCommentAndRate fromUpdateRequest(CustomerCommentAndRateUpdateRequest request) {
         CustomerCommentAndRate commentAndRate = new CustomerCommentAndRate();
         commentAndRate.setId(request.id());
         //commentAndRate.setOrder(request.order());
         commentAndRate.setRating(request.rating());
         commentAndRate.setComment(request.comment());
         return commentAndRate;
-    }
+    }*/
 }

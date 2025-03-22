@@ -42,7 +42,7 @@ public class AdminMapper {
         return admin;
     }
 
-    public static Admin fromUpdateRequest(AdminUpdateRequest adminUpdateRequest) {
+    /*public static Admin fromUpdateRequest(AdminUpdateRequest adminUpdateRequest) {
         if (adminUpdateRequest == null) {
             return null;
         }
@@ -57,9 +57,9 @@ public class AdminMapper {
         admin.setBirthday(adminUpdateRequest.birthday());
         admin.setEmail(adminUpdateRequest.email());
         return admin;
-    }
+    }*/
 
-    public static Admin fromChangePasswordRequest(AdminChangePasswordRequest request) {
+    /*public static Admin fromChangePasswordRequest(AdminChangePasswordRequest request) {
         if (request == null) {
             return null;
         }
@@ -67,5 +67,5 @@ public class AdminMapper {
         admin.setId(request.id());
         admin.setPassword(request.newPassword());
         return admin;
-    }
+    }*/
 }

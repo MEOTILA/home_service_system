@@ -39,7 +39,7 @@ public class SubServiceMapper {
         return subService;
     }
 
-    public static SubService fromUpdateRequest(SubServiceUpdateRequest request) {
+    /*public static SubService fromUpdateRequest(SubServiceUpdateRequest request) {
         if (request == null) {
             return null;
         }
@@ -50,5 +50,5 @@ public class SubServiceMapper {
         subService.setDescription(request.description());
         //subService.setMainService(request.mainService());
         return subService;
-    }
+    }*/
 }

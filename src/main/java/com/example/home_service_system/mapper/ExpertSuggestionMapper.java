@@ -37,7 +37,7 @@ public class ExpertSuggestionMapper {
         return expertSuggestion;
     }
 
-    public static ExpertSuggestion fromUpdateRequest(ExpertSuggestionUpdateRequest request) {
+    /*public static ExpertSuggestion fromUpdateRequest(ExpertSuggestionUpdateRequest request) {
         if (request == null) {
             return null;
         }
@@ -49,9 +49,9 @@ public class ExpertSuggestionMapper {
         expertSuggestion.setServiceTimeDuration(request.serviceTimeDuration());
         expertSuggestion.setExpertServiceStartDateTime(request.expertServiceStartDateTime());
         return expertSuggestion;
-    }
+    }*/
 
-    public static ExpertSuggestionUpdateRequest toUpdateRequest(ExpertSuggestion expertSuggestion) {
+    /*public static ExpertSuggestionUpdateRequest toUpdateRequest(ExpertSuggestion expertSuggestion) {
        return new ExpertSuggestionUpdateRequest(
                expertSuggestion.getId(),
                //expertSuggestion.getOrder() != null ? expertSuggestion.getOrder().getId() : null,
@@ -61,5 +61,5 @@ public class ExpertSuggestionMapper {
                expertSuggestion.getExpertServiceStartDateTime()
        );
 
-    }
+    }*/
 }

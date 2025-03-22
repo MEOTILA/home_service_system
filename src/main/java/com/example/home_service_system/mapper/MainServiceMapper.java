@@ -33,7 +33,7 @@ public class MainServiceMapper {
         return mainService;
     }
 
-    public static MainService fromUpdateRequest(MainServiceUpdateRequest request) {
+    /*public static MainService fromUpdateRequest(MainServiceUpdateRequest request) {
         if (request == null)
             return null;
 
@@ -41,13 +41,13 @@ public class MainServiceMapper {
         mainService.setId(request.id());
         mainService.setName(request.name());
         return mainService;
-    }
+    }*/
 
-    public static MainService toMainServiceFromResponse(MainServiceResponse response) {
+    /*public static MainService toMainServiceFromResponse(MainServiceResponse response) {
         MainService mainService = new MainService();
         mainService.setId(response.id());
         mainService.setName(response.name());
         return mainService;
-    }
+    }*/
 }
 

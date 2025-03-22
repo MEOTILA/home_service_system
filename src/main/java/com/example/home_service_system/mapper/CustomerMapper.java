@@ -48,7 +48,7 @@ public class CustomerMapper {
         return customer;
     }
 
-    public static Customer fromUpdateRequest(CustomerUpdateRequest request) {
+    /*public static Customer fromUpdateRequest(CustomerUpdateRequest request) {
         if (request == null) {
             return null;
         }
@@ -65,9 +65,9 @@ public class CustomerMapper {
         customer.setUserStatus(request.userStatus());
         customer.setBalance(request.balance());
         return customer;
-    }
+    }*/
 
-    public static Customer fromChangePasswordRequest(CustomerChangePasswordRequest request) {
+    /*public static Customer fromChangePasswordRequest(CustomerChangePasswordRequest request) {
         if (request == null) {
             return null;
         }
@@ -75,6 +75,6 @@ public class CustomerMapper {
         customer.setId(request.id());
         customer.setPassword(request.newPassword());
         return customer;
-    }
+    }*/
 }
 
