@@ -17,6 +17,7 @@ import com.example.home_service_system.dto.mainServiceDTO.MainServiceSaveRequest
 import com.example.home_service_system.dto.mainServiceDTO.MainServiceUpdateRequest;
 import com.example.home_service_system.dto.orderDTO.OrderSaveRequest;
 import com.example.home_service_system.dto.orderDTO.OrderUpdateRequest;
+import com.example.home_service_system.dto.subServiceDTO.SubServiceSaveRequest;
 import com.example.home_service_system.dto.subServiceDTO.SubServiceUpdateRequest;
 import com.example.home_service_system.entity.MainService;
 import com.example.home_service_system.entity.Order;
@@ -209,14 +210,14 @@ public class HomeServiceSystemApplication {
         /*MainServiceSaveRequest mainServiceSaveRequest =
                 new MainServiceSaveRequest("Electronic");*/
 
-       /* MainServiceUpdateRequest mainServiceUpdateRequest =
-                new MainServiceUpdateRequest(1L, "Electronic", null);*/
+        /*MainServiceUpdateRequest mainServiceUpdateRequest =
+                new MainServiceUpdateRequest(1L, "Electronic");*/
         //mainServiceService.update(mainServiceUpdateRequest);
         //mainServiceService.save(mainServiceSaveRequest);
         //System.out.println(mainServiceService.findAll());
 
-        //MainServiceResponse mainServiceResponse = mainServiceService.findByIdAndIsDeletedFalse(1L);
-        //MainService mainService = CustomMainServiceMapper.toMainServiceFromResponse(mainServiceResponse);
+        /*MainServiceResponse mainServiceResponse = mainServiceService.findByIdAndIsDeletedFalse(1L);
+        MainService mainService = MainServiceMapper.toMainServiceFromResponse(mainServiceResponse);*/
 
         /*SubServiceSaveRequest subServiceSaveRequest =
                 new SubServiceSaveRequest("Fixing laptops"

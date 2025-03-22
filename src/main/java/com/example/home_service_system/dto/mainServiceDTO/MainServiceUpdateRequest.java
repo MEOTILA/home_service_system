@@ -14,7 +14,8 @@ public record MainServiceUpdateRequest(
         @NotBlank(message = "Main Service name cannot be null or empty!")
         @Pattern(regexp = "^[a-zA-Z]+$", message = "Main service name must contain only alphabetic characters!")
         @Size(min = 5, max = 25, message = "Main service name must be between 5 and 25 characters!")
-        String name,
+        String name
 
-        List<Long> subServiceIds) {
+        //List<Long> subServiceIds
+) {
 }
