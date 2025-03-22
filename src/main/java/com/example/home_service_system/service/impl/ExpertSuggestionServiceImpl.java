@@ -59,9 +59,9 @@ public class ExpertSuggestionServiceImpl implements ExpertSuggestionService {
         ExpertSuggestion expertSuggestion = ExpertSuggestionMapper.fromSaveRequest(request);
         expertSuggestion.setOrder(order);
         expertSuggestion.setExpert(expert);
-        order.getExpertSuggestionList().add(expertSuggestion);
 
-        orderService.update(OrderMapper.toUpdateRequest(order));
+        /*order.getExpertSuggestionList().add(expertSuggestion);
+        orderService.update(OrderMapper.toUpdateRequest(order));*/
 
         repository.save(expertSuggestion);
         log.info("ExpertSuggestion with id {} saved", expertSuggestion.getId());
