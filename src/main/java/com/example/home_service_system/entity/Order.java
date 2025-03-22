@@ -35,9 +35,9 @@ public class Order extends BaseEntity<Long> {
     @Column(length = 500, nullable = false)
     String customerDescription;
 
-    @CreationTimestamp
+    /*@CreationTimestamp
     @Column(nullable = false, updatable = false)
-    LocalDateTime submitDate;
+    LocalDateTime submitDate;*/
 
     @Column(nullable = false)
     LocalDateTime serviceDate;

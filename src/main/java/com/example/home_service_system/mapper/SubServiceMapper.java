@@ -18,6 +18,8 @@ public class SubServiceMapper {
                 subService.getBaseCost(),
                 subService.getDescription(),
                 subService.getMainService() != null ? subService.getMainService().getId() : null,
+                subService.getCreatedAt(),
+                subService.getUpdatedAt(),
                 subService.getOrderList() != null ? subService.getOrderList().stream()
                         .map(order -> order.getId()).collect(Collectors.toList()) : null,
                 subService.getExpertList() != null ? subService.getExpertList().stream()

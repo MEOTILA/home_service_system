@@ -8,7 +8,8 @@ public record ExpertSuggestionResponse(
         Long orderId,
         Long expertId,
         String expertSuggestion,
-        LocalDateTime suggestionSubmitDate,
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt,
         Long expertOfferedCost,
         Duration serviceTimeDuration,
         LocalDateTime expertServiceStartDateTime

@@ -11,7 +11,9 @@ public class CustomerCommentAndRateMapper {
                 commentAndRate.getId(),
                 commentAndRate.getOrder() != null ? commentAndRate.getOrder().getId() : null,
                 commentAndRate.getRating(),
-                commentAndRate.getComment()
+                commentAndRate.getComment(),
+                commentAndRate.getCreatedAt(),
+                commentAndRate.getUpdatedAt()
         );
     }
 

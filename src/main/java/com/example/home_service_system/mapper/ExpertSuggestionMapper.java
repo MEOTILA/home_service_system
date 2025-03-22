@@ -15,7 +15,8 @@ public class ExpertSuggestionMapper {
                 expertSuggestion.getOrder() != null ? expertSuggestion.getOrder().getId() : null,
                 expertSuggestion.getExpert() != null ? expertSuggestion.getExpert().getId() : null,
                 expertSuggestion.getExpertSuggestion(),
-                expertSuggestion.getSuggestionSubmitDate(),
+                expertSuggestion.getCreatedAt(),
+                expertSuggestion.getUpdatedAt(),
                 expertSuggestion.getExpertOfferedCost(),
                 expertSuggestion.getServiceTimeDuration(),
                 expertSuggestion.getExpertServiceStartDateTime()

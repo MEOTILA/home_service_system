@@ -14,6 +14,8 @@ public class MainServiceMapper {
         return new MainServiceResponse(
                 mainService.getId(),
                 mainService.getName(),
+                mainService.getCreatedAt(),
+                mainService.getUpdatedAt(),
                 /*mainService.getSubServices().stream()
                         .map(subService -> subService.getId())
                         .collect(Collectors.toList())*/

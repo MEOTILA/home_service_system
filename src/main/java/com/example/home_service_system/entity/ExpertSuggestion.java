@@ -30,9 +30,9 @@ public class ExpertSuggestion extends BaseEntity<Long> {
     @Column(length = 500, nullable = false)
     String expertSuggestion;
 
-    @CreationTimestamp
+    /*@CreationTimestamp
     @Column(nullable = false, updatable = false)
-    LocalDateTime suggestionSubmitDate;
+    LocalDateTime suggestionSubmitDate;*/
 
     @Column(nullable = false)
     Long expertOfferedCost;

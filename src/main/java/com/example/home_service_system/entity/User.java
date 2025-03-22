@@ -42,13 +42,13 @@ public abstract class User extends BaseEntity<Long> {
     @Column(length = 50, nullable = false, unique = true)
     String email;
 
-    @CreationTimestamp
+    /*@CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
     @Column(nullable = false, updatable = false)
-    private LocalDateTime updatedAt;
+    private LocalDateTime updatedAt;*/
 
     @Override
     public String toString() {
