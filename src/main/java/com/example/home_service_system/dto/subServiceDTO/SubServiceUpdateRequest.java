@@ -24,7 +24,8 @@ public record SubServiceUpdateRequest(
         String description,
 
         @NotNull(message = "Main service cannot be null!")
-        MainService mainService,
+        MainService mainService
 
-        List<Long> expertIds) {
+        //List<Long> expertIds
+) {
 }

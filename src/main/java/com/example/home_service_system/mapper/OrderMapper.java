@@ -61,10 +61,10 @@ public class OrderMapper {
                 order.getCustomerDescription(),
                 order.getServiceDate(),
                 order.getAddress(),
-                order.getStatus(),
-                order.getExpertSuggestionList().stream().map(e -> e.getId())
+                order.getStatus()
+                /*order.getExpertSuggestionList().stream().map(e -> e.getId())
                         .collect(Collectors.toList()),
-                order.getCustomerCommentAndRate()
+                order.getCustomerCommentAndRate()*/
         );
     }
 }

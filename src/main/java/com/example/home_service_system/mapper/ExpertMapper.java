@@ -119,8 +119,8 @@ public class ExpertMapper {
                 expert.getExpertImage(),
                 expert.getRating(),
                 expert.getUserStatus(),
-                expert.getBalance(),
-                expert.getOrderList() != null
+                expert.getBalance()
+                /*expert.getOrderList() != null
                         ? expert.getOrderList().stream()
                         .map(order -> order.getId()).collect(Collectors.toList())
                         : Collections.emptyList(),
@@ -131,7 +131,7 @@ public class ExpertMapper {
                 expert.getExpertServiceFields() != null
                         ? expert.getExpertServiceFields().stream()
                         .map(SubService::getId).collect(Collectors.toList())
-                        : Collections.emptyList()
+                        : Collections.emptyList()*/
         );
     }
 

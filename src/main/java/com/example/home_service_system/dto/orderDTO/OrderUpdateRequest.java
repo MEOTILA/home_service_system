@@ -31,10 +31,10 @@ public record OrderUpdateRequest(
         @Size(min = 5, max = 250, message = "Address must be between 5 and 250 characters!")
         String address,
 
-        OrderStatus status,
+        OrderStatus status
 
-        List<Long> expertSuggestionListIds,
+        //List<Long> expertSuggestionListIds,
 
-        CustomerCommentAndRate customerCommentAndRate
+        //CustomerCommentAndRate customerCommentAndRate
 ) {
 }

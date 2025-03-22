@@ -210,8 +210,8 @@ public class HomeServiceSystemApplication {
         /*MainServiceSaveRequest mainServiceSaveRequest =
                 new MainServiceSaveRequest("Electronic");*/
 
-        /*MainServiceUpdateRequest mainServiceUpdateRequest =
-                new MainServiceUpdateRequest(1L, "Electronic");*/
+        MainServiceUpdateRequest mainServiceUpdateRequest =
+                new MainServiceUpdateRequest(1L, "Electronics");
         //mainServiceService.update(mainServiceUpdateRequest);
         //mainServiceService.save(mainServiceSaveRequest);
         //System.out.println(mainServiceService.findAll());
