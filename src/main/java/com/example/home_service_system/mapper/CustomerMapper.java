@@ -44,6 +44,7 @@ public class CustomerMapper {
         customer.setPhoneNumber(request.phoneNumber());
         customer.setBirthday(request.birthday());
         customer.setEmail(request.email());
+        customer.setBalance(0L);
         return customer;
     }
 

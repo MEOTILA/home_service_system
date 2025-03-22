@@ -13,8 +13,8 @@ public record ExpertSuggestionUpdateRequest(
         @NotNull(message = "ID cannot be null")
         Long id,
 
-        @NotNull(message = "Order cannot be null")
-        Order order,
+        /*@NotNull(message = "Order ID cannot be null")
+        Long orderId,*/
 
         @Size(max = 500, message = "Expert suggestion must be at most 500 characters")
         String expertSuggestion,

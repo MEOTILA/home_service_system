@@ -28,8 +28,8 @@ public class ExpertSuggestionMapper {
             return null;
         }
         ExpertSuggestion expertSuggestion = new ExpertSuggestion();
-        expertSuggestion.setOrder(request.order());
-        expertSuggestion.setExpert(request.expert());
+        //expertSuggestion.setOrder(request.order());
+        //expertSuggestion.setExpert(request.expert());
         expertSuggestion.setExpertSuggestion(request.expertSuggestion());
         expertSuggestion.setExpertOfferedCost(request.expertOfferedCost());
         expertSuggestion.setServiceTimeDuration(request.serviceTimeDuration());
@@ -43,7 +43,7 @@ public class ExpertSuggestionMapper {
         }
         ExpertSuggestion expertSuggestion = new ExpertSuggestion();
         expertSuggestion.setId(request.id());
-        expertSuggestion.setOrder(request.order());
+        //expertSuggestion.setOrder(request.order());
         expertSuggestion.setExpertSuggestion(request.expertSuggestion());
         expertSuggestion.setExpertOfferedCost(request.expertOfferedCost());
         expertSuggestion.setServiceTimeDuration(request.serviceTimeDuration());
@@ -54,7 +54,7 @@ public class ExpertSuggestionMapper {
     public static ExpertSuggestionUpdateRequest toUpdateRequest(ExpertSuggestion expertSuggestion) {
        return new ExpertSuggestionUpdateRequest(
                expertSuggestion.getId(),
-               expertSuggestion.getOrder() != null ? expertSuggestion.getOrder() : null,
+               //expertSuggestion.getOrder() != null ? expertSuggestion.getOrder().getId() : null,
                expertSuggestion.getExpertSuggestion(),
                expertSuggestion.getExpertOfferedCost(),
                expertSuggestion.getServiceTimeDuration(),

@@ -11,6 +11,7 @@ import com.example.home_service_system.dto.customerDTO.CustomerSaveRequest;
 import com.example.home_service_system.dto.expertDTO.ExpertChangePasswordRequest;
 import com.example.home_service_system.dto.expertDTO.ExpertResponse;
 import com.example.home_service_system.dto.expertDTO.ExpertSaveRequest;
+import com.example.home_service_system.dto.expertSuggestionDTO.ExpertSuggestionSaveRequest;
 import com.example.home_service_system.dto.expertSuggestionDTO.ExpertSuggestionUpdateRequest;
 import com.example.home_service_system.dto.mainServiceDTO.MainServiceResponse;
 import com.example.home_service_system.dto.mainServiceDTO.MainServiceSaveRequest;
@@ -19,6 +20,7 @@ import com.example.home_service_system.dto.orderDTO.OrderSaveRequest;
 import com.example.home_service_system.dto.orderDTO.OrderUpdateRequest;
 import com.example.home_service_system.dto.subServiceDTO.SubServiceSaveRequest;
 import com.example.home_service_system.dto.subServiceDTO.SubServiceUpdateRequest;
+import com.example.home_service_system.entity.Expert;
 import com.example.home_service_system.entity.MainService;
 import com.example.home_service_system.entity.Order;
 import com.example.home_service_system.entity.enums.OrderStatus;
@@ -285,19 +287,19 @@ public class HomeServiceSystemApplication {
         );*/
         //customerCommentAndRateservice.update(request2);
 
-        /*Expert expert1 = expertService.findExpertByIdAndIsDeletedFalse(5L);
+        //Expert expert1 = expertService.findExpertByIdAndIsDeletedFalse(5L);
         ExpertSuggestionSaveRequest request3 = new ExpertSuggestionSaveRequest(
-                order1, expert1, "Meeeeee", 1321L
+                1L, 1L, "Meeeeee", 1321L
                 , Duration.ofHours(4L), LocalDateTime.now().plusDays(7)
-        );*/
-       // expertSuggestionService.save(request3);
+        );
+       //expertSuggestionService.save(request3);
 
-        /*ExpertSuggestionUpdateRequest request3 = new ExpertSuggestionUpdateRequest(
-                3L, order1,"Helloooo",652L,
+        ExpertSuggestionUpdateRequest request6 = new ExpertSuggestionUpdateRequest(
+                1L,"Helloooo",652L,
                 Duration.ofDays(2L), LocalDateTime.now().plusDays(7)
-        );*/
-        //expertSuggestionService.update(request3);
-        //expertSuggestionService.softDeleteById(3L);
+        );
+        //expertSuggestionService.update(request6);
+        //expertSuggestionService.softDeleteById(1L);
 
         //orderService.softDeleteOrderAndExpertSuggestionsAndCommentAndRateByOrderId(1L);
         //System.out.println(expertSuggestionService.findAllByIsDeletedFalse());

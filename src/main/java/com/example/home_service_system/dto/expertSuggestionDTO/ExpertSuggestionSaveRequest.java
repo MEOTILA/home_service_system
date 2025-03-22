@@ -9,11 +9,11 @@ import java.time.LocalDateTime;
 
 public record ExpertSuggestionSaveRequest(
 
-        @NotNull(message = "Order cannot be null")
-        Order order,
+        @NotNull(message = "Order ID cannot be null")
+        Long orderId,
 
-        @NotNull(message = "Expert cannot be null")
-        Expert expert,
+        @NotNull(message = "Expert ID cannot be null")
+        Long expertId,
 
         @NotBlank(message = "Expert suggestion cannot be empty")
         @Size(max = 500, message = "Expert suggestion must be at most 500 characters")

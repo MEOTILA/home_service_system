@@ -37,8 +37,8 @@ public class ExpertSuggestionServiceImpl implements ExpertSuggestionService {
     @Override
     public ExpertSuggestionResponse save(@Valid ExpertSuggestionSaveRequest request) {
 
-        Order order = orderService.findOrderByIdAndIsDeletedFalse(request.order().getId());
-        Expert expert = expertService.findExpertByIdAndIsDeletedFalse(request.expert().getId());
+        Order order = orderService.findOrderByIdAndIsDeletedFalse(request.orderId());
+        Expert expert = expertService.findExpertByIdAndIsDeletedFalse(request.expertId());
 
         if (!expert.getExpertServiceFields().contains(order.getSubService()))
             throw new CustomApiException("Expert service field is not same to this order.",
@@ -58,6 +58,7 @@ public class ExpertSuggestionServiceImpl implements ExpertSuggestionService {
 
         ExpertSuggestion expertSuggestion = ExpertSuggestionMapper.fromSaveRequest(request);
         expertSuggestion.setOrder(order);
+        expertSuggestion.setExpert(expert);
         order.getExpertSuggestionList().add(expertSuggestion);
 
         orderService.update(OrderMapper.toUpdateRequest(order));
