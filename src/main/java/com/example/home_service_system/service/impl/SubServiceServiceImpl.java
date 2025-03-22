@@ -42,10 +42,11 @@ public class SubServiceServiceImpl implements SubServiceService {
                     + "} is already exists!",
                     CustomApiExceptionType.UNPROCESSABLE_ENTITY);
         }
-        mainServiceService.
-                findMainServiceByIdAndIsDeletedFalse(request.mainService().getId());
+        MainService mainService = mainServiceService.
+                findMainServiceByIdAndIsDeletedFalse(request.mainServiceId());
 
         SubService subService = SubServiceMapper.fromSaveRequest(request);
+        subService.setMainService(mainService);
         subServiceRepository.save(subService);
         log.info("SubService with id {} created", subService.getId());
 
@@ -66,9 +67,9 @@ public class SubServiceServiceImpl implements SubServiceService {
             existingSubService.setDescription(request.description());
         }
 
-        if (request.mainService() != null && request.mainService().getId() != null) {
+        if (request.mainServiceId() != null) {
             MainService newMainService = mainServiceService.
-                    findMainServiceByIdAndIsDeletedFalse(request.mainService().getId());
+                    findMainServiceByIdAndIsDeletedFalse(request.mainServiceId());
             if (!newMainService.getId().equals(existingSubService.getMainService().getId())) {
                 existingSubService.setMainService(newMainService);
             }

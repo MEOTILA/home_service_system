@@ -35,7 +35,7 @@ public class SubServiceMapper {
         subService.setName(request.name());
         subService.setBaseCost(request.baseCost());
         subService.setDescription(request.description());
-        subService.setMainService(request.mainService());
+        //subService.setMainService(request.mainService());
         return subService;
     }
 
@@ -48,7 +48,7 @@ public class SubServiceMapper {
         subService.setName(request.name());
         subService.setBaseCost(request.baseCost());
         subService.setDescription(request.description());
-        subService.setMainService(request.mainService());
+        //subService.setMainService(request.mainService());
         return subService;
     }
 }

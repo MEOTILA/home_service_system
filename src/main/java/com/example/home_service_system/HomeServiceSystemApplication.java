@@ -217,14 +217,15 @@ public class HomeServiceSystemApplication {
         //System.out.println(mainServiceService.findAll());
 
         /*MainServiceResponse mainServiceResponse = mainServiceService.findByIdAndIsDeletedFalse(1L);
-        MainService mainService = MainServiceMapper.toMainServiceFromResponse(mainServiceResponse);*/
+        MainService mainService = MainServiceMapper.toMainServiceFromResponse(mainServiceResponse)*/;
 
         /*SubServiceSaveRequest subServiceSaveRequest =
-                new SubServiceSaveRequest("Fixing laptops"
-                        , 910000L, "Full Fixing for laptops.",
-                        mainService);*/
-        //subServiceService.save(subServiceSaveRequest);
+                new SubServiceSaveRequest("Fixing PCs"
+                        , 220000L, "Full Fixing for PCs.",
+                        3L);
+        subServiceService.save(subServiceSaveRequest);*/
         //subServiceService.updateSubService(1L,subServiceUpdateRequest);
+
         //System.out.println(subServiceService.findAllByIsDeletedFalse());
 
         //subServiceService.addExpertToSubService(1L,2L);
@@ -251,13 +252,12 @@ public class HomeServiceSystemApplication {
         // System.out.println(expertService.findAll());
         //System.out.println(expertService.findByUsername("David"));
 
-/*
-        OrderSaveRequest orderSaveRequest1 = new OrderSaveRequest(
-                2L, 1L, 987654L
+        /*OrderSaveRequest orderSaveRequest1 = new OrderSaveRequest(
+                1L, 1L, 987654L
                 , "i need help to fix my apple laptop",
                 LocalDateTime.now().plusDays(3L), "New York 33th Street"
-        );*/
-        //orderService.save(orderSaveRequest1);
+        );
+        orderService.save(orderSaveRequest1);*/
 
         /*OrderUpdateRequest orderUpdateRequest = new OrderUpdateRequest(
                 1L, 3L, 2L, 2L, 800000L

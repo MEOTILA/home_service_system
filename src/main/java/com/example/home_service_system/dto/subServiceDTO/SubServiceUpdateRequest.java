@@ -23,8 +23,8 @@ public record SubServiceUpdateRequest(
         @Size(min = 10, max = 500, message = "Description must be between 10 and 500 characters!")
         String description,
 
-        @NotNull(message = "Main service cannot be null!")
-        MainService mainService
+        @NotNull(message = "Main service ID cannot be null!")
+        Long mainServiceId
 
         //List<Long> expertIds
 ) {
