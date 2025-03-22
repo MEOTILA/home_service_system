@@ -19,7 +19,7 @@ public class CustomerCommentAndRateMapper {
 
     public static CustomerCommentAndRate fromSaveRequest(CustomerCommentAndRateSaveRequest request) {
         CustomerCommentAndRate commentAndRate = new CustomerCommentAndRate();
-        commentAndRate.setOrder(request.order());
+        //commentAndRate.setOrder(request.order());
         commentAndRate.setRating(request.rating());
         commentAndRate.setComment(request.comment());
         return commentAndRate;
@@ -28,7 +28,7 @@ public class CustomerCommentAndRateMapper {
     public static CustomerCommentAndRate fromUpdateRequest(CustomerCommentAndRateUpdateRequest request) {
         CustomerCommentAndRate commentAndRate = new CustomerCommentAndRate();
         commentAndRate.setId(request.id());
-        commentAndRate.setOrder(request.order());
+        //commentAndRate.setOrder(request.order());
         commentAndRate.setRating(request.rating());
         commentAndRate.setComment(request.comment());
         return commentAndRate;

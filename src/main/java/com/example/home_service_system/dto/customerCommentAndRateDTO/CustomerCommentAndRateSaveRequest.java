@@ -7,8 +7,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record CustomerCommentAndRateSaveRequest(
-        @NotNull(message = "Order cannot be null!")
-        Order order,
+        @NotNull(message = "Order ID cannot be null!")
+        Long orderId,
 
         @NotNull(message = "Rating cannot be null!")
         @Min(value = 0, message = "Rating must be at least 0!")

@@ -38,7 +38,7 @@ public class CustomerCommentAndRateServiceImpl implements CustomerCommentAndRate
 
     @Override
     public CustomerCommentAndRateResponse save(@Valid CustomerCommentAndRateSaveRequest request) {
-        Order order = orderService.findOrderByIdAndIsDeletedFalse(request.order().getId());
+        Order order = orderService.findOrderByIdAndIsDeletedFalse(request.orderId());
         if (order.getExpert() == null)
             throw new CustomApiException("Order does not have an assigned expert!",
                     CustomApiExceptionType.BAD_REQUEST);
@@ -68,8 +68,8 @@ public class CustomerCommentAndRateServiceImpl implements CustomerCommentAndRate
         CustomerCommentAndRate existingCommentAndRate =
                 findCommentAndRateByIdAndIsDeletedFalse(request.id());
 
-        if (request.order() != null)
-            existingCommentAndRate.setOrder(request.order());
+        /*if (request.order() != null)
+            existingCommentAndRate.setOrder(request.order());*/
 
         if (request.rating() != null)
             existingCommentAndRate.setRating(request.rating());
@@ -77,7 +77,9 @@ public class CustomerCommentAndRateServiceImpl implements CustomerCommentAndRate
         if (StringUtils.hasText(request.comment()))
             existingCommentAndRate.setComment(request.comment());
 
-        Order order = orderService.findOrderByIdAndIsDeletedFalse(request.order().getId());
+        //Order order = orderService.findOrderByIdAndIsDeletedFalse(request.orderId());
+        Order order = orderService
+                .findOrderByIdAndIsDeletedFalse(existingCommentAndRate.getOrder().getId());
         if (order.getExpert() == null)
             throw new CustomApiException("Order does not have an assigned expert!",
                     CustomApiExceptionType.BAD_REQUEST);

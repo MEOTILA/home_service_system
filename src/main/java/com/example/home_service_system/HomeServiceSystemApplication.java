@@ -46,7 +46,7 @@ public class HomeServiceSystemApplication {
         var mainServiceService = context.getBean(MainServiceService.class);
         var subServiceService = context.getBean(SubServiceService.class);
         var orderService = context.getBean(OrderService.class);
-        var customerCommentAndRateservice = context.getBean(CustomerCommentAndRateService.class);
+        var customerCommentAndRateService = context.getBean(CustomerCommentAndRateService.class);
         var expertSuggestionService = context.getBean(ExpertSuggestionService.class);
 
 
@@ -273,12 +273,16 @@ public class HomeServiceSystemApplication {
         //System.out.println(orderService.findAllByIsDeletedFalse());
         //System.out.println(expertService.findByIdAndIsDeletedFalse(1L));
         //Order order = orderService.findOrderByIdAndIsDeletedFalse(3L);
-        /*CustomerCommentAndRateSaveRequest request = new CustomerCommentAndRateSaveRequest(
-                order, 75, "Good job!"
-        );*/
-        //customerCommentAndRateservice.save(request);
-        //customerCommentAndRateservice.softDeleteById(20L);
-        //customerCommentAndRateservice.findAllAndIsDeletedFalse();
+        CustomerCommentAndRateSaveRequest request = new CustomerCommentAndRateSaveRequest(
+                1L, 75, "Good job!"
+        );
+        //customerCommentAndRateService.save(request);
+        CustomerCommentAndRateUpdateRequest request8 = new CustomerCommentAndRateUpdateRequest(
+                1L, 100, "Well done!"
+        );
+        //customerCommentAndRateService.update(request8);
+        //customerCommentAndRateService.softDeleteById(1L);
+        //customerCommentAndRateService.findAllAndIsDeletedFalse();
         // orderService.findByIdAndIsDeletedFalse(2L);
 
         //Order order1 = orderService.findOrderByIdAndIsDeletedFalse(1L);

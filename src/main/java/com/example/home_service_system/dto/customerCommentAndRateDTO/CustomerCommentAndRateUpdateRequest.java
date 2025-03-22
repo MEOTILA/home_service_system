@@ -10,8 +10,8 @@ public record CustomerCommentAndRateUpdateRequest(
         @NotNull(message = "Id cannot be null for update!")
         Long id,
 
-        @NotNull(message = "Order cannot be null!")
-        Order order,
+        /*@NotNull(message = "Order ID cannot be null!")
+        Long orderId,*/
 
         @Min(value = 0, message = "Rating must be at least 0!")
         @Max(value = 100, message = "Rating must be at most 100!")
