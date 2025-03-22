@@ -1,9 +1,6 @@
 package com.example.home_service_system.base;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
@@ -18,4 +15,7 @@ public class BaseEntity<ID extends Serializable>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private ID id;
+
+    @Column(nullable = false)
+    boolean isDeleted = false;
 }

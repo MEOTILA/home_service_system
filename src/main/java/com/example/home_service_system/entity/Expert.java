@@ -43,6 +43,6 @@ public class Expert extends User {
     )
     List<SubService> expertServiceFields = new ArrayList<>();
 
-    @Column(nullable = false)
-    boolean isDeleted = false;
+    /*@Column(nullable = false)
+    boolean isDeleted = false;*/
 }

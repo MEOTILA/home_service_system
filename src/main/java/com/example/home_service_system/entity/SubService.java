@@ -35,6 +35,6 @@ public class SubService extends BaseEntity<Long> {
     @ManyToMany(mappedBy = "expertServiceFields")
     List<Expert> expertList = new ArrayList<>();
 
-    @Column(nullable = false)
-    boolean isDeleted = false;
+    /*@Column(nullable = false)
+    boolean isDeleted = false;*/
 }

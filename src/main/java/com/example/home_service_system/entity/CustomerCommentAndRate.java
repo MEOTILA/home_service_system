@@ -22,7 +22,7 @@ public class CustomerCommentAndRate extends BaseEntity<Long> {
     @Column(length = 500)
     String comment;
 
-    @Column(nullable = false)
-    boolean isDeleted = false;
+    /*@Column(nullable = false)
+    boolean isDeleted = false;*/
 
 }

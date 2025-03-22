@@ -43,6 +43,6 @@ public class ExpertSuggestion extends BaseEntity<Long> {
     @Column(nullable = false)
     LocalDateTime expertServiceStartDateTime;
 
-    @Column(nullable = false)
-    boolean isDeleted = false;
+    /*@Column(nullable = false)
+    boolean isDeleted = false;*/
 }

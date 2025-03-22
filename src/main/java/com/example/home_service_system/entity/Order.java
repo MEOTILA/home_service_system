@@ -55,6 +55,6 @@ public class Order extends BaseEntity<Long> {
     @OneToOne
     CustomerCommentAndRate customerCommentAndRate;
 
-    @Column(nullable = false)
-    boolean isDeleted = false;
+    /*@Column(nullable = false)
+    boolean isDeleted = false;*/
 }

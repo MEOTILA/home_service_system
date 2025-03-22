@@ -174,14 +174,14 @@ public class HomeServiceSystemApplication {
         byte[] dummyImage = new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 
         ExpertSaveRequest expert = new ExpertSaveRequest(
-                "Angel",
-                "Angel",
-                "Angel",
-                "Angel@1234",
-                "0019234327",
-                "09124232176",
-                LocalDate.of(1930, 8, 15),
-                "angel@example.com",
+                "Paul",
+                "Nedved",
+                "Paul",
+                "Paul@1234",
+                "0019281327",
+                "09144232176",
+                LocalDate.of(1940, 8, 15),
+                "paul@example.com",
                 dummyImage
         );
         //expertService.save(expert);
@@ -190,8 +190,8 @@ public class HomeServiceSystemApplication {
         //todo: deleteeeeeeeeeeeeeeeee
         //expertService.softDeleteExpertAndOrdersAndSuggestionsAndCommentAndRatesById(1L);
         //customerService.softDeleteCustomerAndOrdesrAndSuggestionsAndCommentAndRateById(2L);
-        mainServiceService
-                .softDeleteMainServiceAndSubServicesAndOrdersAndSuggestionsAndCommentAndRate(1L);
+        /*mainServiceService
+                .softDeleteMainServiceAndSubServicesAndOrdersAndSuggestionsAndCommentAndRate(2L);*/
         /*subServiceService
                 .softDeleteSubServiceAndExpertFieldsAndOrdersAndCommentAndRateAndSuggestionsById(3L);*/
         //orderService.softDeleteOrderAndExpertSuggestionsAndCommentAndRateByOrderId(3L);

@@ -24,6 +24,6 @@ public class MainService extends BaseEntity<Long> {
     @OneToMany(mappedBy = "mainService")
     List<SubService> subServices = new ArrayList<>();
 
-    @Column(nullable = false)
-    boolean isDeleted = false;
+   /* @Column(nullable = false)
+    boolean isDeleted = false;*/
 }
