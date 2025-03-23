@@ -231,7 +231,7 @@ public class HomeServiceSystemApplication {
         //System.out.println(subServiceService.findAllByIsDeletedFalse());
 
         //subServiceService.addExpertToSubService(5L,1L);
-        //subServiceService.removeExpertFromSubService(1L,1L);
+        subServiceService.removeExpertFromSubService(5L,1L);
         // subServiceService.addExpertToSubService(1L,2L);
         //subServiceService.addExpertToSubService(4L,2L);
         //subServiceService.addExpertToSubService(4L,1L);
