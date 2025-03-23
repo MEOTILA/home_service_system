@@ -60,9 +60,9 @@ public class MainServiceServiceImpl implements MainServiceService {
         mainService.getSubServices().forEach(subService -> {
             subService.setDeleted(true);
 
-            for (Expert expert : subService.getExpertList()) {
+            /*for (Expert expert : subService.getExpertList()) {
                 expert.getExpertServiceFields().remove(subService);
-            }
+            }*/
 
             subService.getOrderList().forEach(order -> {
                 order.setDeleted(true);

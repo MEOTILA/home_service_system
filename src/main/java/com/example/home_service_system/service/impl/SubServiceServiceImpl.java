@@ -128,10 +128,10 @@ public class SubServiceServiceImpl implements SubServiceService {
             }
         }
 
-        for (Expert expert : deletingSubService.getExpertList()) {
+        /*for (Expert expert : deletingSubService.getExpertList()) {
             expert.getExpertServiceFields().remove(deletingSubService);
             expertService.update(ExpertMapper.toUpdateRequest(expert));
-        }
+        }*/
 
         //deletingSubService.setDeleted(true);
         //subServiceRepository.save(deletingSubService);

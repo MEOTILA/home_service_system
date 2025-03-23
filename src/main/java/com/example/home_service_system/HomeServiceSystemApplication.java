@@ -194,7 +194,7 @@ public class HomeServiceSystemApplication {
         //expertService.softDeleteExpertAndOrdersAndSuggestionsAndCommentAndRatesById(1L);
         //customerService.softDeleteCustomerAndOrdesrAndSuggestionsAndCommentAndRateById(2L);
         /*mainServiceService
-                .softDeleteMainServiceAndSubServicesAndOrdersAndSuggestionsAndCommentAndRate(2L);*/
+                .softDeleteMainServiceAndSubServicesAndOrdersAndSuggestionsAndCommentAndRate(1L);*/
         /*subServiceService
                 .softDeleteSubServiceAndExpertFieldsAndOrdersAndCommentAndRateAndSuggestionsById(1L);*/
         //orderService.softDeleteOrderAndExpertSuggestionsAndCommentAndRateByOrderId(3L);
@@ -230,7 +230,7 @@ public class HomeServiceSystemApplication {
 
         //System.out.println(subServiceService.findAllByIsDeletedFalse());
 
-        //subServiceService.addExpertToSubService(1L,1L);
+        //subServiceService.addExpertToSubService(5L,1L);
         //subServiceService.removeExpertFromSubService(1L,1L);
         // subServiceService.addExpertToSubService(1L,2L);
         //subServiceService.addExpertToSubService(4L,2L);
@@ -296,7 +296,7 @@ public class HomeServiceSystemApplication {
                 1L, 1L, "Meeeeee", 1321L
                 , Duration.ofHours(4L), LocalDateTime.now().plusDays(7)
         );
-       expertSuggestionService.save(request3);
+       //expertSuggestionService.save(request3);
 
         ExpertSuggestionUpdateRequest request6 = new ExpertSuggestionUpdateRequest(
                 1L,"Helloooo",652L,
