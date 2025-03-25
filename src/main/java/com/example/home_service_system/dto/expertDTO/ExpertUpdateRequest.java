@@ -63,13 +63,13 @@ public record ExpertUpdateRequest(
         UserStatus userStatus,
 
         @Min(value = 0, message = "Balance cannot be negative!")
-        Long balance
+        Long balance,
 
         //List<Long> orderListIds,
 
         //List<Long> expertSuggestionList,
 
-        //List<Long> expertServiceFieldIds
+        List<Long> expertServiceFieldIds
 
         //List<Long> customerCommentAndRateIds
         ) {

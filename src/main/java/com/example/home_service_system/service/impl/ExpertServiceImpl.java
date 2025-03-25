@@ -5,16 +5,20 @@ import com.example.home_service_system.dto.expertDTO.ExpertResponse;
 import com.example.home_service_system.dto.expertDTO.ExpertSaveRequest;
 import com.example.home_service_system.dto.expertDTO.ExpertUpdateRequest;
 import com.example.home_service_system.entity.Expert;
+import com.example.home_service_system.entity.SubService;
 import com.example.home_service_system.entity.enums.UserStatus;
 import com.example.home_service_system.exceptions.CustomApiException;
 import com.example.home_service_system.exceptions.CustomApiExceptionType;
 import com.example.home_service_system.mapper.ExpertMapper;
 import com.example.home_service_system.repository.ExpertRepository;
 import com.example.home_service_system.service.ExpertService;
+import com.example.home_service_system.service.SubServiceService;
 import com.example.home_service_system.specification.ExpertSpecification;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -28,6 +32,7 @@ import org.springframework.validation.annotation.Validated;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -38,6 +43,13 @@ public class ExpertServiceImpl implements ExpertService {
 
     private final ExpertRepository expertRepository;
     private final PasswordEncoder passwordEncoder;
+    @Lazy
+    private SubServiceService subServiceService;
+
+    @Autowired
+    public void setSubServiceService(@Lazy SubServiceService subServiceService) {
+        this.subServiceService = subServiceService;
+    }
 
     @Override
     public ExpertResponse save(@Valid ExpertSaveRequest request) {
@@ -152,7 +164,14 @@ public class ExpertServiceImpl implements ExpertService {
         if (request.balance() != null) {
             updatingExpert.setBalance(request.balance());
         }
+        if (request.expertServiceFieldIds() != null && !request.expertServiceFieldIds().isEmpty()) {
+            List<SubService> subServices = request.expertServiceFieldIds().stream()
+                    .map(subServiceId -> subServiceService
+                            .findSubServiceByIdAndIsDeletedFalse(subServiceId))
+                    .collect(Collectors.toList());
 
+            updatingExpert.setExpertServiceFields(subServices);
+        }
         Expert updatedExpert = expertRepository.save(updatingExpert);
         log.info("Expert with id {} updated", updatedExpert.getId());
         return ExpertMapper.to(updatedExpert);

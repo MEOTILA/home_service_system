@@ -177,14 +177,14 @@ public class HomeServiceSystemApplication {
         byte[] dummyImage = new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 
         ExpertSaveRequest expert = new ExpertSaveRequest(
-                "Paul",
-                "Nedved",
-                "Paul",
-                "Paul@1234",
-                "0019281327",
-                "09144232176",
-                LocalDate.of(1940, 8, 15),
-                "paul@example.com",
+                "George",
+                "Michael",
+                "George",
+                "George@1234",
+                "0019331327",
+                "09143332176",
+                LocalDate.of(1945, 8, 15),
+                "george@example.com",
                 dummyImage
         );
         //expertService.save(expert);
@@ -230,8 +230,8 @@ public class HomeServiceSystemApplication {
 
         //System.out.println(subServiceService.findAllByIsDeletedFalse());
 
-        //subServiceService.addExpertToSubService(5L,1L);
-        subServiceService.removeExpertFromSubService(5L,1L);
+        //subServiceService.addExpertToSubService(1L,2L);
+        //subServiceService.removeExpertFromSubService(1L,2L);
         // subServiceService.addExpertToSubService(1L,2L);
         //subServiceService.addExpertToSubService(4L,2L);
         //subServiceService.addExpertToSubService(4L,1L);
