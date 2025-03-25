@@ -196,24 +196,24 @@ public class HomeServiceSystemApplication {
         /*mainServiceService
                 .softDeleteMainServiceAndSubServicesAndOrdersAndSuggestionsAndCommentAndRate(1L);*/
         /*subServiceService
-                .softDeleteSubServiceAndExpertFieldsAndOrdersAndCommentAndRateAndSuggestionsById(1L);*/
+                .softDeleteSubServiceAndExpertFieldsAndOrdersAndCommentAndRateAndSuggestionsById(5L);*/
         //orderService.softDeleteOrderAndExpertSuggestionsAndCommentAndRateByOrderId(3L);
-        //test
 
 
         //System.out.println(customerService.findAll());
-        //System.out.println(expertService.findAll());
+        //System.out.println(expertService.findByIdAndIsDeletedFalse(2L));
+        //System.out.println(subServiceService.findAllSubServicesByIsDeletedFalse());
 /*
         ExpertChangePasswordRequest request6 = new ExpertChangePasswordRequest(
                 6L,"Angel@12345","Angel@12344"
         );*/
         //expertService.changePassword(request6);
 
-        /*MainServiceSaveRequest mainServiceSaveRequest =
-                new MainServiceSaveRequest("Electronic");*/
+        MainServiceSaveRequest mainServiceSaveRequest =
+                new MainServiceSaveRequest("Cleaning");
 
-        MainServiceUpdateRequest mainServiceUpdateRequest =
-                new MainServiceUpdateRequest(1L, "Electronics");
+        /*MainServiceUpdateRequest mainServiceUpdateRequest =
+                new MainServiceUpdateRequest(2L, "Cleaning");*/
         //mainServiceService.update(mainServiceUpdateRequest);
         //mainServiceService.save(mainServiceSaveRequest);
         //System.out.println(mainServiceService.findAll());
@@ -230,7 +230,7 @@ public class HomeServiceSystemApplication {
 
         //System.out.println(subServiceService.findAllByIsDeletedFalse());
 
-        //subServiceService.addExpertToSubService(1L,2L);
+        //subServiceService.addExpertToSubService(5L,2L);
         //subServiceService.removeExpertFromSubService(1L,2L);
         // subServiceService.addExpertToSubService(1L,2L);
         //subServiceService.addExpertToSubService(4L,2L);
