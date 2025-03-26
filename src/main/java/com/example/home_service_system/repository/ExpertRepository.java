@@ -21,7 +21,7 @@ public interface ExpertRepository extends JpaRepository<Expert, Long>
     Optional<Expert> findByIdAndIsDeletedFalse(Long id);
 
     @Query("SELECT e FROM Expert e WHERE e.isDeleted = false")
-    List<Expert> findAllByIsDeletedFalse();
+    List<Expert> findAllAndIsDeletedFalse();
 
     @Query("SELECT e FROM Expert e WHERE e.username = :username AND e.isDeleted = false")
     Optional<Expert> findByUsernameAndIsDeletedFalse(String username);

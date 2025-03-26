@@ -16,7 +16,7 @@ public interface SubServiceRepository extends JpaRepository<SubService, Long> {
     Optional<SubService> findByIdAndIsDeletedFalse(Long id);
 
     @Query("SELECT s FROM SubService s WHERE s.isDeleted = false")
-    List<SubService> findAllByIsDeletedFalse();
+    List<SubService> findAllAndIsDeletedFalse();
 
     @Query("SELECT s FROM SubService s WHERE s.name = :name AND s.isDeleted = false")
     Optional<SubService> findByNameAndIsDeletedFalse(String name);
@@ -25,6 +25,9 @@ public interface SubServiceRepository extends JpaRepository<SubService, Long> {
 
     @Query("SELECT s FROM SubService s WHERE s.mainService.id = :mainServiceId AND s.isDeleted = false")
     List<SubService> findAllByMainServiceIdAndIsDeletedFalse(Long mainServiceId);
+
+    @Query("SELECT s FROM SubService s JOIN s.expertList e WHERE e.id = :expertId AND s.isDeleted = false")
+    List<SubService> findAllByExpertIdAndIsDeletedFalse(Long expertId);
 
     @Modifying
     @Query("UPDATE SubService s SET s.isDeleted = true WHERE s.id = :id")

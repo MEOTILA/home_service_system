@@ -20,5 +20,5 @@ public interface MainServiceService {
 
     MainService findMainServiceByIdAndIsDeletedFalse(Long id);
 
-    List<MainServiceResponse> findAllByIsDeletedFalse();
+    List<MainServiceResponse> findAllAndIsDeletedFalse();
 }

@@ -16,7 +16,7 @@ public interface AdminRepository extends JpaRepository<Admin, Long> {
     Optional<Admin> findByIdAndIsDeletedFalse(Long id);
 
     @Query("SELECT a FROM Admin a WHERE a.isDeleted = false")
-    List<Admin> findAllByIsDeletedFalse();
+    List<Admin> findAllAndIsDeletedFalse();
 
     @Query("SELECT a FROM Admin a WHERE a.username = :username AND a.isDeleted = false")
     Optional<Admin> findByUsernameAndIsDeletedFalse(String username);

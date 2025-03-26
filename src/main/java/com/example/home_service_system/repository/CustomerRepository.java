@@ -1,6 +1,5 @@
 package com.example.home_service_system.repository;
 
-import com.example.home_service_system.entity.Admin;
 import com.example.home_service_system.entity.Customer;
 import com.example.home_service_system.entity.enums.UserStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,7 +21,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long>
     Optional<Customer> findByIdAndIsDeletedFalse(Long id);
 
     @Query("SELECT c FROM Customer c WHERE c.isDeleted = false")
-    List<Customer> findAllByIsDeletedFalse();
+    List<Customer> findAllAndIsDeletedFalse();
 
     @Query("SELECT c FROM Customer c WHERE c.username = :username AND c.isDeleted = false")
     Optional<Customer> findByUsernameAndIsDeletedFalse(String username);

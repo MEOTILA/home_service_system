@@ -18,7 +18,7 @@ public interface AdminService {
 
     Admin findAdminByIdAndIsDeletedFalse(Long id);
 
-    List<AdminResponse> findAllByIsDeletedFalse();
+    List<AdminResponse> findAllAndIsDeletedFalse();
 
     AdminResponse findByUsernameAndIsDeletedFalse(String username);
 

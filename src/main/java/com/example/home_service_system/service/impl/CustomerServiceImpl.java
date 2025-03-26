@@ -169,8 +169,8 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<CustomerResponse> findAllByIsDeletedFalse() {
-        List<Customer> foundedCustomers = customerRepository.findAllByIsDeletedFalse();
+    public List<CustomerResponse> findAllAndIsDeletedFalse() {
+        List<Customer> foundedCustomers = customerRepository.findAllAndIsDeletedFalse();
         return foundedCustomers.stream()
                 .map(CustomerMapper::to)
                 .toList();
@@ -199,7 +199,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void softDeleteCustomerAndOrdesrAndSuggestionsAndCommentAndRateById(Long id) {
+    public void softDeleteCustomerAndOrdersAndSuggestionsAndCommentAndRateById(Long id) {
        Customer customer = findCustomerByIdAndIsDeletedFalse(id);
 
         customer.getOrderList().forEach(order -> {

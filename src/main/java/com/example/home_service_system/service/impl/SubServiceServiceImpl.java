@@ -97,20 +97,27 @@ public class SubServiceServiceImpl implements SubServiceService {
     }
 
     @Override
-    public List<SubServiceResponse> findAllByIsDeletedFalse() {
-        List<SubService> subServices = subServiceRepository.findAllByIsDeletedFalse();
+    public List<SubServiceResponse> findAllAndIsDeletedFalse() {
+        List<SubService> subServices = subServiceRepository.findAllAndIsDeletedFalse();
         return subServices.stream().map(SubServiceMapper::to).toList();
     }
 
     @Override
-    public List<SubService> findAllSubServicesByIsDeletedFalse() {
-        return subServiceRepository.findAllByIsDeletedFalse();
+    public List<SubService> findAllSubServicesAndIsDeletedFalse() {
+        return subServiceRepository.findAllAndIsDeletedFalse();
     }
 
     @Override
     public List<SubServiceResponse> findAllByMainServiceId(Long mainServiceId) {
         List<SubService> subServices = subServiceRepository.
                 findAllByMainServiceIdAndIsDeletedFalse(mainServiceId);
+        return subServices.stream().map(SubServiceMapper::to).toList();
+    }
+
+    @Override
+    public List<SubServiceResponse> findAllByExpertIdAndIsDeletedFalse(Long expertId){
+        List<SubService> subServices =
+                subServiceRepository.findAllByExpertIdAndIsDeletedFalse(expertId);
         return subServices.stream().map(SubServiceMapper::to).toList();
     }
 

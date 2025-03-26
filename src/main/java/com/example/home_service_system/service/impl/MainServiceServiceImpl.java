@@ -3,11 +3,9 @@ package com.example.home_service_system.service.impl;
 import com.example.home_service_system.dto.mainServiceDTO.MainServiceResponse;
 import com.example.home_service_system.dto.mainServiceDTO.MainServiceSaveRequest;
 import com.example.home_service_system.dto.mainServiceDTO.MainServiceUpdateRequest;
-import com.example.home_service_system.entity.Expert;
 import com.example.home_service_system.entity.MainService;
 import com.example.home_service_system.exceptions.CustomApiException;
 import com.example.home_service_system.exceptions.CustomApiExceptionType;
-import com.example.home_service_system.mapper.ExpertMapper;
 import com.example.home_service_system.mapper.MainServiceMapper;
 import com.example.home_service_system.repository.MainServiceRepository;
 import com.example.home_service_system.service.MainServiceService;
@@ -102,8 +100,8 @@ public class MainServiceServiceImpl implements MainServiceService {
     }
 
     @Override
-    public List<MainServiceResponse> findAllByIsDeletedFalse() {
-        List<MainService> mainServices = mainServiceRepository.findAllByIsDeletedFalse();
+    public List<MainServiceResponse> findAllAndIsDeletedFalse() {
+        List<MainService> mainServices = mainServiceRepository.findAllAndIsDeletedFalse();
         if (mainServices.isEmpty()) {
             throw new CustomApiException("No MainServices found!",
                     CustomApiExceptionType.NOT_FOUND);

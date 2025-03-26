@@ -106,8 +106,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderResponse> findAllByIsDeletedFalse() {
-        return orderRepository.findAllByIsDeletedFalse().stream()
+    public List<OrderResponse> findAllAndIsDeletedFalse() {
+        return orderRepository.findAllAndIsDeletedFalse().stream()
                 .map(OrderMapper::to).toList();
     }
 

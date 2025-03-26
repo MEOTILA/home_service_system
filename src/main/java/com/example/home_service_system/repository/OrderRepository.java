@@ -17,7 +17,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     Optional<Order> findByIdAndIsDeletedFalse(Long id);
 
     @Query("SELECT o FROM Order o WHERE o.isDeleted = false")
-    List<Order> findAllByIsDeletedFalse();
+    List<Order> findAllAndIsDeletedFalse();
 
     @Query("SELECT o FROM Order o WHERE o.customer.id = :customerId AND o.isDeleted = false")
     List<Order> findByCustomerIdAndIsDeletedFalse(Long customerId);

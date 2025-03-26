@@ -21,7 +21,7 @@ public interface ExpertService {
 
     Expert findExpertByIdAndIsDeletedFalse(Long id);
 
-    List<ExpertResponse> findAllByIsDeletedFalse();
+    List<ExpertResponse> findAllAndIsDeletedFalse();
 
     ExpertResponse findByUsernameAndIsDeletedFalse(String username);
 

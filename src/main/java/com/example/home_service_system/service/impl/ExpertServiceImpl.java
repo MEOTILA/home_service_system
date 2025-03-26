@@ -194,8 +194,8 @@ public class ExpertServiceImpl implements ExpertService {
     }
 
     @Override
-    public List<ExpertResponse> findAllByIsDeletedFalse() {
-        List<Expert> foundedExperts = expertRepository.findAllByIsDeletedFalse();
+    public List<ExpertResponse> findAllAndIsDeletedFalse() {
+        List<Expert> foundedExperts = expertRepository.findAllAndIsDeletedFalse();
         return foundedExperts.stream()
                 .map(ExpertMapper::to)
                 .toList();

@@ -18,7 +18,7 @@ public interface CustomerCommentAndRateRepository
     Optional<CustomerCommentAndRate> findByIdAndIsDeletedFalse(Long id);
 
     @Query("SELECT c FROM CustomerCommentAndRate c WHERE c.isDeleted = false")
-    List<CustomerCommentAndRate> findAllByIsDeletedFalse();
+    List<CustomerCommentAndRate> findAllAndIsDeletedFalse();
 
     @Query("SELECT c FROM CustomerCommentAndRate c WHERE c.order = :order AND c.isDeleted = false")
     List<CustomerCommentAndRate> findByOrderAndIsDeletedFalse(Order order);

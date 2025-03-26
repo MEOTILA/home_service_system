@@ -121,7 +121,7 @@ public class CustomerCommentAndRateServiceImpl implements CustomerCommentAndRate
 
     @Override
     public List<CustomerCommentAndRateResponse> findAllAndIsDeletedFalse() {
-        List<CustomerCommentAndRate> comments = repository.findAllByIsDeletedFalse();
+        List<CustomerCommentAndRate> comments = repository.findAllAndIsDeletedFalse();
         if (comments.isEmpty()) {
             throw new CustomApiException("No comments found!"
                     , CustomApiExceptionType.NOT_FOUND);

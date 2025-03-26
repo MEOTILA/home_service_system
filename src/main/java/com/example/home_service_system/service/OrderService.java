@@ -19,7 +19,7 @@ public interface OrderService {
 
     Order findOrderByIdAndIsDeletedFalse(Long id);
 
-    List<OrderResponse> findAllByIsDeletedFalse();
+    List<OrderResponse> findAllAndIsDeletedFalse();
 
     List<OrderResponse> findByCustomerIdAndIsDeletedFalse(Long customerId);
 

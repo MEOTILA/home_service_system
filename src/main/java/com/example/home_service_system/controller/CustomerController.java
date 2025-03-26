@@ -49,7 +49,7 @@ public class CustomerController {
 
     @GetMapping("/all")
     public ResponseEntity<List<CustomerResponse>> findAll() {
-        List<CustomerResponse> customers = customerService.findAllByIsDeletedFalse();
+        List<CustomerResponse> customers = customerService.findAllAndIsDeletedFalse();
         return ResponseEntity.ok(customers);
     }
 
@@ -67,7 +67,7 @@ public class CustomerController {
 
     @DeleteMapping("/{id}/full")
     public ResponseEntity<Void> softDeleteCustomerAndRelatedData(@PathVariable Long id) {
-        customerService.softDeleteCustomerAndOrdesrAndSuggestionsAndCommentAndRateById(id);
+        customerService.softDeleteCustomerAndOrdersAndSuggestionsAndCommentAndRateById(id);
         return ResponseEntity.noContent().build();
     }
 

@@ -16,7 +16,7 @@ public interface MainServiceRepository extends JpaRepository<MainService, Long> 
     Optional<MainService> findByIdAndIsDeletedFalse(Long id);
 
     @Query("SELECT m FROM MainService m WHERE m.isDeleted = false")
-    List<MainService> findAllByIsDeletedFalse();
+    List<MainService> findAllAndIsDeletedFalse();
 
     @Query("SELECT m FROM MainService m WHERE m.name = :name AND m.isDeleted = false")
     Optional<MainService> findByNameAndIsDeletedFalse(String name);

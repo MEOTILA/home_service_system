@@ -153,8 +153,8 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public List<AdminResponse> findAllByIsDeletedFalse() {
-        List<Admin> foundedAdmins = adminRepository.findAllByIsDeletedFalse();
+    public List<AdminResponse> findAllAndIsDeletedFalse() {
+        List<Admin> foundedAdmins = adminRepository.findAllAndIsDeletedFalse();
         return foundedAdmins.stream().map(AdminMapper::to).toList();
     }
 

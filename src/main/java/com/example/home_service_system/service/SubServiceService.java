@@ -16,11 +16,13 @@ public interface SubServiceService {
 
     SubService findSubServiceByIdAndIsDeletedFalse(Long id);
 
-    List<SubServiceResponse> findAllByIsDeletedFalse();
+    List<SubServiceResponse> findAllAndIsDeletedFalse();
 
-    List<SubService>  findAllSubServicesByIsDeletedFalse();
+    List<SubService> findAllSubServicesAndIsDeletedFalse();
 
     List<SubServiceResponse> findAllByMainServiceId(Long mainServiceId);
+
+    List<SubServiceResponse> findAllByExpertIdAndIsDeletedFalse(Long expertId);
 
     void softDeleteSubServiceAndExpertFieldsAndOrdersAndCommentAndRateAndSuggestionsById(Long id);
 
