@@ -1,24 +1,71 @@
 package com.example.home_service_system.controller;
 
+import com.example.home_service_system.dto.expertDTO.ExpertChangePasswordRequest;
 import com.example.home_service_system.dto.expertDTO.ExpertResponse;
+import com.example.home_service_system.dto.expertDTO.ExpertSaveRequest;
+import com.example.home_service_system.dto.expertDTO.ExpertUpdateRequest;
 import com.example.home_service_system.entity.enums.UserStatus;
 import com.example.home_service_system.service.ExpertService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/experts")
+@RequiredArgsConstructor
+@Validated
 public class ExpertController {
 
     private final ExpertService expertService;
 
-    public ExpertController(ExpertService expertService) {
-        this.expertService = expertService;
+    @PostMapping
+    public ResponseEntity<ExpertResponse> save(@Valid @RequestBody ExpertSaveRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(expertService.save(request));
+    }
+
+    @PutMapping
+    public ResponseEntity<ExpertResponse> update(@Valid @RequestBody ExpertUpdateRequest request) {
+        return ResponseEntity.ok(expertService.update(request));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ExpertResponse> findById(@PathVariable Long id) {
+        return ResponseEntity.ok(expertService.findByIdAndIsDeletedFalse(id));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ExpertResponse>> findAll() {
+        return ResponseEntity.ok(expertService.findAllAndIsDeletedFalse());
+    }
+
+    @GetMapping("/username/{username}")
+    public ResponseEntity<ExpertResponse> findByUsername(@PathVariable String username) {
+        return ResponseEntity.ok(expertService.findByUsernameAndIsDeletedFalse(username));
+    }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<Void> changePassword(@Valid @RequestBody ExpertChangePasswordRequest request) {
+        expertService.changePassword(request);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> softDelete(@PathVariable Long id) {
+        expertService.softDeleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/full-delete/{id}")
+    public ResponseEntity<Void> softDeleteExpertAndRelations(@PathVariable Long id) {
+        expertService.softDeleteExpertAndOrdersAndSuggestionsAndCommentAndRatesById(id);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/filter")
