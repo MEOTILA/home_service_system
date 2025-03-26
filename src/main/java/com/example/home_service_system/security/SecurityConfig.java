@@ -16,7 +16,8 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-    @Bean
+
+   @Bean
     public UserDetailsService userDetailsService() {
         return new InMemoryUserDetailsManager(
                 User.withUsername("admin")
@@ -26,17 +27,16 @@ public class SecurityConfig {
         );
     }
 
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .requestMatchers("/login", "/public/**").permitAll()  // Use requestMatchers instead of antMatchers
-                .anyRequest().authenticated()  // Require authentication for other URLs
+                .requestMatchers("/login", "/public/**").permitAll()
+                .anyRequest().authenticated()
                 .and()
-                .formLogin().loginPage("/login").permitAll()  // Custom login page
+                .formLogin().loginPage("/login").permitAll()
                 .and()
-                .logout().permitAll();  // Allow logout
+                .logout().permitAll();
 
         return http.build();
     }

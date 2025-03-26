@@ -9,6 +9,7 @@ import com.example.home_service_system.service.CustomerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -25,8 +26,8 @@ public class CustomerController {
     private final CustomerService customerService;
 
     @PostMapping
-    public CustomerResponse save(@Valid @RequestBody CustomerSaveRequest request) {
-        return customerService.save(request);
+    public ResponseEntity<CustomerResponse> save(@Valid @RequestBody CustomerSaveRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(customerService.save(request));
     }
 
     @PutMapping("/update")
