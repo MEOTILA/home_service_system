@@ -44,7 +44,7 @@ public class OrderController {
         return ResponseEntity.ok(orderService.findByIdAndIsDeletedFalse(id));
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<OrderResponse>> findAll() {
         return ResponseEntity.ok(orderService.findAllAndIsDeletedFalse());
     }

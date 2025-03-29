@@ -40,7 +40,7 @@ public class ExpertController {
         return ResponseEntity.ok(expertService.findByIdAndIsDeletedFalse(id));
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<ExpertResponse>> findAll() {
         return ResponseEntity.ok(expertService.findAllAndIsDeletedFalse());
     }

@@ -9,7 +9,6 @@ import com.example.home_service_system.entity.Order;
 import com.example.home_service_system.exceptions.CustomApiException;
 import com.example.home_service_system.exceptions.CustomApiExceptionType;
 import com.example.home_service_system.mapper.ExpertSuggestionMapper;
-import com.example.home_service_system.mapper.OrderMapper;
 import com.example.home_service_system.repository.ExpertSuggestionRepository;
 import com.example.home_service_system.service.ExpertService;
 import com.example.home_service_system.service.ExpertSuggestionService;
@@ -93,6 +92,16 @@ public class ExpertSuggestionServiceImpl implements ExpertSuggestionService {
     public List<ExpertSuggestionResponse> findAllAndIsDeletedFalse() {
         List<ExpertSuggestion> foundedItems = repository.findAllAndIsDeletedFalse();
         return foundedItems.stream().map(ExpertSuggestionMapper::to).toList();
+    }
+
+    @Override
+    public ExpertSuggestionResponse findByIdAndIsDeletedFalse(Long id) {
+        ExpertSuggestion expertSuggestion = repository.findByIdAndIsDeletedFalse(id)
+                .orElseThrow(() -> new CustomApiException("Expert Suggestion with id {"
+                        + id + "} not found!", CustomApiExceptionType.NOT_FOUND));
+
+        return ExpertSuggestionMapper.to(expertSuggestion);
+
     }
 
     @Override

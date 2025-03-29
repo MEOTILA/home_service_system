@@ -7,6 +7,7 @@ import com.example.home_service_system.service.CustomerCommentAndRateService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/customer-comments")
 @RequiredArgsConstructor
+@Validated
 public class CustomerCommentAndRateController {
 
     private final CustomerCommentAndRateService customerCommentAndRateService;
@@ -35,7 +37,7 @@ public class CustomerCommentAndRateController {
         return ResponseEntity.ok(customerCommentAndRateService.findByIdAndIsDeletedFalse(id));
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<CustomerCommentAndRateResponse>> findAll() {
         return ResponseEntity.ok(customerCommentAndRateService.findAllAndIsDeletedFalse());
     }

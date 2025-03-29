@@ -37,17 +37,16 @@ public class ExpertSuggestionController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<ExpertSuggestionResponse>> findAll() {
         return ResponseEntity.ok(expertSuggestionService.findAllAndIsDeletedFalse());
     }
 
-    /*@GetMapping("/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ExpertSuggestionResponse> findById(@PathVariable Long id) {
-        return ResponseEntity.ok(ExpertSuggestionResponse
-                .from(expertSuggestionService.findSuggestionByIdAndIsDeletedFalse(id)));
+        return ResponseEntity.ok(expertSuggestionService.findByIdAndIsDeletedFalse(id));
 
-    }*/
+    }
 
     @GetMapping("/expert/{expertId}")
     public ResponseEntity<List<ExpertSuggestionResponse>> findAllByExpertId(@PathVariable Long expertId) {

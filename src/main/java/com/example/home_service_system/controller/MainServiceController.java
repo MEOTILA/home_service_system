@@ -31,8 +31,8 @@ public class MainServiceController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> softDelete(@PathVariable Long id) {
-        mainServiceService.softDelete(id);
+    public ResponseEntity<Void> softDeleteMainServiceAndRelations(@PathVariable Long id) {
+        mainServiceService.softDeleteMainServiceAndSubServicesAndOrdersAndSuggestionsAndCommentAndRate(id);
         return ResponseEntity.noContent().build();
     }
 
@@ -41,7 +41,7 @@ public class MainServiceController {
         return ResponseEntity.ok(mainServiceService.findByIdAndIsDeletedFalse(id));
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<MainServiceResponse>> findAll() {
         return ResponseEntity.ok(mainServiceService.findAllAndIsDeletedFalse());
     }

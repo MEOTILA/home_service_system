@@ -16,6 +16,8 @@ public interface ExpertSuggestionService {
 
     List<ExpertSuggestionResponse> findAllAndIsDeletedFalse();
 
+    ExpertSuggestionResponse findByIdAndIsDeletedFalse(Long id);
+
     ExpertSuggestion findSuggestionByIdAndIsDeletedFalse(Long id);
 
     List<ExpertSuggestionResponse> findAllByExpertIdAndIsDeletedFalse(Long id);

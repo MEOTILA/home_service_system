@@ -32,7 +32,8 @@ public class SubServiceController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> softDelete(@PathVariable Long id) {
-        subServiceService.softDeleteById(id);
+        subServiceService.
+                softDeleteSubServiceAndExpertFieldsAndOrdersAndCommentAndRateAndSuggestionsById(id);
         return ResponseEntity.noContent().build();
     }
 
@@ -41,7 +42,7 @@ public class SubServiceController {
         return ResponseEntity.ok(subServiceService.findByIdAndIsDeletedFalse(id));
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<SubServiceResponse>> findAll() {
         return ResponseEntity.ok(subServiceService.findAllAndIsDeletedFalse());
     }
