@@ -17,13 +17,13 @@ import com.example.home_service_system.specification.ExpertSpecification;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -42,7 +42,7 @@ import java.util.stream.Collectors;
 public class ExpertServiceImpl implements ExpertService {
 
     private final ExpertRepository expertRepository;
-    private final PasswordEncoder passwordEncoder;
+//    private final PasswordEncoder passwordEncoder;
     @Lazy
     private SubServiceService subServiceService;
 
@@ -81,7 +81,9 @@ public class ExpertServiceImpl implements ExpertService {
                     + request.email() + "} already exists!",
                     CustomApiExceptionType.UNPROCESSABLE_ENTITY);
         }
-        String hashedPassword = passwordEncoder.encode(request.password());
+        //String hashedPassword = passwordEncoder.encode(request.password());
+        String hashedPassword = BCrypt.hashpw(request.password(), BCrypt.gensalt());
+
         Expert expert = ExpertMapper.fromSaveRequest(request);
         expert.setPassword(hashedPassword);
         expert.setUserStatus(UserStatus.NEW);
@@ -112,7 +114,9 @@ public class ExpertServiceImpl implements ExpertService {
             updatingExpert.setUsername(request.username());
         }
         if (StringUtils.hasText(request.password())) {
-            String hashedPassword = passwordEncoder.encode(request.password());
+            //String hashedPassword = passwordEncoder.encode(request.password());
+            String hashedPassword = BCrypt.hashpw(request.password(), BCrypt.gensalt());
+
             updatingExpert.setPassword(hashedPassword);
         }
         if (StringUtils.hasText(request.nationalId())) {
@@ -214,11 +218,17 @@ public class ExpertServiceImpl implements ExpertService {
     public void changePassword(@Valid ExpertChangePasswordRequest request) {
         Expert expert = findExpertByIdAndIsDeletedFalse(request.id());
 
-        if (!passwordEncoder.matches(request.currentPassword(), expert.getPassword())) {
+        /*if (!passwordEncoder.matches(request.currentPassword(), expert.getPassword())) {
+            throw new CustomApiException("Current password is incorrect!",
+                    CustomApiExceptionType.UNAUTHORIZED);
+        }*/
+        if (!BCrypt.checkpw(request.currentPassword(), expert.getPassword())) {
             throw new CustomApiException("Current password is incorrect!",
                     CustomApiExceptionType.UNAUTHORIZED);
         }
-        String hashedNewPassword = passwordEncoder.encode(request.newPassword());
+        //String hashedNewPassword = passwordEncoder.encode(request.newPassword());
+        String hashedNewPassword = BCrypt.hashpw(request.newPassword(), BCrypt.gensalt());
+
         expert.setPassword(hashedNewPassword);
         expertRepository.save(expert);
         log.info("Password changed successfully for expert with id {}", request.id());
