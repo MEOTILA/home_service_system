@@ -33,6 +33,11 @@ public class OrderController {
         return ResponseEntity.ok(orderService.update(request));
     }
 
+    @PutMapping("/acceptingOrder")
+    public ResponseEntity<OrderResponse> acceptingAnExpertForOrder(@RequestParam Long orderId, Long expertId) {
+        return ResponseEntity.ok(orderService.acceptingAnExpertForOrder(orderId, expertId));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> softDelete(@PathVariable Long id) {
         orderService.softDeleteOrderAndExpertSuggestionsAndCommentAndRateByOrderId(id);

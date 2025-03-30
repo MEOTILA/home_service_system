@@ -93,6 +93,33 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public OrderResponse acceptingAnExpertForOrder(Long orderId, Long expertId){
+        Order order = findOrderByIdAndIsDeletedFalse(orderId);
+        Expert expert = expertService.findExpertByIdAndIsDeletedFalse(expertId);
+        List<ExpertSuggestion> expertSuggestionList = order.getExpertSuggestionList();
+
+        if (order.getExpert() != null){
+            throw new CustomApiException("Order with ID " + orderId +
+                    " is already has an expert!",
+                    CustomApiExceptionType.BAD_REQUEST);
+        }
+        boolean isExpertSuggested = expertSuggestionList.stream()
+                .anyMatch(suggestion -> suggestion.getExpert().getId().equals(expertId));
+
+        if (!isExpertSuggested) {
+            throw new CustomApiException("Expert with ID " + expertId +
+                    " is not in the suggestion list for this order!",
+                    CustomApiExceptionType.NOT_FOUND);
+        }
+
+        order.setExpert(expert);
+        orderRepository.save(order);
+        log.info("Order with id {} is assigned to expert with id {}",
+                order.getId(), expert.getId());
+        return OrderMapper.to(order);
+    }
+
+    @Override
     public OrderResponse findByIdAndIsDeletedFalse(Long id) {
         Order order = orderRepository.findByIdAndIsDeletedFalse(id)
                 .orElseThrow(() -> new CustomApiException("Order with id {"

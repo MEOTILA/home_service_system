@@ -15,6 +15,8 @@ public interface OrderService {
 
     OrderResponse update(@Valid OrderUpdateRequest orderUpdateRequest);
 
+    OrderResponse acceptingAnExpertForOrder(Long orderId, Long expertId);
+
     OrderResponse findByIdAndIsDeletedFalse(Long id);
 
     Order findOrderByIdAndIsDeletedFalse(Long id);

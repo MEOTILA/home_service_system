@@ -6,9 +6,11 @@ import com.example.home_service_system.dto.expertSuggestionDTO.ExpertSuggestionU
 import com.example.home_service_system.entity.Expert;
 import com.example.home_service_system.entity.ExpertSuggestion;
 import com.example.home_service_system.entity.Order;
+import com.example.home_service_system.entity.enums.OrderStatus;
 import com.example.home_service_system.exceptions.CustomApiException;
 import com.example.home_service_system.exceptions.CustomApiExceptionType;
 import com.example.home_service_system.mapper.ExpertSuggestionMapper;
+import com.example.home_service_system.mapper.OrderMapper;
 import com.example.home_service_system.repository.ExpertSuggestionRepository;
 import com.example.home_service_system.service.ExpertService;
 import com.example.home_service_system.service.ExpertSuggestionService;
@@ -58,6 +60,8 @@ public class ExpertSuggestionServiceImpl implements ExpertSuggestionService {
         ExpertSuggestion expertSuggestion = ExpertSuggestionMapper.fromSaveRequest(request);
         expertSuggestion.setOrder(order);
         expertSuggestion.setExpert(expert);
+        order.setStatus(OrderStatus.WAITING_FOR_CUSTOMER_TO_ACCEPT);
+        orderService.update(OrderMapper.toUpdateRequest(order));
 
         /*order.getExpertSuggestionList().add(expertSuggestion);
         orderService.update(OrderMapper.toUpdateRequest(order));*/

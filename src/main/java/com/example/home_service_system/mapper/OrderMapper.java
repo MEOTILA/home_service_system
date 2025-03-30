@@ -50,7 +50,7 @@ public class OrderMapper {
         return order;
     }*/
 
-    /*public static OrderUpdateRequest toUpdateRequest(Order order) {
+    public static OrderUpdateRequest toUpdateRequest(Order order) {
         return new OrderUpdateRequest(
                 order.getId(),
                 order.getSubService().getId(),
@@ -62,10 +62,10 @@ public class OrderMapper {
                 order.getServiceDate(),
                 order.getAddress(),
                 order.getStatus()
-                *//*order.getExpertSuggestionList().stream().map(e -> e.getId())
+                /*order.getExpertSuggestionList().stream().map(e -> e.getId())
                         .collect(Collectors.toList()),
-                order.getCustomerCommentAndRate()*//*
+                order.getCustomerCommentAndRate()*/
         );
-    }*/
+    }
 }
 
