@@ -98,7 +98,8 @@ public class OrderServiceImpl implements OrderService {
         Expert expert = expertService.findExpertByIdAndIsDeletedFalse(expertId);
         List<ExpertSuggestion> expertSuggestionList = order.getExpertSuggestionList();
 
-        if (order.getExpert() != null){
+        if (order.getExpert() != null ||
+                !order.getStatus().equals(OrderStatus.WAITING_FOR_CUSTOMER_TO_ACCEPT)){
             throw new CustomApiException("Order with ID " + orderId +
                     " is already has an expert!",
                     CustomApiExceptionType.BAD_REQUEST);
@@ -113,6 +114,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         order.setExpert(expert);
+        order.setStatus(OrderStatus.WAITING_FOR_EXPERT_TO_ARRIVE);
         orderRepository.save(order);
         log.info("Order with id {} is assigned to expert with id {}",
                 order.getId(), expert.getId());
