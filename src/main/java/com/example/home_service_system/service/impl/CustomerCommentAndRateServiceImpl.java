@@ -6,6 +6,7 @@ import com.example.home_service_system.dto.customerCommentAndRateDTO.CustomerCom
 import com.example.home_service_system.entity.CustomerCommentAndRate;
 import com.example.home_service_system.entity.Expert;
 import com.example.home_service_system.entity.Order;
+import com.example.home_service_system.entity.enums.OrderStatus;
 import com.example.home_service_system.exceptions.CustomApiException;
 import com.example.home_service_system.exceptions.CustomApiExceptionType;
 import com.example.home_service_system.mapper.CustomerCommentAndRateMapper;
@@ -45,6 +46,10 @@ public class CustomerCommentAndRateServiceImpl implements CustomerCommentAndRate
 
         if (order.getCustomerCommentAndRate() != null)
             throw new CustomApiException("A comment for this order already exists!",
+                    CustomApiExceptionType.BAD_REQUEST);
+
+        if (!order.getStatus().equals(OrderStatus.SERVICE_IS_DONE))
+            throw new CustomApiException("Service is not done yet!",
                     CustomApiExceptionType.BAD_REQUEST);
 
         CustomerCommentAndRate commentAndRate = CustomerCommentAndRateMapper

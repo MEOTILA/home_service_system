@@ -24,5 +24,7 @@ public interface ExpertSuggestionService {
 
     List<ExpertSuggestionResponse> findAllByOrderIdAndIsDeletedFalse(Long id);
 
+    List<ExpertSuggestionResponse> findAllSortedByOrderIdAndIsDeletedFalse(Long id, String sortBy);
+
     void softDeleteById(Long id);
 }

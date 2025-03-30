@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.Comparator;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -55,6 +56,10 @@ public class ExpertSuggestionServiceImpl implements ExpertSuggestionService {
 
         if (order.getExpert() != null)
             throw new CustomApiException("This order has already been assigned to an expert."
+                    , CustomApiExceptionType.BAD_REQUEST);
+
+        if (!order.getStatus().equals(OrderStatus.WAITING_FOR_EXPERT_TO_RESPONSE))
+            throw new CustomApiException("This order has an accepted expert!"
                     , CustomApiExceptionType.BAD_REQUEST);
 
         ExpertSuggestion expertSuggestion = ExpertSuggestionMapper.fromSaveRequest(request);
@@ -124,6 +129,20 @@ public class ExpertSuggestionServiceImpl implements ExpertSuggestionService {
     @Override
     public List<ExpertSuggestionResponse> findAllByOrderIdAndIsDeletedFalse(Long id) {
         List<ExpertSuggestion> foundedItems = repository.findAllByOrderIdAndIsDeletedFalse(id);
+        return foundedItems.stream().map(ExpertSuggestionMapper::to).toList();
+    }
+
+    @Override
+    public List<ExpertSuggestionResponse> findAllSortedByOrderIdAndIsDeletedFalse(Long orderId, String sortBy) {
+        List<ExpertSuggestion> foundedItems = repository.findAllByOrderIdAndIsDeletedFalse(orderId);
+
+        if ("cost".equalsIgnoreCase(sortBy)) {
+            foundedItems.sort(Comparator.comparing(ExpertSuggestion::getExpertOfferedCost));
+        } else if ("rating".equalsIgnoreCase(sortBy)) {
+            foundedItems.sort(Comparator.comparing(suggestion ->
+                    suggestion.getExpert().getRating(), Comparator.reverseOrder()));
+        }
+
         return foundedItems.stream().map(ExpertSuggestionMapper::to).toList();
     }
 

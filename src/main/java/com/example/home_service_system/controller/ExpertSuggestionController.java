@@ -57,4 +57,12 @@ public class ExpertSuggestionController {
     public ResponseEntity<List<ExpertSuggestionResponse>> findAllByOrderId(@PathVariable Long orderId) {
         return ResponseEntity.ok(expertSuggestionService.findAllByOrderIdAndIsDeletedFalse(orderId));
     }
+
+    @GetMapping("/sortedOrders")
+    public ResponseEntity<List<ExpertSuggestionResponse>> findAllSortedByOrderId
+            (@RequestParam Long orderId,
+             @RequestParam(defaultValue = "price") String sortBy) {
+        return ResponseEntity.ok(expertSuggestionService
+                .findAllSortedByOrderIdAndIsDeletedFalse(orderId,sortBy));
+    }
 }
