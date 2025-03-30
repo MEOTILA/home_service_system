@@ -28,6 +28,9 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query("SELECT o FROM Order o WHERE o.subService.id = :subServiceId AND o.isDeleted = false")
     List<Order> findBySubServiceIdAndIsDeletedFalse(Long subServiceId);
 
+    @Query("SELECT o FROM Order o WHERE o.subService.id IN :subServiceIds AND o.isDeleted = false")
+    List<Order> findBySubServiceIdInAndIsDeletedFalse(List<Long> subServiceIds);
+
     @Query("SELECT o FROM Order o WHERE o.status = :status AND o.isDeleted = false")
     List<Order> findByStatusAndIsDeletedFalse(OrderStatus status);
 

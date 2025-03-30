@@ -25,6 +25,8 @@ public interface OrderService {
 
     List<OrderResponse> findByExpertIdAndIsDeletedFalse(Long expertId);
 
+    List<OrderResponse> findByExpertFieldsIdAndIsDeletedFalse(Long expertId);
+
     List<OrderResponse> findByStatusAndIsDeletedFalse(OrderStatus status);
 
     List<OrderResponse> findByServiceDateBetween(LocalDateTime startDate, LocalDateTime endDate);

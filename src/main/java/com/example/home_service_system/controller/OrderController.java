@@ -59,6 +59,11 @@ public class OrderController {
         return ResponseEntity.ok(orderService.findByExpertIdAndIsDeletedFalse(expertId));
     }
 
+    @GetMapping("/expert/exFields/{expertId}")
+    public ResponseEntity<List<OrderResponse>> findByExpertFields(@PathVariable Long expertId) {
+        return ResponseEntity.ok(orderService.findByExpertFieldsIdAndIsDeletedFalse(expertId));
+    }
+
     @GetMapping("/status/{status}")
     public ResponseEntity<List<OrderResponse>> findByStatus(@PathVariable OrderStatus status) {
         return ResponseEntity.ok(orderService.findByStatusAndIsDeletedFalse(status));

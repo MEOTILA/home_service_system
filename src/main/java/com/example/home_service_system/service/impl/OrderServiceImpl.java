@@ -19,7 +19,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -122,6 +124,20 @@ public class OrderServiceImpl implements OrderService {
     public List<OrderResponse> findByExpertIdAndIsDeletedFalse(Long expertId) {
         return orderRepository.findByExpertIdAndIsDeletedFalse(expertId).stream()
                 .map(OrderMapper::to).toList();
+    }
+
+    @Override
+    public List<OrderResponse> findByExpertFieldsIdAndIsDeletedFalse(Long expertId) {
+        Expert expert = expertService.findExpertByIdAndIsDeletedFalse(expertId);
+        List<SubService> expertFields = expert.getExpertServiceFields();
+
+        if (expertFields.isEmpty())
+            return Collections.emptyList();
+
+        List<Long> subServiceIds = expertFields.stream().map(SubService::getId).toList();
+
+        List<Order> orders = orderRepository.findBySubServiceIdInAndIsDeletedFalse(subServiceIds);
+        return orders.stream().map(OrderMapper::to).collect(Collectors.toList());
     }
 
     @Override
