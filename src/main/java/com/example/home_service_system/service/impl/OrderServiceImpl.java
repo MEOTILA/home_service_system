@@ -166,7 +166,13 @@ public class OrderServiceImpl implements OrderService {
         List<Long> subServiceIds = expertFields.stream().map(SubService::getId).toList();
 
         List<Order> orders = orderRepository.findBySubServiceIdInAndIsDeletedFalse(subServiceIds);
-        return orders.stream().map(OrderMapper::to).collect(Collectors.toList());
+
+        List<OrderResponse> filteredOrders = orders.stream()
+                .filter(order -> order.getStatus() == OrderStatus.WAITING_FOR_EXPERT_TO_RESPONSE)
+                .map(OrderMapper::to)
+                .collect(Collectors.toList());
+
+        return filteredOrders;
     }
 
     @Override
