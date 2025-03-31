@@ -4,6 +4,8 @@ import com.example.home_service_system.entity.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +16,8 @@ import java.util.List;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
+/*@SQLDelete(sql = "UPDATE Customer SET is_deleted = true WHERE id = ?")
+@Where(clause = "is_deleted = false")*/
 public class Customer extends User {
 
     @OneToMany(mappedBy = "customer")
