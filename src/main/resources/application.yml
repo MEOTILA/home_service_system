@@ -1,4 +1,8 @@
 spring:
+  servlet:
+    multipart:
+      enabled: true
+
   application:
     name: my-spring-boot
 
