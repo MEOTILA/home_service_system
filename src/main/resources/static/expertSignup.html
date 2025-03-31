@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expert Signup</title>
+    <link rel="stylesheet" href="expertSignup.css">
+</head>
+<body>
+<div class="container">
+    <h2>Expert Signup</h2>
+    <form id="signupForm" enctype="multipart/form-data">
+        <input type="text" id="firstName" placeholder="First Name" required>
+        <input type="text" id="lastName" placeholder="Last Name" required>
+        <input type="text" id="username" placeholder="Username" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <input type="text" id="nationalId" placeholder="National ID" required>
+        <input type="text" id="phoneNumber" placeholder="Phone Number" required>
+        <input type="date" id="birthday" required>
+        <input type="email" id="email" placeholder="Email" required>
+        <label for="expertImage">Upload Image (JPEG, max 300KB):</label>
+        <input type="file" id="expertImage" accept="image/jpeg" required>
+        <button type="submit">Sign Up</button>
+    </form>
+    <p id="message"></p>
+</div>
+<script src="expertSignup.js"></script>
+</body>
+</html>

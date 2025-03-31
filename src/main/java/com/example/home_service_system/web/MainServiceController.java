@@ -1,4 +1,4 @@
-package com.example.home_service_system.controller;
+package com.example.home_service_system.web;
 
 import com.example.home_service_system.dto.mainServiceDTO.MainServiceResponse;
 import com.example.home_service_system.dto.mainServiceDTO.MainServiceSaveRequest;

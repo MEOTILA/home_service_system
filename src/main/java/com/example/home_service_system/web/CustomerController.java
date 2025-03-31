@@ -1,4 +1,4 @@
-package com.example.home_service_system.controller;
+package com.example.home_service_system.web;
 
 import com.example.home_service_system.dto.customerDTO.CustomerChangePasswordRequest;
 import com.example.home_service_system.dto.customerDTO.CustomerResponse;
@@ -19,11 +19,15 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/customers")
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 @Validated
 public class CustomerController {
 
     private final CustomerService customerService;
+
+    public CustomerController(CustomerService customerService) {
+        this.customerService = customerService;
+    }
 
     @PostMapping
     public ResponseEntity<CustomerResponse> save(@Valid @RequestBody CustomerSaveRequest request) {
