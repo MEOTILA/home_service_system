@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/expert-suggestions")
+@RequestMapping("/v1/expert-suggestions")
 @RequiredArgsConstructor
 @Validated
 public class ExpertSuggestionController {

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/customer-comments")
+@RequestMapping("/v1/customer-comments")
 @RequiredArgsConstructor
 @Validated
 public class CustomerCommentAndRateController {

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/main-services")
+@RequestMapping("/v1/main-services")
 @RequiredArgsConstructor
 @Validated
 public class MainServiceController {

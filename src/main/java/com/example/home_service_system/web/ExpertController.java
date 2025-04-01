@@ -19,7 +19,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/experts")
+@RequestMapping("/v1/experts")
 @RequiredArgsConstructor
 @Validated
 public class ExpertController {

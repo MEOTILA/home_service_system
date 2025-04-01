@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/sub-services")
+@RequestMapping("/v1/sub-services")
 @RequiredArgsConstructor
 @Validated
 public class SubServiceController {
