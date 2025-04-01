@@ -1,6 +1,7 @@
 package com.example.home_service_system.dto.expertDTO;
 
 import jakarta.validation.constraints.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 
@@ -53,8 +54,11 @@ public record ExpertSaveRequest(
         @Email(regexp = "^(.+)@(.+)$", message = "Invalid email format!")
         String email,
 
-        @NotNull(message = "Expert image cannot be null!")
+        /*@NotNull(message = "Expert image cannot be null!")
         @Size(max = 307200, message = "Image size must not exceed 300KB!")
-        byte[] expertImage
+        byte[] expertImage*/
+
+        @NotNull(message = "Expert image cannot be null!")
+        MultipartFile expertImage
 ) {
 }

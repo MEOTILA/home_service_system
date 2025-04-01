@@ -176,7 +176,7 @@ public class HomeServiceSystemApplication {
 
         byte[] dummyImage = new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 
-        ExpertSaveRequest expert = new ExpertSaveRequest(
+        /*ExpertSaveRequest expert = new ExpertSaveRequest(
                 "George",
                 "Michael",
                 "George",
@@ -186,7 +186,7 @@ public class HomeServiceSystemApplication {
                 LocalDate.of(1945, 8, 15),
                 "george@example.com",
                 dummyImage
-        );
+        );*/
         //expertService.save(expert);
         //System.out.println(expertService.findByIdAndIsDeletedFalse(1L));
 

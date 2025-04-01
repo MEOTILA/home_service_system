@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -25,8 +26,12 @@ public class ExpertController {
 
     private final ExpertService expertService;
 
-    @PostMapping
+    /*@PostMapping
     public ResponseEntity<ExpertResponse> save(@Valid @RequestBody ExpertSaveRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(expertService.save(request));
+    }*/
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ExpertResponse> save(@Valid @ModelAttribute ExpertSaveRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(expertService.save(request));
     }
 
@@ -34,6 +39,15 @@ public class ExpertController {
     public ResponseEntity<ExpertResponse> update(@Valid @RequestBody ExpertUpdateRequest request) {
         return ResponseEntity.ok(expertService.update(request));
     }
+
+    @GetMapping("/{id}/image")
+    public ResponseEntity<byte[]> getExpertImage(@PathVariable Long id) {
+        byte[] imageData = expertService.getExpertImage(id);
+        if (imageData == null || imageData.length == 0)
+            return ResponseEntity.notFound().build();
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageData);
+    }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<ExpertResponse> findById(@PathVariable Long id) {

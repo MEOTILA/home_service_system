@@ -16,6 +16,7 @@ import java.util.List;
 @Entity
 public class Expert extends User {
 
+    @Lob
     @Column(nullable = false)
     byte[] expertImage;
 

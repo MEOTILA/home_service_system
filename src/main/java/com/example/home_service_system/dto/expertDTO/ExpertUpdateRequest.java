@@ -5,6 +5,7 @@ import com.example.home_service_system.entity.Order;
 import com.example.home_service_system.entity.SubService;
 import com.example.home_service_system.entity.enums.UserStatus;
 import jakarta.validation.constraints.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -53,8 +54,9 @@ public record ExpertUpdateRequest(
         @Email(regexp = "^(.+)@(.+)$", message = "Invalid email format!")
         String email,
 
-        @Size(max = 307200, message = "Image size must not exceed 300KB!")
-        byte[] expertImage,
+        /*@Size(max = 307200, message = "Image size must not exceed 300KB!")
+        byte[] expertImage,*/
+        MultipartFile expertImage,
 
         @Min(value = 0, message = "rating cannot be negative!")
         @Max(value = 100, message = "rating must not exceed 100!")

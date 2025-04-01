@@ -29,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -87,6 +88,22 @@ public class ExpertServiceImpl implements ExpertService {
         Expert expert = ExpertMapper.fromSaveRequest(request);
         expert.setPassword(hashedPassword);
         expert.setUserStatus(UserStatus.NEW);
+
+        if (request.expertImage().getSize() > 300 * 1024) {
+            throw new CustomApiException("Image size must not exceed 300KB!",
+                    CustomApiExceptionType.BAD_REQUEST);
+        }
+        String contentType = request.expertImage().getContentType();
+        if (contentType == null || !contentType.equals("image/jpeg")) {
+            throw new CustomApiException("Only JPEG images are allowed!",
+                    CustomApiExceptionType.BAD_REQUEST);
+        }
+        try {
+            expert.setExpertImage(request.expertImage().getBytes());
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to process image", e);
+        }
+
         expertRepository.save(expert);
         log.info("Expert with id {} saved", expert.getId());
         return ExpertMapper.to(expert);
@@ -155,10 +172,28 @@ public class ExpertServiceImpl implements ExpertService {
             }
             updatingExpert.setEmail(request.email());
         }
-        if (request.expertImage() != null &&
+        /*if (request.expertImage() != null &&
                 request.expertImage().length > 0) {
             updatingExpert.setExpertImage(request.expertImage());
+        }*/
+
+
+        if (request.expertImage() != null && !request.expertImage().isEmpty()) {
+            if (!"image/jpeg".equals(request.expertImage().getContentType())) {
+                throw new CustomApiException("Image must be in JPEG format!",
+                        CustomApiExceptionType.UNPROCESSABLE_ENTITY);
+            }
+            if (request.expertImage().getSize() > 300 * 1024) {
+                throw new CustomApiException("Image size must not exceed 300 KB!",
+                        CustomApiExceptionType.UNPROCESSABLE_ENTITY);
+            }
+            try {
+                updatingExpert.setExpertImage(request.expertImage().getBytes());
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to process image", e);
+            }
         }
+
         if (request.rating() != null) {
             updatingExpert.setRating(request.rating());
         }
@@ -181,6 +216,11 @@ public class ExpertServiceImpl implements ExpertService {
         return ExpertMapper.to(updatedExpert);
     }
 
+    @Override
+    public byte[] getExpertImage(Long expertId) {
+        Expert expert = findExpertByIdAndIsDeletedFalse(expertId);
+        return expert.getExpertImage();
+    }
 
     @Override
     public ExpertResponse findByIdAndIsDeletedFalse(Long id) {

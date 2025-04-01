@@ -17,6 +17,8 @@ public interface ExpertService {
 
     ExpertResponse update(@Valid ExpertUpdateRequest expertUpdateRequest);
 
+    byte[] getExpertImage(Long expertId);
+
     ExpertResponse findByIdAndIsDeletedFalse(Long id);
 
     Expert findExpertByIdAndIsDeletedFalse(Long id);

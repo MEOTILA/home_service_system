@@ -6,7 +6,11 @@ import com.example.home_service_system.dto.expertDTO.ExpertSaveRequest;
 import com.example.home_service_system.dto.expertDTO.ExpertUpdateRequest;
 import com.example.home_service_system.entity.Expert;
 import com.example.home_service_system.entity.SubService;
+import com.example.home_service_system.exceptions.CustomApiException;
+import com.example.home_service_system.exceptions.CustomApiExceptionType;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
@@ -56,7 +60,14 @@ public class ExpertMapper {
         expert.setPhoneNumber(request.phoneNumber());
         expert.setBirthday(request.birthday());
         expert.setEmail(request.email());
-        expert.setExpertImage(request.expertImage());
+        //expert.setExpertImage(request.expertImage());
+        try {
+            expert.setExpertImage(request.expertImage().getBytes());
+        } catch (IOException e) {
+            throw new CustomApiException("Failed to process image",
+                    CustomApiExceptionType.BAD_REQUEST);
+        }
+
         expert.setRating(0);
         expert.setBalance(0L);
         return expert;
@@ -75,7 +86,8 @@ public class ExpertMapper {
                 expert.getPhoneNumber(),
                 expert.getBirthday(),
                 expert.getEmail(),
-                expert.getExpertImage(),
+                //expert.getExpertImage(),
+                null,
                 expert.getRating(),
                 expert.getUserStatus(),
                 expert.getBalance(),
