@@ -14,6 +14,10 @@ document.getElementById('addExpertToSubService').addEventListener('click', funct
     loadAddExpertToSubServiceForm();
 });
 
+document.getElementById('viewAllMainService').addEventListener('click', function () {
+    loadAllMainServices();
+});
+
 function loadFilterForm() {
     document.getElementById('form-container').innerHTML = `
         <h2>Filter Users</h2>
@@ -397,3 +401,45 @@ function loadAddExpertToSubServiceForm() {
 }
 
 
+
+function loadAllMainServices() {
+    document.getElementById('form-container').innerHTML = `<h2>Loading Main Services...</h2>`;
+
+    // Fetch all main services from the backend
+    fetch('http://localhost:8081/v1/main-services/all', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data && data.length > 0) {
+                displayAllMainServices(data);
+            } else {
+                document.getElementById('form-container').innerHTML = `<p>No Main Services available.</p>`;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Failed to fetch main services. Please try again later.');
+        });
+}
+
+function displayAllMainServices(services) {
+    const container = document.getElementById('form-container');
+    container.innerHTML = `<h2>All Main Services</h2><ul id="main-service-list"></ul>`;
+
+    const list = document.getElementById('main-service-list');
+
+    services.forEach(service => {
+        const listItem = document.createElement('li');
+        listItem.innerHTML = `
+            <strong>Name:</strong> ${service.name} <br>
+            <strong>Created At:</strong> ${service.createdAt} <br>
+            <strong>Updated At:</strong> ${service.updatedAt} <br>
+            <strong>Sub Service IDs:</strong> ${service.subServiceIds.join(', ')} <br>
+        `;
+        list.appendChild(listItem);
+    });
+}

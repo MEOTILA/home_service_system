@@ -213,6 +213,7 @@ function loadViewSuggestionsForm() {
                         resultHTML += `
                             <li>
                                 <strong>Expert ID:</strong> ${suggestion.expertId}<br>
+                                <strong>Suggestion ID:</strong> ${suggestion.id}<br>
                                 <strong>Suggestion:</strong> ${suggestion.expertSuggestion}<br>
                                 <strong>Offered Cost:</strong> $${suggestion.expertOfferedCost}<br>
                                 <strong>Service Duration:</strong> ${formatDuration(suggestion.serviceTimeDuration)}<br>
@@ -314,6 +315,7 @@ function displaySortedSuggestions(suggestions) {
         resultHTML += `
             <li>
                 <strong>Expert ID:</strong> ${suggestion.expertId}<br>
+                <strong>Expert Suggestion ID:</strong> ${suggestion.id}<br>
                 <strong>Suggestion:</strong> ${suggestion.expertSuggestion}<br>
                 <strong>Offered Cost:</strong> ${suggestion.expertOfferedCost} Rial<br>
                 <strong>Service Duration:</strong> ${formatDuration(suggestion.serviceTimeDuration)}<br>
