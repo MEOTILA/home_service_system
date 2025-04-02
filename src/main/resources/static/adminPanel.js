@@ -292,88 +292,208 @@ function loadAddSubServiceForm() {
             <input type="text" id="sub-service-name" placeholder="Sub Service Name" required><br>
             <input type="number" id="sub-service-baseCost" placeholder="Base Cost" required><br>
             <textarea id="sub-service-description" placeholder="Description" required></textarea><br>
-            <input type="number" id="sub-service-mainServiceId" placeholder="Main Service ID" required><br>
+            <select id="sub-service-mainServiceId" required>
+                <option value="">Select Main Service</option>
+            </select><br>
             <button type="submit">Add Sub Service</button>
         </form>
     `;
 
-    // Add form submission handler
+    // Fetch and populate main services dropdown
+    fetchMainServices();
+
+    // Handle form submission
     const form = document.getElementById('add-sub-service-form');
     form.addEventListener('submit', function (event) {
-        event.preventDefault(); // Prevent default form submission
+        event.preventDefault();
 
         const name = document.getElementById('sub-service-name').value;
         const baseCost = document.getElementById('sub-service-baseCost').value;
         const description = document.getElementById('sub-service-description').value;
         const mainServiceId = document.getElementById('sub-service-mainServiceId').value;
 
-        // Create the payload
-        const payload = {
-            name: name,
-            baseCost: baseCost,
-            description: description,
-            mainServiceId: mainServiceId
-        };
+        if (!validateForm(name, baseCost, description, mainServiceId)) return;
 
-        // Send the request to the backend using fetch
-        fetch('http://localhost:8081/v1/sub-services', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(payload),
-        })
-            .then(response => {
-                if (!response.ok) {
-                    // Check if the response is not successful (status code not OK)
-                    return response.json().then(errorData => {
-                        // Handle the error response from backend
-                        const errorMessage = errorData.message || 'An unknown error occurred.';
-                        alert(`Error: ${errorMessage}`);
-                        throw new Error(errorMessage); // Stop further execution and throw error
-                    });
-                }
-                return response.json(); // Proceed to parse response as JSON if successful
-            })
-            .then(data => {
-                // Only execute this if the response is successful
-                alert('Sub service added successfully!');
-                console.log(data); // Log the data from the backend for debugging
-            })
-            .catch(error => {
-                // Log the error and show a generic failure message if something went wrong
-                console.error('Error:', error);
-                alert('Failed to add sub service. Please try again later.');
-            });
+        const payload = { name, baseCost, description, mainServiceId };
+
+        submitSubService(payload);
     });
 }
 
+function fetchMainServices() {
+    fetch('http://localhost:8081/v1/main-services/all')
+        .then(response => response.json())
+        .then(data => {
+            console.log('Main Services:', data);  // Check the data here
+            populateMainServicesDropdown(data);
+        })
+        .catch(error => {
+            console.error('Error fetching main services:', error);
+            alert('Failed to load main services.');
+        });
+}
+
+function populateMainServicesDropdown(services) {
+    const mainServiceDropdown = document.getElementById('sub-service-mainServiceId');
+
+    console.log('Populating Main Services Dropdown with:', services);  // Check this log
+
+    // Clear any existing options (in case of form reload)
+    mainServiceDropdown.innerHTML = `<option value="">Select Main Service</option>`;
+
+    // If no services were fetched, show a placeholder message
+    if (services.length === 0) {
+        const option = document.createElement('option');
+        option.textContent = "No Main Services available";
+        mainServiceDropdown.appendChild(option);
+    } else {
+        services.forEach(service => {
+            const option = document.createElement('option');
+            option.value = service.id;
+            option.textContent = service.name;
+            mainServiceDropdown.appendChild(option);
+        });
+    }
+}
+
+function validateForm(name, baseCost, description, mainServiceId) {
+    if (!name || !baseCost || !description || !mainServiceId) {
+        alert('All fields are required.');
+        return false;
+    }
+    return true;
+}
+
+function submitSubService(payload) {
+    fetch('http://localhost:8081/v1/sub-services', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+    })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(errorData => {
+                    alert(`Error: ${errorData.message || 'An unknown error occurred.'}`);
+                    throw new Error(errorData.message);
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            alert('Sub service added successfully!');
+            console.log(data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Failed to add sub service. Please try again later.');
+        });
+}
+
+
+
+
+
 
 function loadAddExpertToSubServiceForm() {
+    // Step 1: Load main services
     document.getElementById('form-container').innerHTML = `
         <h2>Add Expert to Sub Service</h2>
-        <form id="add-expert-to-sub-service-form">
-            <input type="number" id="sub-service-id" placeholder="Sub Service ID" required><br>
+        <h3>Select a Main Service</h3>
+        <select id="main-service-select" required>
+            <option value="">--Select Main Service--</option>
+            <!-- Main services will be populated here -->
+        </select>
+        <div id="sub-service-container" style="display:none;">
+            <h3>Select a Sub Service</h3>
+            <select id="sub-service-select" required>
+                <option value="">--Select Sub Service--</option>
+                <!-- Sub services will be populated here -->
+            </select>
+        </div>
+        <div id="expert-id-container" style="display:none;">
             <input type="number" id="expert-id" placeholder="Expert ID" required><br>
-            <button type="submit">Add Expert</button>
-        </form>
+            <button type="submit" id="add-expert-btn">Add Expert</button>
+        </div>
     `;
 
-    // Add form submission handler
-    const form = document.getElementById('add-expert-to-sub-service-form');
-    form.addEventListener('submit', function (event) {
-        event.preventDefault(); // Prevent default form submission
+    // Step 2: Fetch and load main services from the server
+    fetch('http://localhost:8081/v1/main-services/all')
+        .then(response => response.json())
+        .then(mainServices => {
+            const mainServiceSelect = document.getElementById('main-service-select');
+            mainServices.forEach(service => {
+                const option = document.createElement('option');
+                option.value = service.id;
+                option.textContent = service.name;
+                mainServiceSelect.appendChild(option);
+            });
+        })
+        .catch(error => {
+            console.error('Error loading main services:', error);
+            alert('Failed to load main services.');
+        });
 
-        const subServiceId = document.getElementById('sub-service-id').value;
+    // Step 3: Add event listener to the main service select dropdown
+    const mainServiceSelect = document.getElementById('main-service-select');
+    mainServiceSelect.addEventListener('change', function () {
+        const mainServiceId = mainServiceSelect.value;
+        if (!mainServiceId) {
+            document.getElementById('sub-service-container').style.display = 'none';
+            document.getElementById('expert-id-container').style.display = 'none';
+            return;
+        }
+
+        // Step 4: Fetch sub-services based on selected main service
+        fetch(`http://localhost:8081/v1/sub-services/by-main-service/${mainServiceId}`)
+            .then(response => response.json())
+            .then(subServices => {
+                const subServiceSelect = document.getElementById('sub-service-select');
+                subServiceSelect.innerHTML = '<option value="">--Select Sub Service--</option>'; // Clear existing options
+
+                subServices.forEach(service => {
+                    const option = document.createElement('option');
+                    option.value = service.id;
+                    option.textContent = service.name;
+                    subServiceSelect.appendChild(option);
+                });
+
+                document.getElementById('sub-service-container').style.display = 'block'; // Show sub-service dropdown
+                document.getElementById('expert-id-container').style.display = 'none'; // Hide expert input by default
+            })
+            .catch(error => {
+                console.error('Error loading sub-services:', error);
+                alert('Failed to load sub-services.');
+            });
+    });
+
+    // Step 4.1: Add event listener to the sub-service select dropdown
+    const subServiceSelect = document.getElementById('sub-service-select');
+    subServiceSelect.addEventListener('change', function () {
+        const subServiceId = subServiceSelect.value;
+        if (!subServiceId) {
+            document.getElementById('expert-id-container').style.display = 'none';
+            return;
+        }
+
+        // Show the expert ID input and button
+        document.getElementById('expert-id-container').style.display = 'block';
+    });
+
+    // Step 5: Add event listener to the "Add Expert" button (this should be outside of other listeners)
+    const addExpertButton = document.getElementById('add-expert-btn');
+    addExpertButton.addEventListener('click', function (event) {
+        event.preventDefault();
+
+        const subServiceId = document.getElementById('sub-service-select').value;
         const expertId = document.getElementById('expert-id').value;
 
         // Validate inputs
         if (!subServiceId || !expertId) {
-            alert('Both Sub Service ID and Expert ID are required!');
+            alert('Both Sub Service and Expert ID are required!');
             return;
         }
 
-        // Send the request to the backend using fetch
+        // Send the request to the backend to add expert to sub-service
         fetch(`http://localhost:8081/v1/sub-services/${subServiceId}/add-expert/${expertId}`, {
             method: 'POST',
             headers: {
@@ -385,13 +505,14 @@ function loadAddExpertToSubServiceForm() {
                     return response.json().then(errorData => {
                         const errorMessage = errorData.message || 'An unknown error occurred.';
                         alert(`Error: ${errorMessage}`);
-                        console.error('Error details:', errorData); // Log error details for debugging
-                        throw new Error(errorMessage); // Stop further execution
+                        console.error('Error details:', errorData);
+                        throw new Error(errorMessage);
                     });
                 }
-                // Handle empty response (no content returned on success)
+                // Handle success
                 alert('Expert added to sub service successfully!');
                 console.log('Expert added successfully');
+                document.getElementById('expert-id').value = ''; // Clear input field
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -402,22 +523,20 @@ function loadAddExpertToSubServiceForm() {
 
 
 
-function loadAllMainServices() {
-    document.getElementById('form-container').innerHTML = `<h2>Loading Main Services...</h2>`;
 
-    // Fetch all main services from the backend
+function loadAllMainServices() {
+    document.getElementById('form-container').innerHTML = "<h2>Loading Main Services...</h2>";
+
     fetch('http://localhost:8081/v1/main-services/all', {
         method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        }
+        headers: { 'Content-Type': 'application/json' }
     })
         .then(response => response.json())
-        .then(data => {
-            if (data && data.length > 0) {
-                displayAllMainServices(data);
+        .then((mainServices) => {
+            if (mainServices && mainServices.length > 0) {
+                displayMainServicesList(mainServices);
             } else {
-                document.getElementById('form-container').innerHTML = `<p>No Main Services available.</p>`;
+                document.getElementById('form-container').innerHTML = "<p>No Main Services available.</p>";
             }
         })
         .catch(error => {
@@ -426,20 +545,63 @@ function loadAllMainServices() {
         });
 }
 
-function displayAllMainServices(services) {
+function displayMainServicesList(mainServices) {
     const container = document.getElementById('form-container');
-    container.innerHTML = `<h2>All Main Services</h2><ul id="main-service-list"></ul>`;
+    container.innerHTML = "<h2>Main Services</h2><ul id='main-service-list'></ul>";
 
     const list = document.getElementById('main-service-list');
 
-    services.forEach(service => {
+    mainServices.forEach(mainService => {
         const listItem = document.createElement('li');
-        listItem.innerHTML = `
-            <strong>Name:</strong> ${service.name} <br>
-            <strong>Created At:</strong> ${service.createdAt} <br>
-            <strong>Updated At:</strong> ${service.updatedAt} <br>
-            <strong>Sub Service IDs:</strong> ${service.subServiceIds.join(', ')} <br>
-        `;
+        listItem.innerHTML = `<a href="#" onclick="toggleSubServices(${mainService.id})">${mainService.name}</a>`;
+
+        const subServiceContainer = document.createElement('div');
+        subServiceContainer.id = `sub-service-${mainService.id}`;
+        subServiceContainer.style.display = "none";
+
+        listItem.appendChild(subServiceContainer);
         list.appendChild(listItem);
     });
 }
+
+async function toggleSubServices(mainServiceId) {
+    const subServiceContainer = document.getElementById(`sub-service-${mainServiceId}`);
+
+    if (subServiceContainer.style.display === "block") {
+        subServiceContainer.style.display = "none"; // Hide if already shown
+        return;
+    }
+
+    // Show loading message inside the sub-service container
+    subServiceContainer.innerHTML = "<p>Loading sub-services...</p>";
+    subServiceContainer.style.display = "block";
+
+    try {
+        const response = await fetch(`http://localhost:8081/v1/sub-services/by-main-service/${mainServiceId}`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        if (!response.ok) throw new Error(`Failed to fetch sub-services for main service ID: ${mainServiceId}`);
+
+        const subServices = await response.json();
+
+        if (subServices.length > 0) {
+            subServiceContainer.innerHTML = "<ul>" +
+                subServices.map(subService => `
+                    <li>
+                        <strong>${subService.name}</strong><br>
+                        <em>Base Cost:</em> ${subService.baseCost} <br>
+                        <em>Description:</em> ${subService.description}
+                    </li>
+                `).join('') +
+                "</ul>";
+        } else {
+            subServiceContainer.innerHTML = "<p>No sub-services available.</p>";
+        }
+    } catch (error) {
+        console.error('Error fetching sub-services:', error);
+        subServiceContainer.innerHTML = "<p>Failed to load sub-services.</p>";
+    }
+}
+
