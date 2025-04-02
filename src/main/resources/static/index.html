@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup Selection</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        button {
+            margin: 10px;
+            padding: 10px 20px;
+            border: none;
+            background-color: #007BFF;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>SignUp As:</h2>
+    <button onclick="redirectTo('customer')">Customer</button>
+    <button onclick="redirectTo('expert')">Expert</button>
+</div>
+
+<script>
+    function redirectTo(role) {
+        if (role === 'customer') {
+            window.location.href = 'customerSignup.html';
+        } else if (role === 'expert') {
+            window.location.href = 'expertSignup.html';
+        }
+    }
+</script>
+
+</body>
+</html>
