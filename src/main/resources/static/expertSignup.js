@@ -39,7 +39,7 @@ document.getElementById("signupForm").addEventListener("submit", async function(
     formData.append("expertImage", expertImageFile);
 
     try {
-        const response = await fetch("http://localhost:8081/api/experts", {
+        const response = await fetch("http://localhost:8081/v1/experts", {
             method: "POST",
             body: formData
         });

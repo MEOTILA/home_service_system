@@ -13,7 +13,7 @@ document.getElementById("signupForm").addEventListener("submit", async function(
     };
 
     try {
-        const response = await fetch("http://localhost:8081/api/customers", {
+        const response = await fetch("http://localhost:8081/v1/customers", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(customerData)
