@@ -80,12 +80,70 @@ function validatePassword(password) {
     return passwordRegex.test(password);
 }
 
-// Function to load the "Place an Order" form
 function loadPlaceOrderForm() {
+    // Fetch main services
+    fetch("http://localhost:8081/v1/main-services/all")  // Endpoint to get main services
+        .then(response => response.json())
+        .then(mainServices => {
+            // Display main services
+            let mainServicesHTML = "<h3>Select a Main Service</h3><ul>";
+            mainServices.forEach(service => {
+                mainServicesHTML += `
+                    <li>
+                        <button class="main-service-button" data-id="${service.id}">${service.name}</button>
+                    </li>
+                `;
+            });
+            mainServicesHTML += "</ul>";
+
+            document.getElementById("form-container").innerHTML = mainServicesHTML;
+
+            // Add event listeners to main service buttons
+            document.querySelectorAll(".main-service-button").forEach(button => {
+                button.addEventListener("click", function() {
+                    const mainServiceId = this.getAttribute("data-id");
+                    loadSubServices(mainServiceId);
+                });
+            });
+        })
+        .catch(error => alert("Error: " + error.message));
+}
+
+// Fetch and display sub-services based on selected main service
+function loadSubServices(mainServiceId) {
+    fetch(`http://localhost:8081/v1/sub-services/by-main-service/${mainServiceId}`)  // Endpoint to get sub services by main service ID
+        .then(response => response.json())
+        .then(subServices => {
+            // Display sub services
+            let subServicesHTML = "<h3>Select a Sub Service</h3><ul>";
+            subServices.forEach(service => {
+                subServicesHTML += `
+                    <li>
+                        <button class="sub-service-button" data-id="${service.id}">${service.name}</button>
+                    </li>
+                `;
+            });
+            subServicesHTML += "</ul>";
+
+            document.getElementById("form-container").innerHTML = subServicesHTML;
+
+            // Add event listeners to sub service buttons
+            document.querySelectorAll(".sub-service-button").forEach(button => {
+                button.addEventListener("click", function() {
+                    const subServiceId = this.getAttribute("data-id");
+                    loadOrderForm(subServiceId);
+                });
+            });
+        })
+        .catch(error => alert("Error: " + error.message));
+}
+
+// Load the order form after selecting sub service
+function loadOrderForm(subServiceId) {
     document.getElementById("form-container").innerHTML = `
         <h3>Place an Order</h3>
         <form id="place-order-form">
-            <input type="number" id="sub-service-id" placeholder="Sub-Service ID" required><br>
+<!--            <input type="number" id="sub-service-id" value="${subServiceId}" readonly><br>-->
             <input type="number" id="customer-id" placeholder="Customer ID" required><br>
             <input type="number" id="customer-offered-cost" placeholder="Offered Cost" required><br>
             <textarea id="customer-description" placeholder="Order Description" required></textarea><br>
@@ -99,7 +157,8 @@ function loadPlaceOrderForm() {
         event.preventDefault();
 
         const request = {
-            subServiceId: document.getElementById("sub-service-id").value,
+            subServiceId: subServiceId,
+            // subServiceId: document.getElementById("sub-service-id").value,
             customerId: document.getElementById("customer-id").value,
             customerOfferedCost: document.getElementById("customer-offered-cost").value,
             customerDescription: document.getElementById("customer-description").value,
@@ -121,21 +180,21 @@ function loadPlaceOrderForm() {
         })
             .then(response => {
                 if (!response.ok) {
-                    // If the response is not OK, we throw an error
                     return response.text().then(message => {
-                        throw new Error(message); // Throw the error message from the backend
+                        throw new Error(message);
                     });
                 }
-                return response.json(); // If response is OK, parse the response body
+                return response.json();
             })
             .then(data => {
                 alert("Order placed successfully! Order ID: " + data.id);
             })
             .catch(error => {
-                alert("Error: " + error.message); // Display the error message
+                alert("Error: " + error.message);
             });
     });
 }
+
 
 // Function to validate the order data
 function validateOrderData(request) {
