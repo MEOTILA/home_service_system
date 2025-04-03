@@ -16,6 +16,5 @@ import lombok.experimental.FieldDefaults;
 @Entity
 public class Admin extends User{
 
-    /*@Column(nullable = false)
-    boolean isDeleted = false;*/
+
 }

@@ -29,7 +29,4 @@ public class Customer extends User {
 
     @Column(nullable = false)
     Long balance = 0L;
-
-    /*@Column(nullable = false)
-    boolean isDeleted = false;*/
 }

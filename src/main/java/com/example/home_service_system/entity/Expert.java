@@ -43,7 +43,4 @@ public class Expert extends User {
             inverseJoinColumns = @JoinColumn(name = "subservice_id")
     )
     List<SubService> expertServiceFields = new ArrayList<>();
-
-    /*@Column(nullable = false)
-    boolean isDeleted = false;*/
 }
