@@ -14,6 +14,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mindrot.jbcrypt.BCrypt;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -30,7 +31,7 @@ import java.util.Optional;
 public class AdminServiceImpl implements AdminService {
 
     private final AdminRepository adminRepository;
-//    private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public AdminResponse save(@Valid AdminSaveRequest request) {
@@ -62,8 +63,8 @@ public class AdminServiceImpl implements AdminService {
                     + request.email() + "} already exists!",
                     CustomApiExceptionType.UNPROCESSABLE_ENTITY);
         }
-        //String hashedPassword = passwordEncoder.encode(request.password());
-        String hashedPassword = BCrypt.hashpw(request.password(), BCrypt.gensalt());
+        String hashedPassword = passwordEncoder.encode(request.password());
+        //String hashedPassword = BCrypt.hashpw(request.password(), BCrypt.gensalt());
         Admin admin = AdminMapper.fromSaveRequest(request);
         admin.setPassword(hashedPassword);
         adminRepository.save(admin);
@@ -93,8 +94,8 @@ public class AdminServiceImpl implements AdminService {
             updatingAdmin.setUsername(request.username());
         }
         if (StringUtils.hasText(request.password())) {
-            //String hashedPassword = passwordEncoder.encode(request.password());
-            String hashedPassword = BCrypt.hashpw(request.password(), BCrypt.gensalt());
+            String hashedPassword = passwordEncoder.encode(request.password());
+            //String hashedPassword = BCrypt.hashpw(request.password(), BCrypt.gensalt());
 
             updatingAdmin.setPassword(hashedPassword);
         }
@@ -173,16 +174,16 @@ public class AdminServiceImpl implements AdminService {
     public void changePassword(@Valid AdminChangePasswordRequest request) {
         Admin admin = findAdminByIdAndIsDeletedFalse(request.id());
 
-        /*if (!passwordEncoder.matches(request.currentPassword(), admin.getPassword())) {
-            throw new CustomApiException("Current password is incorrect!",
-                    CustomApiExceptionType.UNAUTHORIZED);
-        }*/
-        if (!BCrypt.checkpw(request.currentPassword(), admin.getPassword())) {
+        if (!passwordEncoder.matches(request.currentPassword(), admin.getPassword())) {
             throw new CustomApiException("Current password is incorrect!",
                     CustomApiExceptionType.UNAUTHORIZED);
         }
-        //String hashedNewPassword = passwordEncoder.encode(request.newPassword());
-        String hashedNewPassword = BCrypt.hashpw(request.newPassword(), BCrypt.gensalt());
+        /*if (!BCrypt.checkpw(request.currentPassword(), admin.getPassword())) {
+            throw new CustomApiException("Current password is incorrect!",
+                    CustomApiExceptionType.UNAUTHORIZED);
+        }*/
+        String hashedNewPassword = passwordEncoder.encode(request.newPassword());
+        //String hashedNewPassword = BCrypt.hashpw(request.newPassword(), BCrypt.gensalt());
 
         admin.setPassword(hashedNewPassword);
         adminRepository.save(admin);

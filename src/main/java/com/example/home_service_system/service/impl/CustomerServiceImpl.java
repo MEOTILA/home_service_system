@@ -20,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -37,7 +38,7 @@ import java.util.Optional;
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
-//    private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public CustomerResponse save(@Valid CustomerSaveRequest request) {
@@ -69,8 +70,8 @@ public class CustomerServiceImpl implements CustomerService {
                     + request.email() + "} already exists!",
                     CustomApiExceptionType.UNPROCESSABLE_ENTITY);
         }
-        //String hashedPassword = passwordEncoder.encode(request.password());
-        String hashedPassword = BCrypt.hashpw(request.password(), BCrypt.gensalt());
+        String hashedPassword = passwordEncoder.encode(request.password());
+        //String hashedPassword = BCrypt.hashpw(request.password(), BCrypt.gensalt());
 
         Customer customer = CustomerMapper.fromSaveRequest(request);
         customer.setPassword(hashedPassword);
@@ -103,8 +104,8 @@ public class CustomerServiceImpl implements CustomerService {
             updatingCustomer.setUsername(request.username());
         }
         if (StringUtils.hasText(request.password())) {
-            //String hashedPassword = passwordEncoder.encode(request.password());
-            String hashedPassword = BCrypt.hashpw(request.password(), BCrypt.gensalt());
+            String hashedPassword = passwordEncoder.encode(request.password());
+            //String hashedPassword = BCrypt.hashpw(request.password(), BCrypt.gensalt());
 
             updatingCustomer.setPassword(hashedPassword);
         }
@@ -192,16 +193,16 @@ public class CustomerServiceImpl implements CustomerService {
     public void changePassword(@Valid CustomerChangePasswordRequest request) {
         Customer customer = findCustomerByIdAndIsDeletedFalse(request.id());
 
-        /*if (!passwordEncoder.matches(request.currentPassword(), customer.getPassword())) {
-            throw new CustomApiException("Current password is incorrect!"
-                    , CustomApiExceptionType.UNAUTHORIZED);
-        }*/
-        if (!BCrypt.checkpw(request.currentPassword(), customer.getPassword())) {
+        if (!passwordEncoder.matches(request.currentPassword(), customer.getPassword())) {
             throw new CustomApiException("Current password is incorrect!"
                     , CustomApiExceptionType.UNAUTHORIZED);
         }
-        //String hashedNewPassword = passwordEncoder.encode(request.newPassword());
-        String hashedNewPassword = BCrypt.hashpw(request.newPassword(), BCrypt.gensalt());
+        /*if (!BCrypt.checkpw(request.currentPassword(), customer.getPassword())) {
+            throw new CustomApiException("Current password is incorrect!"
+                    , CustomApiExceptionType.UNAUTHORIZED);
+        }*/
+        String hashedNewPassword = passwordEncoder.encode(request.newPassword());
+        //String hashedNewPassword = BCrypt.hashpw(request.newPassword(), BCrypt.gensalt());
 
         customer.setPassword(hashedNewPassword);
         customerRepository.save(customer);

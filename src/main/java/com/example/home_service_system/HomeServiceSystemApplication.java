@@ -65,14 +65,14 @@ public class HomeServiceSystemApplication {
         AdminSaveRequest adminRequest2 = new AdminSaveRequest(
                 "Roger",
                 "Waters",
-                "Roger",
+                "Alan",
                 "Roger@12345",
                 "0012035013",
                 "09123201641",
                 LocalDate.of(1990, 5, 15),
                 "roger@example.com"
         );
-        //adminService.save(adminRequest2);
+        adminService.save(adminRequest2);
         // System.out.println(adminService.findByIdAndIsDeletedFalse(1L));
 
         AdminSaveRequest adminRequest5 = new AdminSaveRequest(
