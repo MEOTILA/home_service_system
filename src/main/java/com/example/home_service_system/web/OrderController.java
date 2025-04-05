@@ -1,6 +1,7 @@
 package com.example.home_service_system.web;
 
 
+import com.example.home_service_system.dto.orderDTO.OrderPaymentRequest;
 import com.example.home_service_system.dto.orderDTO.OrderResponse;
 import com.example.home_service_system.dto.orderDTO.OrderSaveRequest;
 import com.example.home_service_system.dto.orderDTO.OrderUpdateRequest;
@@ -38,13 +39,18 @@ public class OrderController {
         return ResponseEntity.ok(orderService.acceptingAnExpertForOrder(orderId, expertId));
     }
 
-    @PutMapping("/complete-service")
-    public ResponseEntity<OrderResponse> serviceIsCompleted(@Valid @RequestBody OrderUpdateRequest request) {
-        return ResponseEntity.ok(orderService.serviceIsCompleted(request));
+    @PutMapping("/service-starter")
+    public ResponseEntity<OrderResponse> serviceStarter(@RequestParam Long orderId, Long expertId) {
+        return ResponseEntity.ok(orderService.serviceStarter(orderId,expertId ));
+    }
+
+    @PutMapping("/service-completer")
+    public ResponseEntity<OrderResponse> serviceCompleter(@RequestParam Long orderId, Long expertId) {
+        return ResponseEntity.ok(orderService.serviceCompleter(orderId, expertId ));
     }
 
     @PutMapping("/payment")
-    public ResponseEntity<OrderResponse> payment(@Valid @RequestBody OrderUpdateRequest request) {
+    public ResponseEntity<OrderResponse> payment(@Valid @RequestBody OrderPaymentRequest request) {
         return ResponseEntity.ok(orderService.payment(request));
     }
 

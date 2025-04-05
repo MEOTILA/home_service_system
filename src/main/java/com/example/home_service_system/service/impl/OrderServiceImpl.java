@@ -1,5 +1,6 @@
 package com.example.home_service_system.service.impl;
 
+import com.example.home_service_system.dto.orderDTO.OrderPaymentRequest;
 import com.example.home_service_system.dto.orderDTO.OrderResponse;
 import com.example.home_service_system.dto.orderDTO.OrderSaveRequest;
 import com.example.home_service_system.dto.orderDTO.OrderUpdateRequest;
@@ -194,33 +195,60 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderResponse serviceIsCompleted(OrderUpdateRequest orderUpdateRequest) {
-        Expert expert = expertService.
-                findExpertByIdAndIsDeletedFalse(orderUpdateRequest.expertId());
-        Order order = findOrderByIdAndIsDeletedFalse(orderUpdateRequest.id());
-        if (!order.getStatus().equals(OrderStatus.SERVICE_IS_STARTED)){
-            throw new CustomApiException("Order with ID {"
-                    + orderUpdateRequest.id() + "} is not started yet!",
+    public OrderResponse serviceStarter(Long orderId, Long expertId){
+        expertService.findExpertByIdAndIsDeletedFalse(expertId);
+        Order order = findOrderByIdAndIsDeletedFalse(orderId);
+        if (!order.getExpert().getId().equals(expertId)){
+            throw new CustomApiException("Expert with ID {"
+                    + expertId + "} is not for the order!",
+                    CustomApiExceptionType.UNAUTHORIZED);
+        }
+        if (!order.getStatus().equals(OrderStatus.WAITING_FOR_EXPERT_TO_ARRIVE)){
+            throw new CustomApiException("Expert with ID is not arrived yet!",
                     CustomApiExceptionType.BAD_REQUEST);
         }
-        order.setStatus(OrderStatus.SERVICE_IS_DONE);
+        order.setStatus(OrderStatus.SERVICE_IS_STARTED);
         orderRepository.save(order);
-        log.info("Now service is done!");
         return OrderMapper.to(order);
     }
 
     @Override
-    public OrderResponse payment(OrderUpdateRequest orderUpdateRequest) {
+    public OrderResponse serviceCompleter(Long orderId, Long expertId) {
+        expertService.findExpertByIdAndIsDeletedFalse(expertId);
+        Order order = findOrderByIdAndIsDeletedFalse(orderId);
+        if (!order.getExpert().getId().equals(expertId)){
+            throw new CustomApiException("Expert with ID {"
+                    + expertId + "} is not for the order!",
+                    CustomApiExceptionType.UNAUTHORIZED);
+        }
+        if (!order.getStatus().equals(OrderStatus.SERVICE_IS_STARTED)){
+            throw new CustomApiException("Order with ID {"
+                    + orderId + "} is finished or is not started yet!",
+                    CustomApiExceptionType.BAD_REQUEST);
+        }
+        order.setStatus(OrderStatus.SERVICE_IS_DONE);
+        orderRepository.save(order);
+        log.info("Service for order with id {" + orderId + "} is done!");
+        return OrderMapper.to(order);
+    }
+
+    @Override
+    public OrderResponse payment(OrderPaymentRequest request) {
+        Order order = findOrderByIdAndIsDeletedFalse(request.id());
         Customer customer = customerService.
-                findCustomerByIdAndIsDeletedFalse(orderUpdateRequest.customerId());
+                findCustomerByIdAndIsDeletedFalse(request.customerId());
         Expert expert = expertService.
-                findExpertByIdAndIsDeletedFalse(orderUpdateRequest.expertId());
-        Order order = findOrderByIdAndIsDeletedFalse(orderUpdateRequest.id());
+                findExpertByIdAndIsDeletedFalse(order.getExpert().getId());
+        if (!order.getCustomer().getId().equals(request.customerId())){
+            throw new CustomApiException("Customer with ID {"
+                    + request.customerId() + "} is not for the order!",
+                    CustomApiExceptionType.UNAUTHORIZED);
+        }
         Long orderCost = order.getCustomerOfferedCost();
         Long seventyPercent = (long) (orderCost * 0.7);
         if (!order.getStatus().equals(OrderStatus.SERVICE_IS_DONE)) {
             throw new CustomApiException("Order with ID {"
-                    + order.getId() + "} is not finished yet!",
+                    + order.getId() + "} is paid or is not finished yet!",
                     CustomApiExceptionType.BAD_REQUEST);
         }
         if (customer.getBalance() >= order.getCustomerOfferedCost()) {

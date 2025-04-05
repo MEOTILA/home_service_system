@@ -1,5 +1,6 @@
 package com.example.home_service_system.service;
 
+import com.example.home_service_system.dto.orderDTO.OrderPaymentRequest;
 import com.example.home_service_system.dto.orderDTO.OrderResponse;
 import com.example.home_service_system.dto.orderDTO.OrderSaveRequest;
 import com.example.home_service_system.dto.orderDTO.OrderUpdateRequest;
@@ -31,9 +32,11 @@ public interface OrderService {
 
     List<OrderResponse> findByStatusAndIsDeletedFalse(OrderStatus status);
 
-    OrderResponse serviceIsCompleted(OrderUpdateRequest orderUpdateRequest);
+    OrderResponse serviceStarter(Long orderId, Long expertId);
 
-    OrderResponse payment(OrderUpdateRequest orderUpdateRequest);
+    OrderResponse serviceCompleter(Long orderId, Long expertId);
+
+    OrderResponse payment(OrderPaymentRequest orderPaymentRequest);
 
     List<OrderResponse> findByServiceDateBetween(LocalDateTime startDate, LocalDateTime endDate);
 
