@@ -38,6 +38,16 @@ public class OrderController {
         return ResponseEntity.ok(orderService.acceptingAnExpertForOrder(orderId, expertId));
     }
 
+    @PutMapping("/complete-service")
+    public ResponseEntity<OrderResponse> serviceIsCompleted(@Valid @RequestBody OrderUpdateRequest request) {
+        return ResponseEntity.ok(orderService.serviceIsCompleted(request));
+    }
+
+    @PutMapping("/payment")
+    public ResponseEntity<OrderResponse> payment(@Valid @RequestBody OrderUpdateRequest request) {
+        return ResponseEntity.ok(orderService.payment(request));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> softDelete(@PathVariable Long id) {
         orderService.softDeleteOrderAndExpertSuggestionsAndCommentAndRateByOrderId(id);

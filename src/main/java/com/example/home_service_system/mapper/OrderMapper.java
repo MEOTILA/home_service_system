@@ -63,7 +63,8 @@ public class OrderMapper {
                 order.getServiceDate(),
                 order.getAddress(),
                 order.getPaymentType(),
-                order.getStatus()
+                order.getStatus(),
+                null
                 /*order.getExpertSuggestionList().stream().map(e -> e.getId())
                         .collect(Collectors.toList()),
                 order.getCustomerCommentAndRate()*/

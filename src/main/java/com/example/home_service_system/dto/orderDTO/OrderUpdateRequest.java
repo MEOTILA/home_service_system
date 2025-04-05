@@ -34,7 +34,10 @@ public record OrderUpdateRequest(
 
         PaymentType paymentType,
 
-        OrderStatus status
+        OrderStatus status,
+
+        @Size(min = 16, max = 16, message = "Card number must be 16 characters!")
+        String cardNumber
 
         //List<Long> expertSuggestionListIds,
 

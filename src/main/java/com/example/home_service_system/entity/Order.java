@@ -53,7 +53,7 @@ public class Order extends BaseEntity<Long> {
     @OneToOne
     CustomerCommentAndRate customerCommentAndRate;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     PaymentType paymentType;
 

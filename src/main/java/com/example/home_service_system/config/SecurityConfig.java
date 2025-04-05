@@ -48,7 +48,7 @@ public class SecurityConfig {
                         .requestMatchers("/v1/main-services/**").hasAnyRole("CUSTOMER", "EXPERT", "ADMIN")
                         .requestMatchers("/v1/sub-services/**").hasAnyRole("CUSTOMER", "EXPERT", "ADMIN")
                         .requestMatchers("/v1/orders/**").hasAnyRole("CUSTOMER", "EXPERT")
-                        .requestMatchers("/v1/expert-suggestions/**").hasAnyRole("CUSTOMER", "ADMIN")
+                        .requestMatchers("/v1/expert-suggestions/**").hasAnyRole("EXPERT","CUSTOMER", "ADMIN")
                         .requestMatchers("/v1/customer-comments/**").hasAnyRole("CUSTOMER", "EXPERT", "ADMIN")
                         .anyRequest().authenticated()
                 )

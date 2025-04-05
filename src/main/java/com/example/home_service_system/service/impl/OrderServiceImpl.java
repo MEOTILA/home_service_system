@@ -218,12 +218,12 @@ public class OrderServiceImpl implements OrderService {
         Order order = findOrderByIdAndIsDeletedFalse(orderUpdateRequest.id());
         Long orderCost = order.getCustomerOfferedCost();
         Long seventyPercent = (long) (orderCost * 0.7);
-        if (!orderUpdateRequest.status().equals(OrderStatus.SERVICE_IS_DONE)) {
+        if (!order.getStatus().equals(OrderStatus.SERVICE_IS_DONE)) {
             throw new CustomApiException("Order with ID {"
-                    + orderUpdateRequest.id() + "} is not finished yet!",
+                    + order.getId() + "} is not finished yet!",
                     CustomApiExceptionType.BAD_REQUEST);
         }
-        if (customer.getBalance() >= orderUpdateRequest.customerOfferedCost()) {
+        if (customer.getBalance() >= order.getCustomerOfferedCost()) {
             order.setPaymentType(PaymentType.BY_BALANCE);
             customer.setBalance(customer.getBalance() - orderCost);
             expert.setBalance(seventyPercent);
