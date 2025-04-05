@@ -7,6 +7,7 @@ import jakarta.persistence.ManyToOne;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Time;
 import java.time.Duration;
@@ -38,4 +39,15 @@ public class ExpertSuggestion extends BaseEntity<Long> {
 
     @Column(nullable = false)
     LocalDateTime expertServiceStartDateTime;
+
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
+
+    @Column(nullable = false)
+    boolean isDeleted = false;
 }

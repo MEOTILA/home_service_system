@@ -2,10 +2,8 @@ package com.example.home_service_system.repository;
 
 import com.example.home_service_system.entity.Customer;
 import com.example.home_service_system.entity.enums.UserStatus;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
+import jakarta.transaction.Transactional;
+import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,53 +13,46 @@ import java.util.Optional;
 
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long>
-, JpaSpecificationExecutor<Customer>, PagingAndSortingRepository<Customer, Long> {
+        , JpaSpecificationExecutor<Customer>, PagingAndSortingRepository<Customer, Long> {
 
-    @Query("SELECT c FROM Customer c WHERE c.id = :id AND c.isDeleted = false")
-    Optional<Customer> findByIdAndIsDeletedFalse(Long id);
 
-    @Query("SELECT c FROM Customer c WHERE c.isDeleted = false")
+    @Query("SELECT c FROM Customer c WHERE c.user.isDeleted = false")
     List<Customer> findAllAndIsDeletedFalse();
 
-    @Query("SELECT c FROM Customer c WHERE c.username = :username AND c.isDeleted = false")
+    @Query("SELECT c FROM Customer c WHERE c.user.username = :username AND c.user.isDeleted = false")
     Optional<Customer> findByUsernameAndIsDeletedFalse(String username);
 
-    @Query("SELECT c FROM Customer c WHERE c.nationalId = :nationalId AND c.isDeleted = false")
-    Optional<Customer> findByNationalIdAndIsDeletedFalse(String nationalId);
+    // Base queries with user join
+    @EntityGraph(attributePaths = "user")
+    @Query("SELECT c FROM Customer c JOIN c.user u WHERE u.id = :userId AND u.isDeleted = false")
+    Optional<Customer> findByUserIdAndIsDeletedFalse(Long userId);
 
-    @Query("SELECT c FROM Customer c WHERE c.phoneNumber = :phoneNumber AND c.isDeleted = false")
-    Optional<Customer> findByPhoneNumberAndIsDeletedFalse(String phoneNumber);
+    @EntityGraph(attributePaths = "user")
+    @Query("SELECT c FROM Customer c WHERE c.id = :id AND c.user.isDeleted = false")
+    Optional<Customer> findByIdAndIsDeletedFalse(Long id);
 
-    @Query("SELECT c FROM Customer c WHERE c.email = :email AND c.isDeleted = false")
-    Optional<Customer> findByEmailAndIsDeletedFalse(String email);
+    // Status and balance queries
+    @EntityGraph(attributePaths = "user")
+    @Query("SELECT c FROM Customer c WHERE c.userStatus = :status AND c.user.isDeleted = false")
+    List<Customer> findByStatusAndIsDeletedFalse(UserStatus status);
 
-    @Query("SELECT c FROM Customer c WHERE c.firstName = :firstName AND c.isDeleted = false")
-    List<Customer> findByFirstNameAndIsDeletedFalse(String firstName);
-
-    @Query("SELECT c FROM Customer c WHERE c.lastName = :lastName AND c.isDeleted = false")
-    List<Customer> findByLastNameAndIsDeletedFalse(String lastName);
-
-    @Query("SELECT c FROM Customer c WHERE c.birthday = :birthday AND c.isDeleted = false")
-    List<Customer> findByBirthdayAndIsDeletedFalse(LocalDate birthday);
-
-    @Query("SELECT c FROM Customer c WHERE c.createdAt = :createdAt AND c.isDeleted = false")
-    List<Customer> findByCreatedAtAndIsDeletedFalse(LocalDate createdAt);
-
-    @Query("SELECT c FROM Customer c WHERE c.userStatus = :userStatus AND c.isDeleted = false")
-    List<Customer> findByUserStatusAndIsDeletedFalse(UserStatus userStatus);
-
-    @Query("SELECT c FROM Customer c WHERE c.balance = :balance AND c.isDeleted = false")
+    @EntityGraph(attributePaths = "user")
+    @Query("SELECT c FROM Customer c WHERE c.balance = :balance AND c.user.isDeleted = false")
     List<Customer> findByBalanceAndIsDeletedFalse(Long balance);
 
-    Optional<Customer> findByUsername(String username);
+    // Profile information queries
+    @EntityGraph(attributePaths = "user")
+    @Query("SELECT c FROM Customer c WHERE " +
+            "(:firstName IS NULL OR c.user.firstName = :firstName) AND " +
+            "(:lastName IS NULL OR c.user.lastName = :lastName) AND " +
+            "(:birthday IS NULL OR c.user.birthday = :birthday) AND " +
+            "c.user.isDeleted = false")
+    List<Customer> searchCustomers(String firstName, String lastName, LocalDate birthday);
 
-    Optional<Customer> findByPhoneNumber(String phoneNumber);
-
-    Optional<Customer> findByNationalId(String nationalId);
-
-    Optional<Customer> findByEmail(String email);
-
-    @Query("UPDATE Customer c SET c.isDeleted = true WHERE c.id = :id")
+    // Soft delete operation
     @Modifying
-    void softDeleteById(Long id);
+    @Query("UPDATE User u SET u.isDeleted = true WHERE u.id = " +
+            "(SELECT c.user.id FROM Customer c WHERE c.id = :customerId)")
+    void softDelete(Long customerId);
+
 }

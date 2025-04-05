@@ -30,6 +30,7 @@ import com.example.home_service_system.service.OrderService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.domain.Page;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -65,14 +66,14 @@ public class HomeServiceSystemApplication {
         AdminSaveRequest adminRequest2 = new AdminSaveRequest(
                 "Roger",
                 "Waters",
-                "Alan",
-                "Roger@12345",
+                "Roger",
+                "Roger@1234",
                 "0012035013",
                 "09123201641",
                 LocalDate.of(1990, 5, 15),
                 "roger@example.com"
         );
-        adminService.save(adminRequest2);
+        //adminService.save(adminRequest2);
         // System.out.println(adminService.findByIdAndIsDeletedFalse(1L));
 
         AdminSaveRequest adminRequest5 = new AdminSaveRequest(
@@ -175,7 +176,6 @@ public class HomeServiceSystemApplication {
         //customerService.softDeleteById(1L);
 
         byte[] dummyImage = new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-
         /*ExpertSaveRequest expert = new ExpertSaveRequest(
                 "George",
                 "Michael",
@@ -186,8 +186,8 @@ public class HomeServiceSystemApplication {
                 LocalDate.of(1945, 8, 15),
                 "george@example.com",
                 dummyImage
-        );*/
-        //expertService.save(expert);
+        );
+        expertService.save(expert);*/
         //System.out.println(expertService.findByIdAndIsDeletedFalse(1L));
 
         //todo: deleteeeeeeeeeeeeeeeee
@@ -327,7 +327,7 @@ public class HomeServiceSystemApplication {
 
 
         //todo: customer Specification
-        Page<CustomerResponse> customers = customerService.getFilteredCustomers(
+        /*Page<CustomerResponse> customers = customerService.getFilteredCustomers(
                 null,
                 null,
                 null,
@@ -340,11 +340,11 @@ public class HomeServiceSystemApplication {
                 null,
                 0,
                 5
-        );
+        );*/
         //customers.forEach(c -> System.out.println("Found Customers: " + c));
 
         //todo: expert Specification
-        Page<ExpertResponse> experts = expertService.getFilteredExperts(
+        /*Page<ExpertResponse> experts = expertService.getFilteredExperts(
                 "",
                 null,
                 null,
@@ -359,7 +359,7 @@ public class HomeServiceSystemApplication {
                 null,
                 0,
                 5
-        );
+        );*/
         //experts.forEach(e -> System.out.println("Found Experts: " + e));
 
     }

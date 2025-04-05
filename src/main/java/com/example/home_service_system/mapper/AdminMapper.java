@@ -5,40 +5,59 @@ import com.example.home_service_system.dto.adminDTO.AdminResponse;
 import com.example.home_service_system.dto.adminDTO.AdminSaveRequest;
 import com.example.home_service_system.dto.adminDTO.AdminUpdateRequest;
 import com.example.home_service_system.entity.Admin;
+import com.example.home_service_system.entity.User;
 
 public class AdminMapper {
-
     public static AdminResponse to(Admin admin) {
+        if (admin == null || admin.getUser() == null) {
+            return null;
+        }
+
+        User user = admin.getUser();
+        return new AdminResponse(
+                admin.getId(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getUsername(),
+                user.getNationalId(),
+                user.getPhoneNumber(),
+                user.getBirthday(),
+                user.getEmail(),
+                user.getCreatedAt(),
+                user.getUpdatedAt()
+        );
+    }
+    /*public static AdminResponse to(Admin admin) {
         if (admin == null) {
             return null;
         }
         return new AdminResponse(
                 admin.getId(),
-                admin.getFirstName(),
-                admin.getLastName(),
-                admin.getUsername(),
-                admin.getNationalId(),
-                admin.getPhoneNumber(),
-                admin.getBirthday(),
-                admin.getEmail(),
-                admin.getCreatedAt(),
-                admin.getUpdatedAt()
+                admin.getUser().getFirstName(),
+                admin.getUser().getLastName(),
+                admin.getUser().getUsername(),
+                admin.getUser().getNationalId(),
+                admin.getUser().getPhoneNumber(),
+                admin.getUser().getBirthday(),
+                admin.getUser().getEmail(),
+                admin.getUser().getCreatedAt(),
+                admin.getUser().getUpdatedAt()
         );
-    }
+    }*/
 
     public static Admin fromSaveRequest(AdminSaveRequest adminSaveRequest) {
         if (adminSaveRequest == null) {
             return null;
         }
         Admin admin = new Admin();
-        admin.setFirstName(adminSaveRequest.firstName());
+        /*admin.setFirstName(adminSaveRequest.firstName());
         admin.setLastName(adminSaveRequest.lastName());
         admin.setUsername(adminSaveRequest.username());
         admin.setPassword(adminSaveRequest.password());
         admin.setNationalId(adminSaveRequest.nationalId());
         admin.setPhoneNumber(adminSaveRequest.phoneNumber());
         admin.setBirthday(adminSaveRequest.birthday());
-        admin.setEmail(adminSaveRequest.email());
+        admin.setEmail(adminSaveRequest.email());*/
         return admin;
     }
 

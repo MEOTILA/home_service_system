@@ -1,5 +1,6 @@
 package com.example.home_service_system.entity;
 
+import com.example.home_service_system.base.BaseEntity;
 import com.example.home_service_system.entity.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.*;
@@ -14,7 +15,11 @@ import java.util.List;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-public class Expert extends User {
+public class Expert extends BaseEntity<Long> {
+
+    @OneToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id", unique = true)
+    User user;
 
     @Lob
     @Column(nullable = false)

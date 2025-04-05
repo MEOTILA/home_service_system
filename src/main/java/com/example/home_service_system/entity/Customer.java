@@ -1,5 +1,6 @@
 package com.example.home_service_system.entity;
 
+import com.example.home_service_system.base.BaseEntity;
 import com.example.home_service_system.entity.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.*;
@@ -18,7 +19,11 @@ import java.util.List;
 @Entity
 /*@SQLDelete(sql = "UPDATE Customer SET is_deleted = true WHERE id = ?")
 @Where(clause = "is_deleted = false")*/
-public class Customer extends User {
+public class Customer extends BaseEntity<Long> {
+
+    @OneToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id", unique = true)
+    User user;
 
     @OneToMany(mappedBy = "customer")
     List<Order> orderList = new ArrayList<>();

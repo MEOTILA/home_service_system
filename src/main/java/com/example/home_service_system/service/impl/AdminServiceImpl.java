@@ -5,15 +5,17 @@ import com.example.home_service_system.dto.adminDTO.AdminResponse;
 import com.example.home_service_system.dto.adminDTO.AdminSaveRequest;
 import com.example.home_service_system.dto.adminDTO.AdminUpdateRequest;
 import com.example.home_service_system.entity.Admin;
+import com.example.home_service_system.entity.User;
+import com.example.home_service_system.entity.enums.UserType;
 import com.example.home_service_system.exceptions.CustomApiException;
 import com.example.home_service_system.exceptions.CustomApiExceptionType;
 import com.example.home_service_system.mapper.AdminMapper;
 import com.example.home_service_system.repository.AdminRepository;
 import com.example.home_service_system.service.AdminService;
+import com.example.home_service_system.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +23,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -31,42 +32,27 @@ import java.util.Optional;
 public class AdminServiceImpl implements AdminService {
 
     private final AdminRepository adminRepository;
+    private final UserService userService;
     private final PasswordEncoder passwordEncoder;
 
     @Override
     public AdminResponse save(@Valid AdminSaveRequest request) {
-        Optional<Admin> optionalAdminByUsername =
-                adminRepository.findByUsername(request.username());
-        if (optionalAdminByUsername.isPresent()) {
-            throw new CustomApiException("Admin with username {"
-                    + request.username() + "} already exists!",
-                    CustomApiExceptionType.UNPROCESSABLE_ENTITY);
-        }
-        Optional<Admin> optionalAdminByPhoneNumber =
-                adminRepository.findByPhoneNumber(request.phoneNumber());
-        if (optionalAdminByPhoneNumber.isPresent()) {
-            throw new CustomApiException("Admin with phone number {"
-                    + request.phoneNumber() + "} already exists!",
-                    CustomApiExceptionType.UNPROCESSABLE_ENTITY);
-        }
-        Optional<Admin> optionalAdminByNationalId =
-                adminRepository.findByNationalId(request.nationalId());
-        if (optionalAdminByNationalId.isPresent()) {
-            throw new CustomApiException("Admin with national ID {"
-                    + request.nationalId() + "} already exists!",
-                    CustomApiExceptionType.UNPROCESSABLE_ENTITY);
-        }
-        Optional<Admin> optionalAdminByEmail =
-                adminRepository.findByEmail(request.email());
-        if (optionalAdminByEmail.isPresent()) {
-            throw new CustomApiException("Admin with email {"
-                    + request.email() + "} already exists!",
-                    CustomApiExceptionType.UNPROCESSABLE_ENTITY);
-        }
-        String hashedPassword = passwordEncoder.encode(request.password());
-        //String hashedPassword = BCrypt.hashpw(request.password(), BCrypt.gensalt());
+        User user = new User();
+        user.setFirstName(request.firstName());
+        user.setLastName(request.lastName());
+        user.setUsername(request.username());
+        user.setPassword(request.password());
+        user.setNationalId(request.nationalId());
+        user.setPhoneNumber(request.phoneNumber());
+        user.setBirthday(request.birthday());
+        user.setEmail(request.email());
+        user.setUserType(UserType.ADMIN);
+
+        //String hashedPassword = passwordEncoder.encode(request.password());
         Admin admin = AdminMapper.fromSaveRequest(request);
-        admin.setPassword(hashedPassword);
+        //admin.setPassword(hashedPassword);
+        userService.save(user);
+        admin.setUser(user);
         adminRepository.save(admin);
         log.info("Admin with id {} saved", admin.getId());
         return AdminMapper.to(admin);
@@ -75,66 +61,34 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public AdminResponse update(@Valid AdminUpdateRequest request) {
         Admin updatingAdmin = findAdminByIdAndIsDeletedFalse(request.id());
+        User updatingUser = userService.findUserById(updatingAdmin.getUser().getId());
 
         if (StringUtils.hasText(request.firstName())) {
-            updatingAdmin.setFirstName(request.firstName());
+            updatingUser.setFirstName(request.firstName());
         }
         if (StringUtils.hasText(request.lastName())) {
-            updatingAdmin.setLastName(request.lastName());
+            updatingUser.setLastName(request.lastName());
         }
         if (StringUtils.hasText(request.username())) {
-            Optional<Admin> existingAdmin = adminRepository
-                    .findByUsername(request.username());
-            if (existingAdmin.isPresent() && !existingAdmin.get()
-                    .getId().equals(updatingAdmin.getId())) {
-                throw new CustomApiException("Admin with username {"
-                        + request.username() + "} already exists!",
-                        CustomApiExceptionType.UNPROCESSABLE_ENTITY);
-            }
-            updatingAdmin.setUsername(request.username());
-        }
-        if (StringUtils.hasText(request.password())) {
-            String hashedPassword = passwordEncoder.encode(request.password());
-            //String hashedPassword = BCrypt.hashpw(request.password(), BCrypt.gensalt());
-
-            updatingAdmin.setPassword(hashedPassword);
+            userService.usernameExists(request.username());
+            updatingUser.setUsername(request.username());
         }
         if (StringUtils.hasText(request.nationalId())) {
-            Optional<Admin> existingAdmin = adminRepository
-                    .findByNationalId(request.nationalId());
-            if (existingAdmin.isPresent() && !existingAdmin.get()
-                    .getId().equals(updatingAdmin.getId())) {
-                throw new CustomApiException("Admin with national ID {"
-                        + request.nationalId() + "} already exists!",
-                        CustomApiExceptionType.UNPROCESSABLE_ENTITY);
-            }
-            updatingAdmin.setNationalId(request.nationalId());
+            userService.nationalIdExists(request.nationalId());
+            updatingUser.setNationalId(request.nationalId());
         }
         if (StringUtils.hasText(request.phoneNumber())) {
-            Optional<Admin> existingAdmin = adminRepository
-                    .findByPhoneNumber(request.phoneNumber());
-            if (existingAdmin.isPresent() && !existingAdmin.get()
-                    .getId().equals(updatingAdmin.getId())) {
-                throw new CustomApiException("Admin with phone number {"
-                        + request.phoneNumber() + "} already exists!",
-                        CustomApiExceptionType.UNPROCESSABLE_ENTITY);
-            }
-            updatingAdmin.setPhoneNumber(request.phoneNumber());
+            userService.phoneNumberExists(request.phoneNumber());
+            updatingUser.setPhoneNumber(request.phoneNumber());
         }
         if (request.birthday() != null) {
-            updatingAdmin.setBirthday(request.birthday());
+            updatingUser.setBirthday(request.birthday());
         }
         if (StringUtils.hasText(request.email())) {
-            Optional<Admin> existingAdmin = adminRepository
-                    .findByEmail(request.email());
-            if (existingAdmin.isPresent() && !existingAdmin.get()
-                    .getId().equals(updatingAdmin.getId())) {
-                throw new CustomApiException("Admin with email {"
-                        + request.email() + "} already exists!",
-                        CustomApiExceptionType.UNPROCESSABLE_ENTITY);
-            }
-            updatingAdmin.setEmail(request.email());
+            userService.emailExists(request.email());
+            updatingUser.setEmail(request.email());
         }
+        userService.update(updatingUser);
         Admin updatedAdmin = adminRepository.save(updatingAdmin);
         log.info("Admin with id {} updated", updatedAdmin.getId());
         return AdminMapper.to(updatedAdmin);
@@ -153,7 +107,6 @@ public class AdminServiceImpl implements AdminService {
         return adminRepository.findByIdAndIsDeletedFalse(id)
                 .orElseThrow(() -> new CustomApiException("Admin with id {"
                         + id + "} not found!", CustomApiExceptionType.NOT_FOUND));
-
     }
 
     @Override
@@ -173,28 +126,20 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public void changePassword(@Valid AdminChangePasswordRequest request) {
         Admin admin = findAdminByIdAndIsDeletedFalse(request.id());
-
-        if (!passwordEncoder.matches(request.currentPassword(), admin.getPassword())) {
+        User updatingUser = userService.findUserById(admin.getUser().getId());
+        if (!passwordEncoder.matches(request.currentPassword(), admin.getUser().getPassword())) {
             throw new CustomApiException("Current password is incorrect!",
                     CustomApiExceptionType.UNAUTHORIZED);
         }
-        /*if (!BCrypt.checkpw(request.currentPassword(), admin.getPassword())) {
-            throw new CustomApiException("Current password is incorrect!",
-                    CustomApiExceptionType.UNAUTHORIZED);
-        }*/
-        String hashedNewPassword = passwordEncoder.encode(request.newPassword());
-        //String hashedNewPassword = BCrypt.hashpw(request.newPassword(), BCrypt.gensalt());
-
-        admin.setPassword(hashedNewPassword);
-        adminRepository.save(admin);
+        updatingUser.setPassword(request.newPassword());
+        userService.changePassword(updatingUser);
         log.info("Password changed successfully for admin with id {}", request.id());
     }
 
     @Override
     public void softDeleteById(Long id) {
-        findAdminByIdAndIsDeletedFalse(id);
-        adminRepository.softDeleteById(id);
+        Admin admin = findAdminByIdAndIsDeletedFalse(id);
+        userService.softDelete(admin.getUser().getId());
         log.info("Admin with id {} deleted", id);
     }
-
 }

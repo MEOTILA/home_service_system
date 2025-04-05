@@ -3,10 +3,7 @@ package com.example.home_service_system.repository;
 import com.example.home_service_system.entity.Expert;
 import com.example.home_service_system.entity.SubService;
 import com.example.home_service_system.entity.enums.UserStatus;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
@@ -17,45 +14,46 @@ import java.util.Optional;
 public interface ExpertRepository extends JpaRepository<Expert, Long>
         , JpaSpecificationExecutor<Expert>, PagingAndSortingRepository<Expert, Long> {
 
-    @Query("SELECT e FROM Expert e WHERE e.id = :id AND e.isDeleted = false")
-    Optional<Expert> findByIdAndIsDeletedFalse(Long id);
-
-    @Query("SELECT e FROM Expert e WHERE e.isDeleted = false")
+    @Query("SELECT e FROM Expert e WHERE e.user.isDeleted = false")
     List<Expert> findAllAndIsDeletedFalse();
 
-    @Query("SELECT e FROM Expert e WHERE e.username = :username AND e.isDeleted = false")
+    @Query("SELECT e FROM Expert e WHERE e.user.username = :username AND e.user.isDeleted = false")
     Optional<Expert> findByUsernameAndIsDeletedFalse(String username);
 
-    @Query("SELECT e FROM Expert e WHERE e.nationalId = :nationalId AND e.isDeleted = false")
-    Optional<Expert> findByNationalIdAndIsDeletedFalse(String nationalId);
+    @EntityGraph(attributePaths = {"user", "expertServiceFields"})
+    @Query("SELECT e FROM Expert e JOIN e.user u WHERE u.id = :userId AND u.isDeleted = false")
+    Optional<Expert> findByUserIdAndIsDeletedFalse(Long userId);
 
-    @Query("SELECT e FROM Expert e WHERE e.phoneNumber = :phoneNumber AND e.isDeleted = false")
-    Optional<Expert> findByPhoneNumberAndIsDeletedFalse(String phoneNumber);
+    @EntityGraph(attributePaths = {"user", "expertServiceFields"})
+    @Query("SELECT e FROM Expert e WHERE e.id = :id AND e.user.isDeleted = false")
+    Optional<Expert> findByIdAndIsDeletedFalse(Long id);
 
-    @Query("SELECT e FROM Expert e WHERE e.email = :email AND e.isDeleted = false")
-    Optional<Expert> findByEmailAndIsDeletedFalse(String email);
-
-    @Query("SELECT e FROM Expert e WHERE e.rating = :rating AND e.isDeleted = false")
+    // Expert-specific queries
+    @EntityGraph(attributePaths = "user")
+    @Query("SELECT e FROM Expert e WHERE e.rating = :rating AND e.user.isDeleted = false")
     List<Expert> findByRatingAndIsDeletedFalse(Integer rating);
 
-    @Query("SELECT e FROM Expert e JOIN e.expertServiceFields esf WHERE esf = :subService AND e.isDeleted = false")
-    List<Expert> findByExpertServiceFieldsAndIsDeletedFalse(SubService subService);
+    @EntityGraph(attributePaths = {"user", "expertServiceFields"})
+    @Query("SELECT e FROM Expert e JOIN e.expertServiceFields esf " +
+            "WHERE esf = :subService AND e.user.isDeleted = false")
+    List<Expert> findBySubServiceAndIsDeletedFalse(SubService subService);
 
-    @Query("SELECT e FROM Expert e WHERE e.userStatus = :userStatus AND e.isDeleted = false")
-    List<Expert> findByUserStatusAndIsDeletedFalse(UserStatus userStatus);
+    @EntityGraph(attributePaths = "user")
+    @Query("SELECT e FROM Expert e WHERE e.userStatus = :status AND e.user.isDeleted = false")
+    List<Expert> findByStatusAndIsDeletedFalse(UserStatus status);
 
-    @Query("SELECT e FROM Expert e WHERE e.balance = :balance AND e.isDeleted = false")
-    List<Expert> findByBalanceAndIsDeletedFalse(Long balance);
+    // Search with multiple criteria
+    @EntityGraph(attributePaths = {"user", "expertServiceFields"})
+    @Query("SELECT e FROM Expert e WHERE " +
+            "(:minRating IS NULL OR e.rating >= :minRating) AND " +
+            "(:status IS NULL OR e.userStatus = :status) AND " +
+            "(:minBalance IS NULL OR e.balance >= :minBalance) AND " +
+            "e.user.isDeleted = false")
+    List<Expert> searchExperts(Integer minRating, UserStatus status, Long minBalance);
 
-    Optional<Expert> findByUsername(String username);
-
-    Optional<Expert> findByPhoneNumber(String phoneNumber);
-
-    Optional<Expert> findByNationalId(String nationalId);
-
-    Optional<Expert> findByEmail(String email);
-
-    @Query("UPDATE Expert e SET e.isDeleted = true WHERE e.id = :id")
+    // Soft delete operation
     @Modifying
-    void softDeleteById(Long id);
+    @Query("UPDATE User u SET u.isDeleted = true WHERE u.id = " +
+            "(SELECT e.user.id FROM Expert e WHERE e.id = :expertId)")
+    void softDelete(Long expertId);
 }

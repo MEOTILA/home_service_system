@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Home Service System</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+<div class="login-container">
+    <h1>Login</h1>
+
+    <!-- Error message display -->
+    <div id="error-message" class="error-message"></div>
+
+    <form id="login-form" action="/perform_login" method="POST">
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+
+        <div class="form-group remember-me">
+            <input type="checkbox" id="remember-me" name="remember-me">
+            <label for="remember-me">Remember me</label>
+        </div>
+
+        <button type="submit" class="btn-login">Login</button>
+    </form>
+
+    <div class="register-link">
+        Don't have an account? <a href="/register">Register here</a>
+    </div>
+</div>
+
+<script src="./js/login.js"></script>
+</body>
+</html>

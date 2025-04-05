@@ -18,15 +18,4 @@ public class BaseEntity<ID extends Serializable>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private ID id;
-
-    @CreationTimestamp
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    @Column(nullable = false)
-    private LocalDateTime updatedAt;
-
-    @Column(nullable = false)
-    boolean isDeleted = false;
 }
