@@ -2,6 +2,7 @@ package com.example.home_service_system.dto.orderDTO;
 
 import com.example.home_service_system.entity.CustomerCommentAndRate;
 import com.example.home_service_system.entity.enums.OrderStatus;
+import com.example.home_service_system.entity.enums.PaymentType;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -30,6 +31,8 @@ public record OrderUpdateRequest(
 
         @Size(min = 5, max = 250, message = "Address must be between 5 and 250 characters!")
         String address,
+
+        PaymentType paymentType,
 
         OrderStatus status
 

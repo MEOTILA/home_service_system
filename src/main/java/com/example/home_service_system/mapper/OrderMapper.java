@@ -16,6 +16,7 @@ public class OrderMapper {
                 order.getExpert() != null ? order.getExpert().getId() : null,
                 order.getCustomerOfferedCost(),
                 order.getCustomerDescription(),
+                order.getPaymentType(),
                 order.getCreatedAt(),
                 order.getUpdatedAt(),
                 order.getServiceDate(),
@@ -61,6 +62,7 @@ public class OrderMapper {
                 order.getCustomerDescription(),
                 order.getServiceDate(),
                 order.getAddress(),
+                order.getPaymentType(),
                 order.getStatus()
                 /*order.getExpertSuggestionList().stream().map(e -> e.getId())
                         .collect(Collectors.toList()),

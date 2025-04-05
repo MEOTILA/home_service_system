@@ -2,6 +2,7 @@ package com.example.home_service_system.entity;
 
 import com.example.home_service_system.base.BaseEntity;
 import com.example.home_service_system.entity.enums.OrderStatus;
+import com.example.home_service_system.entity.enums.PaymentType;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -51,6 +52,10 @@ public class Order extends BaseEntity<Long> {
 
     @OneToOne
     CustomerCommentAndRate customerCommentAndRate;
+
+    @Enumerated
+    @Column(nullable = false)
+    PaymentType paymentType;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)

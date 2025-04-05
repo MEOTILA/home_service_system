@@ -31,6 +31,10 @@ public interface OrderService {
 
     List<OrderResponse> findByStatusAndIsDeletedFalse(OrderStatus status);
 
+    OrderResponse serviceIsCompleted(OrderUpdateRequest orderUpdateRequest);
+
+    OrderResponse payment(OrderUpdateRequest orderUpdateRequest);
+
     List<OrderResponse> findByServiceDateBetween(LocalDateTime startDate, LocalDateTime endDate);
 
     void softDeleteOrderAndExpertSuggestionsAndCommentAndRateByOrderId(Long id);

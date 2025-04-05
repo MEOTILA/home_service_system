@@ -5,6 +5,7 @@ import com.example.home_service_system.dto.orderDTO.OrderSaveRequest;
 import com.example.home_service_system.dto.orderDTO.OrderUpdateRequest;
 import com.example.home_service_system.entity.*;
 import com.example.home_service_system.entity.enums.OrderStatus;
+import com.example.home_service_system.entity.enums.PaymentType;
 import com.example.home_service_system.exceptions.CustomApiException;
 import com.example.home_service_system.exceptions.CustomApiExceptionType;
 import com.example.home_service_system.mapper.OrderMapper;
@@ -48,6 +49,7 @@ public class OrderServiceImpl implements OrderService {
         order.setSubService(subService);
 
         order.setStatus(OrderStatus.WAITING_FOR_EXPERT_TO_RESPONSE);
+        order.setPaymentType(PaymentType.BY_BALANCE);
 
         orderRepository.save(order);
         log.info("Order with id {} saved", order.getId());
@@ -87,19 +89,22 @@ public class OrderServiceImpl implements OrderService {
         if (request.status() != null) {
             order.setStatus(request.status());
         }
+        if (request.paymentType() != null) {
+            order.setPaymentType(request.paymentType());
+        }
         orderRepository.save(order);
         log.info("Order with id {} updated", order.getId());
         return OrderMapper.to(order);
     }
 
     @Override
-    public OrderResponse acceptingAnExpertForOrder(Long orderId, Long expertId){
+    public OrderResponse acceptingAnExpertForOrder(Long orderId, Long expertId) {
         Order order = findOrderByIdAndIsDeletedFalse(orderId);
         Expert expert = expertService.findExpertByIdAndIsDeletedFalse(expertId);
         List<ExpertSuggestion> expertSuggestionList = order.getExpertSuggestionList();
 
         if (order.getExpert() != null ||
-                !order.getStatus().equals(OrderStatus.WAITING_FOR_CUSTOMER_TO_ACCEPT)){
+                !order.getStatus().equals(OrderStatus.WAITING_FOR_CUSTOMER_TO_ACCEPT)) {
             throw new CustomApiException("Order with ID " + orderId +
                     " is already has an expert!",
                     CustomApiExceptionType.BAD_REQUEST);
@@ -112,8 +117,15 @@ public class OrderServiceImpl implements OrderService {
                     " is not in the suggestion list for this order!",
                     CustomApiExceptionType.NOT_FOUND);
         }
+        ExpertSuggestion expertSuggestion = expertSuggestionList.stream()
+                .filter(suggestion -> suggestion.getExpert().getId().equals(expertId))
+                .findFirst()
+                .orElseThrow(() -> new CustomApiException("Expert with ID " + expertId +
+                        " is not in the suggestion list for this order!",
+                        CustomApiExceptionType.NOT_FOUND));
 
         order.setExpert(expert);
+        order.setCustomerOfferedCost(expertSuggestion.getExpertOfferedCost());
         order.setStatus(OrderStatus.WAITING_FOR_EXPERT_TO_ARRIVE);
         orderRepository.save(order);
         log.info("Order with id {} is assigned to expert with id {}",
@@ -179,6 +191,54 @@ public class OrderServiceImpl implements OrderService {
     public List<OrderResponse> findByStatusAndIsDeletedFalse(OrderStatus status) {
         return orderRepository.findByStatusAndIsDeletedFalse(status).stream()
                 .map(OrderMapper::to).toList();
+    }
+
+    @Override
+    public OrderResponse serviceIsCompleted(OrderUpdateRequest orderUpdateRequest) {
+        Expert expert = expertService.
+                findExpertByIdAndIsDeletedFalse(orderUpdateRequest.expertId());
+        Order order = findOrderByIdAndIsDeletedFalse(orderUpdateRequest.id());
+        if (!order.getStatus().equals(OrderStatus.SERVICE_IS_STARTED)){
+            throw new CustomApiException("Order with ID {"
+                    + orderUpdateRequest.id() + "} is not started yet!",
+                    CustomApiExceptionType.BAD_REQUEST);
+        }
+        order.setStatus(OrderStatus.SERVICE_IS_DONE);
+        orderRepository.save(order);
+        log.info("Now service is done!");
+        return OrderMapper.to(order);
+    }
+
+    @Override
+    public OrderResponse payment(OrderUpdateRequest orderUpdateRequest) {
+        Customer customer = customerService.
+                findCustomerByIdAndIsDeletedFalse(orderUpdateRequest.customerId());
+        Expert expert = expertService.
+                findExpertByIdAndIsDeletedFalse(orderUpdateRequest.expertId());
+        Order order = findOrderByIdAndIsDeletedFalse(orderUpdateRequest.id());
+        Long orderCost = order.getCustomerOfferedCost();
+        Long seventyPercent = (long) (orderCost * 0.7);
+        if (!orderUpdateRequest.status().equals(OrderStatus.SERVICE_IS_DONE)) {
+            throw new CustomApiException("Order with ID {"
+                    + orderUpdateRequest.id() + "} is not finished yet!",
+                    CustomApiExceptionType.BAD_REQUEST);
+        }
+        if (customer.getBalance() >= orderUpdateRequest.customerOfferedCost()) {
+            order.setPaymentType(PaymentType.BY_BALANCE);
+            customer.setBalance(customer.getBalance() - orderCost);
+            expert.setBalance(seventyPercent);
+            order.setStatus(OrderStatus.SERVICE_IS_PAID);
+            orderRepository.save(order);
+            log.info("Payment by customer balance is successful!");
+            return OrderMapper.to(order);
+        } else {
+            order.setPaymentType(PaymentType.BY_CREDIT_CARD);
+            expert.setBalance(seventyPercent);
+            order.setStatus(OrderStatus.SERVICE_IS_PAID);
+            orderRepository.save(order);
+            log.info("Payment by credit card is successful!");
+            return OrderMapper.to(order);
+        }
     }
 
     @Override
