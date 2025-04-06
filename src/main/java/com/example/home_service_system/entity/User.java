@@ -52,17 +52,20 @@ public class User extends BaseEntity<Long> {
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    LocalDateTime createdAt;
 
     @UpdateTimestamp
     @Column(nullable = false)
-    private LocalDateTime updatedAt;
+    LocalDateTime updatedAt;
 
     @OneToOne(mappedBy = "user")
-    private Expert expert;
+    Expert expert;
 
     @OneToOne(mappedBy = "user")
-    private Customer customer;
+    Customer customer;
+
+    @OneToOne(mappedBy = "user")
+    Admin admin;
 
     @Column(nullable = false)
     boolean isDeleted = false;

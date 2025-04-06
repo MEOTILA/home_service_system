@@ -42,11 +42,11 @@ public class ExpertSuggestion extends BaseEntity<Long> {
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    LocalDateTime createdAt;
 
     @UpdateTimestamp
     @Column(nullable = false)
-    private LocalDateTime updatedAt;
+    LocalDateTime updatedAt;
 
     @Column(nullable = false)
     boolean isDeleted = false;
