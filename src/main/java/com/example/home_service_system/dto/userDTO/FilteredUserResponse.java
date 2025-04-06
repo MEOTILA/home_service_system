@@ -1,7 +1,6 @@
 package com.example.home_service_system.dto.userDTO;
 
 import com.example.home_service_system.entity.enums.UserType;
-import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
 import java.util.List;

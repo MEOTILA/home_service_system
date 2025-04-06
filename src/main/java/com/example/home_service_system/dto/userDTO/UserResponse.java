@@ -23,7 +23,7 @@ public record UserResponse(
         LocalDateTime updatedAt,
         boolean isDeleted
 ) {
-    public String getImageBase64() {
+    /*public String getImageBase64() {
         return image != null ? java.util.Base64.getEncoder().encodeToString(image) : null;
-    }
+    }*/
 }
