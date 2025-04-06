@@ -1,10 +1,10 @@
 package com.example.home_service_system.mapper;
 
-import com.example.home_service_system.dto.orderDTO.OrderResponse;
-import com.example.home_service_system.dto.orderDTO.OrderSaveRequest;
-import com.example.home_service_system.dto.orderDTO.OrderUpdateRequest;
+import com.example.home_service_system.dto.orderDTO.*;
 import com.example.home_service_system.entity.Order;
+import org.springframework.data.domain.Page;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class OrderMapper {
@@ -68,6 +68,72 @@ public class OrderMapper {
                 /*order.getExpertSuggestionList().stream().map(e -> e.getId())
                         .collect(Collectors.toList()),
                 order.getCustomerCommentAndRate()*/
+        );
+    }
+
+    // Convert List<Order> to FilteredOrderResponse (non-paginated)
+    public static FilteredOrderResponse toFilteredOrderResponse(
+            List<Order> orders,
+            OrderFilterDTO filter) {
+
+        return new FilteredOrderResponse(
+                orders.stream()
+                        .map(OrderMapper::to)
+                        .collect(Collectors.toList()),
+                0, // currentPage
+                orders.size(), // pageSize
+                orders.size(), // totalElements
+                1, // totalPages
+                filter.getSortBy(),
+                filter.getSortDirection(),
+                // Filter metadata
+                filter.getSubServiceId(),
+                filter.getCustomerId(),
+                filter.getExpertId(),
+                filter.getMinCost(),
+                filter.getMaxCost(),
+                filter.getDescription(),
+                filter.getServiceStartDate(),
+                filter.getServiceEndDate(),
+                filter.getAddress(),
+                filter.getStatus(),
+                filter.getPaymentType(),
+                filter.getCreatedAfter(),
+                filter.getCreatedBefore(),
+                filter.getHasComment()
+        );
+    }
+
+    // Convert Page<Order> to FilteredOrderResponse (paginated)
+    public static FilteredOrderResponse toFilteredOrderResponse(
+            Page<Order> orderPage,
+            OrderFilterDTO filter) {
+
+        return new FilteredOrderResponse(
+                orderPage.getContent().stream()
+                        .map(OrderMapper::to)
+                        .collect(Collectors.toList()),
+                orderPage.getNumber(),
+                orderPage.getSize(),
+                orderPage.getTotalElements(),
+                orderPage.getTotalPages(),
+                filter.getSortBy(),
+                filter.getSortDirection(),
+                // Filter metadata
+                filter.getSubServiceId(),
+                filter.getCustomerId(),
+                filter.getExpertId(),
+                filter.getMinCost(),
+                filter.getMaxCost(),
+                filter.getDescription(),
+                filter.getServiceStartDate(),
+                filter.getServiceEndDate(),
+                filter.getAddress(),
+                filter.getStatus(),
+                filter.getPaymentType(),
+                filter.getCreatedAfter(),
+                filter.getCreatedBefore(),
+                filter.getHasComment()
         );
     }
 }

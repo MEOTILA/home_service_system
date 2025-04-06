@@ -1,9 +1,6 @@
 package com.example.home_service_system.service.impl;
 
-import com.example.home_service_system.dto.orderDTO.OrderPaymentRequest;
-import com.example.home_service_system.dto.orderDTO.OrderResponse;
-import com.example.home_service_system.dto.orderDTO.OrderSaveRequest;
-import com.example.home_service_system.dto.orderDTO.OrderUpdateRequest;
+import com.example.home_service_system.dto.orderDTO.*;
 import com.example.home_service_system.entity.*;
 import com.example.home_service_system.entity.enums.OrderStatus;
 import com.example.home_service_system.entity.enums.PaymentType;
@@ -12,9 +9,14 @@ import com.example.home_service_system.exceptions.CustomApiExceptionType;
 import com.example.home_service_system.mapper.OrderMapper;
 import com.example.home_service_system.repository.OrderRepository;
 import com.example.home_service_system.service.*;
+import com.example.home_service_system.specification.OrderSpecification;
+import jakarta.persistence.criteria.Predicate;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -195,15 +197,15 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderResponse serviceStarter(Long orderId, Long expertId){
+    public OrderResponse serviceStarter(Long orderId, Long expertId) {
         expertService.findExpertByIdAndIsDeletedFalse(expertId);
         Order order = findOrderByIdAndIsDeletedFalse(orderId);
-        if (!order.getExpert().getId().equals(expertId)){
+        if (!order.getExpert().getId().equals(expertId)) {
             throw new CustomApiException("Expert with ID {"
                     + expertId + "} is not for the order!",
                     CustomApiExceptionType.UNAUTHORIZED);
         }
-        if (!order.getStatus().equals(OrderStatus.WAITING_FOR_EXPERT_TO_ARRIVE)){
+        if (!order.getStatus().equals(OrderStatus.WAITING_FOR_EXPERT_TO_ARRIVE)) {
             throw new CustomApiException("Expert with ID is not arrived yet!",
                     CustomApiExceptionType.BAD_REQUEST);
         }
@@ -216,12 +218,12 @@ public class OrderServiceImpl implements OrderService {
     public OrderResponse serviceCompleter(Long orderId, Long expertId) {
         expertService.findExpertByIdAndIsDeletedFalse(expertId);
         Order order = findOrderByIdAndIsDeletedFalse(orderId);
-        if (!order.getExpert().getId().equals(expertId)){
+        if (!order.getExpert().getId().equals(expertId)) {
             throw new CustomApiException("Expert with ID {"
                     + expertId + "} is not for the order!",
                     CustomApiExceptionType.UNAUTHORIZED);
         }
-        if (!order.getStatus().equals(OrderStatus.SERVICE_IS_STARTED)){
+        if (!order.getStatus().equals(OrderStatus.SERVICE_IS_STARTED)) {
             throw new CustomApiException("Order with ID {"
                     + orderId + "} is finished or is not started yet!",
                     CustomApiExceptionType.BAD_REQUEST);
@@ -239,7 +241,7 @@ public class OrderServiceImpl implements OrderService {
                 findCustomerByIdAndIsDeletedFalse(request.customerId());
         Expert expert = expertService.
                 findExpertByIdAndIsDeletedFalse(order.getExpert().getId());
-        if (!order.getCustomer().getId().equals(request.customerId())){
+        if (!order.getCustomer().getId().equals(request.customerId())) {
             throw new CustomApiException("Customer with ID {"
                     + request.customerId() + "} is not for the order!",
                     CustomApiExceptionType.UNAUTHORIZED);
@@ -288,5 +290,38 @@ public class OrderServiceImpl implements OrderService {
 
         orderRepository.softDeleteById(id);
         log.info("Order with id {} deleted", id);
+    }
+
+    @Override
+    public FilteredOrderResponse findAllOrders(OrderFilterDTO filter) {
+        List<Order> orders = orderRepository.findAll(buildSpecification(filter));
+        return OrderMapper.toFilteredOrderResponse(orders, filter);
+    }
+
+    @Override
+    public FilteredOrderResponse findAllOrdersPageable(OrderFilterDTO filter, Pageable pageable) {
+        Page<Order> orderPage = orderRepository.findAll(buildSpecification(filter), pageable);
+        return OrderMapper.toFilteredOrderResponse(orderPage, filter);
+    }
+
+    private Specification<Order> buildSpecification(OrderFilterDTO filter) {
+        return Specification.where(OrderSpecification.isNotDeleted())
+                .and(OrderSpecification.hasSubServiceId(filter.getSubServiceId()))
+                .and(OrderSpecification.hasCustomerId(filter.getCustomerId()))
+                .and(OrderSpecification.hasExpertId(filter.getExpertId()))
+                .and(OrderSpecification.hasMinCustomerOfferedCost(filter.getMinCost()))
+                .and(OrderSpecification.hasMaxCustomerOfferedCost(filter.getMaxCost()))
+                .and(OrderSpecification.hasCustomerDescription(filter.getDescription()))
+                .and(OrderSpecification.serviceDateBetween(
+                        filter.getServiceStartDate(),
+                        filter.getServiceEndDate()))
+                .and(OrderSpecification.hasAddress(filter.getAddress()))
+                .and(OrderSpecification.hasStatus(filter.getStatus()))
+                .and(OrderSpecification.hasPaymentType(filter.getPaymentType()))
+                .and(OrderSpecification.createdAtAfter(filter.getCreatedAfter()))
+                .and(OrderSpecification.createdAtBefore(filter.getCreatedBefore()))
+                .and(filter.getHasComment() != null ?
+                        OrderSpecification.hasCustomerComment(filter.getHasComment()) :
+                        null);
     }
 }

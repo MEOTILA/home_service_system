@@ -1,12 +1,11 @@
 package com.example.home_service_system.service;
 
-import com.example.home_service_system.dto.orderDTO.OrderPaymentRequest;
-import com.example.home_service_system.dto.orderDTO.OrderResponse;
-import com.example.home_service_system.dto.orderDTO.OrderSaveRequest;
-import com.example.home_service_system.dto.orderDTO.OrderUpdateRequest;
+import com.example.home_service_system.dto.orderDTO.*;
 import com.example.home_service_system.entity.Order;
 import com.example.home_service_system.entity.enums.OrderStatus;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -41,4 +40,8 @@ public interface OrderService {
     List<OrderResponse> findByServiceDateBetween(LocalDateTime startDate, LocalDateTime endDate);
 
     void softDeleteOrderAndExpertSuggestionsAndCommentAndRateByOrderId(Long id);
+
+    FilteredOrderResponse findAllOrders(OrderFilterDTO filter);
+
+    FilteredOrderResponse findAllOrdersPageable(OrderFilterDTO filter, Pageable pageable);
 }

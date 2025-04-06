@@ -1,14 +1,16 @@
 package com.example.home_service_system.web;
 
 
-import com.example.home_service_system.dto.orderDTO.OrderPaymentRequest;
-import com.example.home_service_system.dto.orderDTO.OrderResponse;
-import com.example.home_service_system.dto.orderDTO.OrderSaveRequest;
-import com.example.home_service_system.dto.orderDTO.OrderUpdateRequest;
+import com.example.home_service_system.dto.orderDTO.*;
+import com.example.home_service_system.entity.Order;
 import com.example.home_service_system.entity.enums.OrderStatus;
 import com.example.home_service_system.service.OrderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -95,5 +97,25 @@ public class OrderController {
             @RequestParam LocalDateTime startDate,
             @RequestParam LocalDateTime endDate) {
         return ResponseEntity.ok(orderService.findByServiceDateBetween(startDate, endDate));
+    }
+
+    @GetMapping("/getAllOrders")
+    public ResponseEntity<FilteredOrderResponse> getAllOrders(
+            @Valid OrderFilterDTO filter) {
+        return ResponseEntity.ok(orderService.findAllOrders(filter));
+    }
+
+    @GetMapping("/paginated")
+    public ResponseEntity<FilteredOrderResponse> getOrdersPaginated(
+            @Valid OrderFilterDTO filter,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "createdAt") String sortBy,
+            @RequestParam(defaultValue = "DESC") String sortDirection) {
+
+        Sort.Direction direction = Sort.Direction.fromString(sortDirection);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
+
+        return ResponseEntity.ok(orderService.findAllOrdersPageable(filter, pageable));
     }
 }
