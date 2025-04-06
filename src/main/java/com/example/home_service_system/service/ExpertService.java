@@ -32,11 +32,4 @@ public interface ExpertService {
     void softDeleteExpertAndOrdersAndSuggestionsAndCommentAndRatesById(Long id);
 
     void softDeleteById(Long id);
-
-    Page<ExpertResponse> getFilteredExperts(
-            String firstName, String lastName, String username,
-            String nationalId, String phoneNumber, String email,
-            Integer rating, UserStatus userStatus, Long balance,
-            LocalDate createdAt, LocalDate birthday,
-            Long subServiceId, int page, int size);
 }

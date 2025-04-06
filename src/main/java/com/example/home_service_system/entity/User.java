@@ -58,6 +58,12 @@ public class User extends BaseEntity<Long> {
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
+    @OneToOne(mappedBy = "user")
+    private Expert expert;
+
+    @OneToOne(mappedBy = "user")
+    private Customer customer;
+
     @Column(nullable = false)
     boolean isDeleted = false;
 }

@@ -12,27 +12,18 @@ import com.example.home_service_system.exceptions.CustomApiException;
 import com.example.home_service_system.exceptions.CustomApiExceptionType;
 import com.example.home_service_system.mapper.CustomerMapper;
 import com.example.home_service_system.repository.CustomerRepository;
-import com.example.home_service_system.repository.UserRepository;
 import com.example.home_service_system.service.CustomerService;
 import com.example.home_service_system.service.UserService;
-import com.example.home_service_system.specification.CustomerSpecification;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.mindrot.jbcrypt.BCrypt;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -181,23 +172,5 @@ public class CustomerServiceImpl implements CustomerService {
         Customer customer = findCustomerByIdAndIsDeletedFalse(id);
         userService.softDelete(customer.getUser().getId());
         log.info("Customer with id {} deleted", id);
-    }
-
-    @Override
-    public Page<CustomerResponse> getFilteredCustomers(
-            String firstName, String lastName, String username,
-            String nationalId, String phoneNumber, String email,
-            UserStatus userStatus, Long balance, LocalDate createdAt,
-            LocalDate birthday, int page, int size) {
-
-        Specification<Customer> spec = CustomerSpecification.filterCustomers(
-                firstName, lastName, username, nationalId, phoneNumber,
-                email, userStatus, balance, createdAt, birthday
-        );
-
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Customer> customerPage = customerRepository.findAll(spec, pageable);
-
-        return customerPage.map(CustomerMapper::to);
     }
 }

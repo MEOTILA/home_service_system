@@ -1,16 +1,37 @@
 package com.example.home_service_system.mapper;
 
-import com.example.home_service_system.dto.adminDTO.AdminResponse;
+import com.example.home_service_system.dto.userDTO.FilteredUserResponse;
 import com.example.home_service_system.dto.userDTO.UserResponse;
-import com.example.home_service_system.entity.Admin;
 import com.example.home_service_system.entity.User;
+import com.example.home_service_system.entity.enums.UserType;
+import org.springframework.data.domain.Page;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class UserMapper {
 
     public static UserResponse to(User user) {
-        if (user == null) {
-            return null;
+        if (user == null) return null;
+
+        // Handle Expert/Customer specific fields
+        String userStatus = null;
+        Integer expertRating = null;
+        Long balance = null;
+        byte[] expertImage = null;
+
+        if (user.getExpert() != null) {
+            userStatus = user.getExpert().getUserStatus().name();
+            expertRating = user.getExpert().getRating();
+            balance = user.getExpert().getBalance();
+            expertImage = user.getExpert().getExpertImage();
         }
+        else if (user.getCustomer() != null) {
+            userStatus = user.getCustomer().getUserStatus().name();
+            balance = user.getCustomer().getBalance();
+        }
+
         return new UserResponse(
                 user.getId(),
                 user.getFirstName(),
@@ -20,8 +41,55 @@ public class UserMapper {
                 user.getPhoneNumber(),
                 user.getBirthday(),
                 user.getEmail(),
+                user.getUserType(),
+                userStatus,
+                expertRating,
+                balance,
+                expertImage,  // Added expert image
                 user.getCreatedAt(),
-                user.getUpdatedAt()
+                user.getUpdatedAt(),
+                user.isDeleted()  // Added deletion status if needed
         );
+    }
+
+    public static FilteredUserResponse toFilteredResponse(
+            Page<User> userPage,
+            String sortBy,
+            String sortDirection,
+            LocalDateTime createdAtFrom,
+            LocalDateTime createdAtTo,
+            Long minBalance,
+            Long maxBalance,
+            UserType userType,
+            String expertStatus,
+            String customerStatus) {
+
+        List<UserResponse> content = userPage.getContent()
+                .stream()
+                .map(UserMapper::to)
+                .collect(Collectors.toList());
+
+        return FilteredUserResponse.from(
+                new org.springframework.data.domain.PageImpl<>(
+                        content,
+                        userPage.getPageable(),
+                        userPage.getTotalElements()
+                ),
+                sortBy,
+                sortDirection,
+                createdAtFrom,
+                createdAtTo,
+                minBalance,
+                maxBalance,
+                userType,
+                expertStatus,
+                customerStatus
+        );
+    }
+
+    public static List<UserResponse> toResponseList(List<User> users) {
+        return users.stream()
+                .map(UserMapper::to)
+                .collect(Collectors.toList());
     }
 }

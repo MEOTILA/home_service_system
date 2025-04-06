@@ -81,27 +81,4 @@ public class ExpertController {
         expertService.softDeleteExpertAndOrdersAndSuggestionsAndCommentAndRatesById(id);
         return ResponseEntity.noContent().build();
     }
-
-    @GetMapping("/filter")
-    public Page<ExpertResponse> filterExperts(
-            @RequestParam(required = false) String username,
-            @RequestParam(required = false) String firstName,
-            @RequestParam(required = false) String lastName,
-            @RequestParam(required = false) String nationalId,
-            @RequestParam(required = false) String phoneNumber,
-            @RequestParam(required = false) String email,
-            @RequestParam(required = false) Integer rating,
-            @RequestParam(required = false) UserStatus userStatus,
-            @RequestParam(required = false) Long balance,
-            @RequestParam(required = false) LocalDate createdAt,
-            @RequestParam(required = false) LocalDate birthday,
-            @RequestParam(required = false) Long subServiceId,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-
-        return expertService.getFilteredExperts(
-                firstName, lastName, username, nationalId, phoneNumber,
-                email, rating, userStatus, balance, createdAt, birthday, subServiceId,
-                page, size);
-    }
 }

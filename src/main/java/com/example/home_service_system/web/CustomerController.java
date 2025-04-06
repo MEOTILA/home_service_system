@@ -75,24 +75,4 @@ public class CustomerController {
         customerService.softDeleteCustomerAndOrdersAndSuggestionsAndCommentAndRateById(id);
         return ResponseEntity.noContent().build();
     }
-
-    @GetMapping("/filter")
-    public Page<CustomerResponse> filterCustomers(
-            @RequestParam(required = false) String username,
-            @RequestParam(required = false) String firstName,
-            @RequestParam(required = false) String lastName,
-            @RequestParam(required = false) String nationalId,
-            @RequestParam(required = false) String phoneNumber,
-            @RequestParam(required = false) String email,
-            @RequestParam(required = false) UserStatus userStatus,
-            @RequestParam(required = false) Long balance,
-            @RequestParam(required = false) LocalDate createdAt,
-            @RequestParam(required = false) LocalDate birthday,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-
-        return customerService.getFilteredCustomers(
-                username, firstName, lastName, nationalId, phoneNumber,
-                email, userStatus, balance, createdAt, birthday, page, size);
-    }
 }

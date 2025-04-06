@@ -1,5 +1,7 @@
 package com.example.home_service_system.service.impl;
 
+import com.example.home_service_system.dto.userDTO.FilteredUserResponse;
+import com.example.home_service_system.dto.userDTO.UserFilterDTO;
 import com.example.home_service_system.dto.userDTO.UserResponse;
 import com.example.home_service_system.entity.User;
 import com.example.home_service_system.exceptions.CustomApiException;
@@ -7,9 +9,15 @@ import com.example.home_service_system.exceptions.CustomApiExceptionType;
 import com.example.home_service_system.mapper.UserMapper;
 import com.example.home_service_system.repository.UserRepository;
 import com.example.home_service_system.service.UserService;
+import com.example.home_service_system.specification.UserSpecification;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -198,7 +206,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean nationalIdExists(String nationalId) {
-        if (userRepository.existsByUsername(nationalId)) {
+        if (userRepository.existsByNationalId(nationalId)) {
             throw new CustomApiException("User with national ID {"
                     + nationalId + "} already exists!",
                     CustomApiExceptionType.UNPROCESSABLE_ENTITY);
@@ -217,5 +225,87 @@ public class UserServiceImpl implements UserService {
         String hashedNewPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(hashedNewPassword);
         userRepository.save(updatingUser);
+    }
+
+    @Override
+    public FilteredUserResponse findAllWithFilters(UserFilterDTO filter) {
+        Specification<User> spec = buildSpecification(filter);
+
+        Pageable pageable = PageRequest.of(
+                filter.getPage(),
+                filter.getSize(),
+                Sort.by(Sort.Direction.fromString(filter.getSortDirection()),
+                        filter.getSortBy()
+                ));
+
+        Page<User> userPage = userRepository.findAll(spec, pageable);
+        return UserMapper.toFilteredResponse(
+                userPage,
+                filter.getSortBy(),
+                filter.getSortDirection(),
+                filter.getCreatedAtFrom(),
+                filter.getCreatedAtTo(),
+                filter.getMinBalance(),
+                filter.getMaxBalance(),
+                filter.getUserType(),
+                filter.getExpertStatus(),
+                filter.getCustomerStatus()
+        );
+    }
+
+    private Specification<User> buildSpecification(UserFilterDTO filter) {
+        Specification<User> spec = Specification.where(UserSpecification.isNotDeleted());
+
+        if (filter != null) {
+            if (StringUtils.hasText(filter.getFirstName())) {
+                spec = spec.and(UserSpecification.hasFirstName(filter.getFirstName()));
+            }
+            if (StringUtils.hasText(filter.getLastName())) {
+                spec = spec.and(UserSpecification.hasLastName(filter.getLastName()));
+            }
+            if (StringUtils.hasText(filter.getUsername())) {
+                spec = spec.and(UserSpecification.hasUsername(filter.getUsername()));
+            }
+            if (StringUtils.hasText(filter.getNationalId())) {
+                spec = spec.and(UserSpecification.hasNationalId(filter.getNationalId()));
+            }
+            if (StringUtils.hasText(filter.getPhoneNumber())) {
+                spec = spec.and(UserSpecification.hasPhoneNumber(filter.getPhoneNumber()));
+            }
+            if (filter.getBirthday() != null) {
+                spec = spec.and(UserSpecification.hasBirthday(filter.getBirthday()));
+            }
+            if (StringUtils.hasText(filter.getEmail())) {
+                spec = spec.and(UserSpecification.hasEmail(filter.getEmail()));
+            }
+            if (filter.getUserType() != null) {
+                spec = spec.and(UserSpecification.hasUserType(filter.getUserType()));
+            }
+            if (filter.getMinExpertRating() != null) {
+                spec = spec.and(UserSpecification.hasExpertRating(filter.getMinExpertRating()));
+            }
+            if (StringUtils.hasText(filter.getExpertStatus())) {
+                spec = spec.and(UserSpecification.hasExpertStatus(filter.getExpertStatus()));
+            }
+            if (StringUtils.hasText(filter.getCustomerStatus())) {
+                spec = spec.and(UserSpecification.hasCustomerStatus(filter.getCustomerStatus()));
+            }
+            if (filter.getCreatedAtFrom() != null || filter.getCreatedAtTo() != null) {
+                spec = spec.and(UserSpecification.createdAtBetween(
+                        filter.getCreatedAtFrom(),
+                        filter.getCreatedAtTo()
+                ));
+            }
+
+            if (filter.getMinBalance() != null) {
+                spec = spec.and(UserSpecification.hasMinBalance(filter.getMinBalance()));
+            }
+
+            if (filter.getMaxBalance() != null) {
+                spec = spec.and(UserSpecification.hasMaxBalance(filter.getMaxBalance()));
+            }
+        }
+
+        return spec;
     }
 }

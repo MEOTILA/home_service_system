@@ -30,10 +30,4 @@ public interface CustomerService {
     void softDeleteCustomerAndOrdersAndSuggestionsAndCommentAndRateById(Long id);
 
     void softDeleteById(Long id);
-
-    Page<CustomerResponse> getFilteredCustomers(
-            String firstName, String lastName, String username,
-            String nationalId, String phoneNumber, String email,
-            UserStatus userStatus, Long balance, LocalDate createdAt,
-            LocalDate birthday, int page, int size);
 }

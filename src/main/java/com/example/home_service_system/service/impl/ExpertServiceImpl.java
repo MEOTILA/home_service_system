@@ -13,21 +13,14 @@ import com.example.home_service_system.exceptions.CustomApiException;
 import com.example.home_service_system.exceptions.CustomApiExceptionType;
 import com.example.home_service_system.mapper.ExpertMapper;
 import com.example.home_service_system.repository.ExpertRepository;
-import com.example.home_service_system.repository.UserRepository;
 import com.example.home_service_system.service.ExpertService;
 import com.example.home_service_system.service.SubServiceService;
 import com.example.home_service_system.service.UserService;
-import com.example.home_service_system.specification.ExpertSpecification;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,9 +28,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -246,24 +237,5 @@ public class ExpertServiceImpl implements ExpertService {
         Expert expert = findExpertByIdAndIsDeletedFalse(id);
         userService.softDelete(expert.getUser().getId());
         log.info("Expert with id {} deleted", id);
-    }
-
-    @Override
-    public Page<ExpertResponse> getFilteredExperts(
-            String firstName, String lastName, String username,
-            String nationalId, String phoneNumber, String email,
-            Integer rating, UserStatus userStatus, Long balance,
-            LocalDate createdAt, LocalDate birthday,
-            Long subServiceId, int page, int size) {
-
-        Specification<Expert> spec = ExpertSpecification.filterExperts(
-                firstName, lastName, username, nationalId, phoneNumber,
-                email, rating, userStatus, balance, createdAt,
-                birthday, subServiceId);
-
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Expert> customerPage = expertRepository.findAll(spec, pageable);
-
-        return customerPage.map(ExpertMapper::to);
     }
 }
