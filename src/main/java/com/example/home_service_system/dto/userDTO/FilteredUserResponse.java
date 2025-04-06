@@ -23,31 +23,4 @@ public record FilteredUserResponse(
         String expertStatus,
         String customerStatus
 ) {
-    public static FilteredUserResponse from(Page<UserResponse> page,
-                                            String sortBy,
-                                            String sortDirection,
-                                            LocalDateTime createdAtFrom,
-                                            LocalDateTime createdAtTo,
-                                            Long minBalance,
-                                            Long maxBalance,
-                                            UserType userType,
-                                            String expertStatus,
-                                            String customerStatus) {
-        return new FilteredUserResponse(
-                page.getContent(),
-                page.getNumber(),
-                page.getSize(),
-                page.getTotalElements(),
-                page.getTotalPages(),
-                sortBy,
-                sortDirection,
-                createdAtFrom,
-                createdAtTo,
-                minBalance,
-                maxBalance,
-                userType,
-                expertStatus,
-                customerStatus
-        );
-    }
 }

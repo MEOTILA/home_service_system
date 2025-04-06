@@ -5,6 +5,7 @@ import com.example.home_service_system.dto.userDTO.UserResponse;
 import com.example.home_service_system.entity.User;
 import com.example.home_service_system.entity.enums.UserType;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,8 +27,7 @@ public class UserMapper {
             expertRating = user.getExpert().getRating();
             balance = user.getExpert().getBalance();
             expertImage = user.getExpert().getExpertImage();
-        }
-        else if (user.getCustomer() != null) {
+        } else if (user.getCustomer() != null) {
             userStatus = user.getCustomer().getUserStatus().name();
             balance = user.getCustomer().getBalance();
         }
@@ -45,10 +45,10 @@ public class UserMapper {
                 userStatus,
                 expertRating,
                 balance,
-                expertImage,  // Added expert image
+                expertImage,
                 user.getCreatedAt(),
                 user.getUpdatedAt(),
-                user.isDeleted()  // Added deletion status if needed
+                user.isDeleted()
         );
     }
 
@@ -64,17 +64,21 @@ public class UserMapper {
             String expertStatus,
             String customerStatus) {
 
-        List<UserResponse> content = userPage.getContent()
-                .stream()
-                .map(UserMapper::to)
-                .collect(Collectors.toList());
+        // Convert Page<User> to Page<UserResponse>
+        Page<UserResponse> responsePage = new PageImpl<>(
+                userPage.getContent().stream()
+                        .map(UserMapper::to)
+                        .collect(Collectors.toList()),
+                userPage.getPageable(),
+                userPage.getTotalElements()
+        );
 
-        return FilteredUserResponse.from(
-                new org.springframework.data.domain.PageImpl<>(
-                        content,
-                        userPage.getPageable(),
-                        userPage.getTotalElements()
-                ),
+        return new FilteredUserResponse(
+                responsePage.getContent(),
+                responsePage.getNumber(),
+                responsePage.getSize(),
+                responsePage.getTotalElements(),
+                responsePage.getTotalPages(),
                 sortBy,
                 sortDirection,
                 createdAtFrom,
@@ -86,6 +90,7 @@ public class UserMapper {
                 customerStatus
         );
     }
+
 
     public static List<UserResponse> toResponseList(List<User> users) {
         return users.stream()
