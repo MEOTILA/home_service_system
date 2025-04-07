@@ -1,0 +1,26 @@
+<html>
+<head>
+    <title>Payment Page</title>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</head>
+<body>
+<form id="paymentForm" action="/payment" method="POST">
+    <input type="hidden" name="orderId" value="12345">
+    <input type="hidden" name="customerId" value="67890">
+    <input type="text" name="cardNumber" placeholder="Card Number">
+    <div class="g-recaptcha" data-sitekey="6LepKQ0rAAAAAOI2bNUALeEgwXLS10xWDUeyDmhm"></div>
+    <button type="submit">Pay</button>
+</form>
+</body>
+</html>
+<!--
+document.getElementById('paymentForm').addEventListener('submit', function(event) {
+event.preventDefault();
+const response = grecaptcha.getResponse();
+if (!response) {
+alert('Please verify that you are not a robot.');
+return;
+}
+// If CAPTCHA is verified, submit the form
+this.submit();
+});-->

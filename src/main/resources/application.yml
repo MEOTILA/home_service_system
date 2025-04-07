@@ -23,3 +23,7 @@ spring:
 
 server:
   port: 8081
+
+google:
+  recaptcha:
+    secret-key: "6LepKQ0rAAAAAAFrDRjzJ9qkKP70hhNgOzgoi_1Z"

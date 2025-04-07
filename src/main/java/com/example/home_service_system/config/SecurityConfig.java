@@ -35,6 +35,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/",
+                                "/reCaptchaTest.html",
                                 "/login.html",
                                 "/register/**",
                                 "/css/**",

@@ -1,5 +1,6 @@
 package com.example.home_service_system.dto.orderDTO;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
@@ -11,6 +12,9 @@ public record OrderPaymentRequest(
         Long customerId,
 
         @Size(min = 16, max = 16, message = "Card number must be 16 characters!")
-        String cardNumber
+        String cardNumber,
+
+        @NotBlank(message = "CAPTCHA token is required for credit card payments!")
+        String captchaToken
 ) {
 }

@@ -1,5 +1,6 @@
 package com.example.home_service_system.service.impl;
 
+import com.example.home_service_system.config.CaptchaService;
 import com.example.home_service_system.dto.orderDTO.*;
 import com.example.home_service_system.entity.*;
 import com.example.home_service_system.entity.enums.OrderStatus;
@@ -38,6 +39,7 @@ public class OrderServiceImpl implements OrderService {
     private final ExpertService expertService;
     private final CustomerService customerService;
     private final SubServiceService subServiceService;
+    private final CaptchaService captchaService;
 
     @Override
     public OrderResponse save(@Valid OrderSaveRequest request) {
@@ -237,21 +239,15 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderResponse payment(OrderPaymentRequest request) {
         Order order = findOrderByIdAndIsDeletedFalse(request.id());
-        Customer customer = customerService.
-                findCustomerByIdAndIsDeletedFalse(request.customerId());
-        Expert expert = expertService.
-                findExpertByIdAndIsDeletedFalse(order.getExpert().getId());
+        Customer customer = customerService.findCustomerByIdAndIsDeletedFalse(request.customerId());
+        Expert expert = expertService.findExpertByIdAndIsDeletedFalse(order.getExpert().getId());
         if (!order.getCustomer().getId().equals(request.customerId())) {
-            throw new CustomApiException("Customer with ID {"
-                    + request.customerId() + "} is not for the order!",
-                    CustomApiExceptionType.UNAUTHORIZED);
+            throw new CustomApiException("Customer with ID {" + request.customerId() + "} is not for the order!", CustomApiExceptionType.UNAUTHORIZED);
         }
         Long orderCost = order.getCustomerOfferedCost();
         Long seventyPercent = (long) (orderCost * 0.7);
         if (!order.getStatus().equals(OrderStatus.SERVICE_IS_DONE)) {
-            throw new CustomApiException("Order with ID {"
-                    + order.getId() + "} is paid or is not finished yet!",
-                    CustomApiExceptionType.BAD_REQUEST);
+            throw new CustomApiException("Order with ID {" + order.getId() + "} is paid or is not finished yet!", CustomApiExceptionType.BAD_REQUEST);
         }
         if (customer.getBalance() >= order.getCustomerOfferedCost()) {
             order.setPaymentType(PaymentType.BY_BALANCE);
@@ -262,6 +258,13 @@ public class OrderServiceImpl implements OrderService {
             log.info("Payment by customer balance is successful!");
             return OrderMapper.to(order);
         } else {
+            if (request.captchaToken() == null || request.captchaToken().trim().isEmpty()) {
+                throw new CustomApiException("CAPTCHA token is required for credit card payments!",
+                        CustomApiExceptionType.BAD_REQUEST);
+            }
+
+            captchaService.verify(request.captchaToken());
+
             order.setPaymentType(PaymentType.BY_CREDIT_CARD);
             expert.setBalance(seventyPercent);
             order.setStatus(OrderStatus.SERVICE_IS_PAID);
