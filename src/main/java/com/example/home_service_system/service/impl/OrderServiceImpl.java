@@ -241,23 +241,24 @@ public class OrderServiceImpl implements OrderService {
         Order order = findOrderByIdAndIsDeletedFalse(request.id());
         Customer customer = customerService.findCustomerByIdAndIsDeletedFalse(request.customerId());
         Expert expert = expertService.findExpertByIdAndIsDeletedFalse(order.getExpert().getId());
+
         if (!order.getCustomer().getId().equals(request.customerId())) {
-            throw new CustomApiException("Customer with ID {" + request.customerId() + "} is not for the order!", CustomApiExceptionType.UNAUTHORIZED);
+            throw new CustomApiException("Customer with ID {" + request.customerId()
+                    + "} is not for the order!", CustomApiExceptionType.UNAUTHORIZED);
         }
-        Long orderCost = order.getCustomerOfferedCost();
-        Long seventyPercent = (long) (orderCost * 0.7);
+
         if (!order.getStatus().equals(OrderStatus.SERVICE_IS_DONE)) {
-            throw new CustomApiException("Order with ID {" + order.getId() + "} is paid or is not finished yet!", CustomApiExceptionType.BAD_REQUEST);
+            throw new CustomApiException("Order with ID {" + order.getId()
+                    + "} is paid or is not finished yet!", CustomApiExceptionType.BAD_REQUEST);
         }
+
         if (customer.getBalance() >= order.getCustomerOfferedCost()) {
-            order.setPaymentType(PaymentType.BY_BALANCE);
-            customer.setBalance(customer.getBalance() - orderCost);
-            expert.setBalance(seventyPercent);
-            order.setStatus(OrderStatus.SERVICE_IS_PAID);
-            orderRepository.save(order);
-            log.info("Payment by customer balance is successful!");
-            return OrderMapper.to(order);
+            return payByBalance(order, customer, expert);
         } else {
+            if (request.cardNumber() == null || request.cardNumber().trim().isEmpty()) {
+                throw new CustomApiException("Card number is required for credit card payments!",
+                        CustomApiExceptionType.BAD_REQUEST);
+            }
             if (request.captchaToken() == null || request.captchaToken().trim().isEmpty()) {
                 throw new CustomApiException("CAPTCHA token is required for credit card payments!",
                         CustomApiExceptionType.BAD_REQUEST);
@@ -265,13 +266,37 @@ public class OrderServiceImpl implements OrderService {
 
             captchaService.verify(request.captchaToken());
 
-            order.setPaymentType(PaymentType.BY_CREDIT_CARD);
-            expert.setBalance(seventyPercent);
-            order.setStatus(OrderStatus.SERVICE_IS_PAID);
-            orderRepository.save(order);
-            log.info("Payment by credit card is successful!");
-            return OrderMapper.to(order);
+            return payByCreditCard(order, customer, expert);
         }
+    }
+
+    private OrderResponse payByBalance(Order order, Customer customer, Expert expert) {
+        Long orderCost = order.getCustomerOfferedCost();
+        Long seventyPercent = (long) (orderCost * 0.7);
+
+        order.setPaymentType(PaymentType.BY_BALANCE);
+        customer.setBalance(customer.getBalance() - orderCost);
+        expert.setBalance(expert.getBalance() + seventyPercent);
+        order.setStatus(OrderStatus.SERVICE_IS_PAID);
+
+        orderRepository.save(order);
+
+        log.info("Payment by customer balance is successful!");
+        return OrderMapper.to(order);
+    }
+
+    private OrderResponse payByCreditCard(Order order, Customer customer, Expert expert) {
+        Long orderCost = order.getCustomerOfferedCost();
+        Long seventyPercent = (long) (orderCost * 0.7);
+
+        order.setPaymentType(PaymentType.BY_CREDIT_CARD);
+        expert.setBalance(expert.getBalance() + seventyPercent);
+        order.setStatus(OrderStatus.SERVICE_IS_PAID);
+
+        orderRepository.save(order);
+
+        log.info("Payment by credit card is successful!");
+        return OrderMapper.to(order);
     }
 
     @Override

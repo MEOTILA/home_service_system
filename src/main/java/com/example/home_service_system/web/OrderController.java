@@ -51,10 +51,17 @@ public class OrderController {
         return ResponseEntity.ok(orderService.serviceCompleter(orderId, expertId ));
     }
 
-    @PutMapping("/payment")
+    /*@PutMapping("/payment")
     public ResponseEntity<OrderResponse> payment(@Valid @RequestBody OrderPaymentRequest request) {
         return ResponseEntity.ok(orderService.payment(request));
+    }*/
+
+    @PutMapping("/payment")
+    public ResponseEntity<OrderResponse> payment(@Valid @RequestBody OrderPaymentRequest request) {
+        OrderResponse response = orderService.payment(request);
+        return ResponseEntity.ok(response);
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> softDelete(@PathVariable Long id) {
