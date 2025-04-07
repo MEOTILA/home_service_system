@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Page</title>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</head>
+<body>
+<h1>Payment Page</h1>
+<form id="payment-form">
+    <input type="hidden" id="order-id" value="12345">
+    <input type="hidden" id="customer-id" value="67890">
+    <input type="text" id="card-number" placeholder="Card Number" required><br>
+    <div class="g-recaptcha" data-sitekey="6LepKQ0rAAAAAOI2bNUALeEgwXLS10xWDUeyDmhm"></div>
+    <button type="submit">Pay</button>
+</form>
+
+<!--
+<script src="payment.js"></script>
+-->
+</body>
+</html>

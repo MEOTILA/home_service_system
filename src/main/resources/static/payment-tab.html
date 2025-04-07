@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Tab</title>
+    <!-- Load the reCAPTCHA script with an onload callback -->
+    <script src="https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit" async defer></script>
+    <script src="payment-tab.js" defer></script>
+</head>
+<body>
+<h3>Payment for Order ID: <span id="order-id-display"></span></h3>
+<p>Order Cost: <span id="order-cost-display"></span></p>
+<form id="payment-form">
+    <input type="hidden" id="order-id">
+    <input type="number" id="customer-id" readonly><br>
+    <input type="text" id="card-number" placeholder="Card Number" required><br>
+    <input type="password" id="cvv2" placeholder="CVV2 (3 digits)" required><br>
+    <input type="number" id="expiration-month" placeholder="Expiration Month (MM)" required><br>
+    <input type="number" id="expiration-year" placeholder="Expiration Year (YY)" required><br>
+    <input type="password" id="pin" placeholder="PIN (4 digits)" required><br>
+    <div id="recaptcha-container"></div> <!-- Container for reCAPTCHA -->
+    <button type="submit">Pay</button>
+</form>
+
+<script>
+    // This function will be called once the reCAPTCHA script is fully loaded
+    function onRecaptchaLoad() {
+        const orderDetails = localStorage.getItem("orderDetails");
+        if (orderDetails) {
+            const order = JSON.parse(orderDetails);
+            initPaymentTab(order); // Initialize the payment tab with order details
+            localStorage.removeItem("orderDetails"); // Clear the stored data
+        }
+    }
+</script>
+</body>
+</html>

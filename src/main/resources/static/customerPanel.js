@@ -511,3 +511,176 @@ function loadOrderHistory() {
         })
         .catch(error => alert("Error: " + error.message));
 }
+
+// Function to load all customer orders
+function loadViewAllCustomerOrders() {
+    const customerId = prompt("Enter your Customer ID:");
+    if (!customerId) return;
+
+    // Fetch all orders for the customer
+    fetch(`http://localhost:8081/v1/orders/customer/${customerId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Failed to fetch orders.");
+            }
+            return response.json();
+        })
+        .then(orders => {
+            displayOrders(orders);
+        })
+        .catch(error => {
+            alert("Error: " + error.message);
+        });
+}
+
+// Function to display all orders
+function displayOrders(orders) {
+    let ordersHTML = "<h3>Your Orders</h3><ul>";
+
+    orders.forEach(order => {
+        ordersHTML += `
+            <li>
+                <strong>Order ID:</strong> ${order.id}<br>
+                <strong>Status:</strong> ${order.status}<br>
+                <strong>Offered Cost:</strong> ${order.customerOfferedCost} Rial<br>
+                <strong>Description:</strong> ${order.customerDescription}<br>
+                <strong>Service Date:</strong> ${formatDateTime(order.serviceDate)}<br>
+                ${order.status === "SERVICE_IS_DONE" ? `<button class="pay-button" data-order-id="${order.id}">Pay</button>` : ""}
+                <hr>
+            </li>
+        `;
+    });
+
+    ordersHTML += "</ul>";
+    document.getElementById("form-container").innerHTML = ordersHTML;
+
+    // Add event listeners to the pay buttons
+    document.querySelectorAll(".pay-button").forEach(button => {
+        button.addEventListener("click", handlePayment);
+    });
+}
+
+
+/*let recaptchaLoaded = false; // Global flag to track if reCAPTCHA is loaded
+
+// Function to load the reCAPTCHA script
+function loadRecaptchaScript(callback) {
+    if (recaptchaLoaded) {
+        callback(); // If already loaded, call the callback immediately
+        return;
+    }
+
+    const script = document.createElement("script");
+    script.src = "https://www.google.com/recaptcha/api.js?render=explicit";
+    script.async = true;
+    script.defer = true;
+    script.onload = () => {
+        recaptchaLoaded = true;
+        callback(); // Call the callback once the script is loaded
+    };
+    document.head.appendChild(script);
+}*/
+
+// Function to handle payment for an order
+function handlePayment(event) {
+    const orderId = event.target.getAttribute("data-order-id");
+    if (!orderId) return;
+
+    // Fetch the order details
+    fetch(`http://localhost:8081/v1/orders/${orderId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Failed to fetch order details.");
+            }
+            return response.json();
+        })
+        .then(order => {
+            // Check if the order object is defined
+            if (!order) {
+                throw new Error("Order details are missing.");
+            }
+
+            // Fetch the customer details
+            return fetch(`http://localhost:8081/v1/customers/${order.customerId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Failed to fetch customer details.");
+                    }
+                    return response.json();
+                })
+                .then(customer => {
+                    // Merge customer details with the order
+                    order.customer = customer;
+                    return order;
+                });
+        })
+        .then(order => {
+            // Check if the customer has enough balance
+            if (order.customer.balance >= order.customerOfferedCost) {
+                // Automatically pay the order using the customer's balance
+                payByBalance(order);
+            } else {
+                // Redirect to the payment tab for credit card payment
+                alert("You do not have enough balance. Redirecting to payment tab...");
+                loadPaymentTab(order);
+            }
+        })
+        .catch(error => {
+            alert("Error: " + error.message);
+        });
+}
+
+// Function to automatically pay the order using the customer's balance
+function payByBalance(order) {
+    const paymentRequest = {
+        id: order.id,
+        customerId: order.customer.id,
+        captchaToken: null, // Not required for balance payment
+        cardNumber: null, // Not required for balance payment
+    };
+
+    // Make the payment request
+    fetch("http://localhost:8081/v1/orders/payment", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(paymentRequest),
+    })
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(message => {
+                    throw new Error(message || "Payment failed.");
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            alert(`Payment successful! Order ID: ${data.id}, Status: ${data.status}`);
+            // Refresh the orders list
+            loadViewAllCustomerOrders();
+        })
+        .catch(error => {
+            alert("Error: " + error.message);
+        });
+}
+
+function loadPaymentTab(order) {
+    // Open the static payment tab HTML file
+    window.open("payment-tab.html", "_blank");
+
+    // Pass the order details to the static HTML file
+    const orderDetails = JSON.stringify(order);
+    localStorage.setItem("orderDetails", orderDetails);
+}
+
+// When the static HTML file loads, retrieve the order details
+window.addEventListener("DOMContentLoaded", function () {
+    const orderDetails = localStorage.getItem("orderDetails");
+    if (orderDetails) {
+        const order = JSON.parse(orderDetails);
+        initPaymentTab(order); // Call the function to initialize the payment tab
+        localStorage.removeItem("orderDetails"); // Clear the stored data
+    }
+});
+
+// Add event listener for the "View My Orders" link
+document.getElementById("viewAllCustomerOrders").addEventListener("click", loadViewAllCustomerOrders);
