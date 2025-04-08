@@ -4,35 +4,87 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Payment Tab</title>
-    <!-- Load the reCAPTCHA script with an onload callback -->
-    <script src="https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit" async defer></script>
+    <!-- Load the reCAPTCHA script -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <script src="payment-tab.js" defer></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        #payment-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        input, button {
+            padding: 10px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #recaptcha-container {
+            margin: 15px 0;
+        }
+        .timer {
+            text-align: right;
+            font-weight: bold;
+            color: #d9534f;
+        }
+    </style>
 </head>
 <body>
+<div class="timer" id="time-remaining">Time remaining: 10:00</div>
 <h3>Payment for Order ID: <span id="order-id-display"></span></h3>
 <p>Order Cost: <span id="order-cost-display"></span></p>
+
 <form id="payment-form">
     <input type="hidden" id="order-id">
-    <input type="number" id="customer-id" readonly><br>
-    <input type="text" id="card-number" placeholder="Card Number" required><br>
-    <input type="password" id="cvv2" placeholder="CVV2 (3 digits)" required><br>
-    <input type="number" id="expiration-month" placeholder="Expiration Month (MM)" required><br>
-    <input type="number" id="expiration-year" placeholder="Expiration Year (YY)" required><br>
-    <input type="password" id="pin" placeholder="PIN (4 digits)" required><br>
-    <div id="recaptcha-container"></div> <!-- Container for reCAPTCHA -->
-    <button type="submit">Pay</button>
+    <input type="hidden" id="customer-id">
+
+    <input type="text" id="card-number" placeholder="Card Number (16 digits)" required>
+    <input type="password" id="cvv2" placeholder="CVV2 (3 digits)" required>
+    <input type="text" id="expiration-month" placeholder="Expiration Month (MM)" required>
+    <input type="text" id="expiration-year" placeholder="Expiration Year (YY)" required>
+    <input type="password" id="pin" placeholder="PIN (4 digits)" required>
+
+    <div id="recaptcha-container"></div>
+    <button type="submit">Pay Now</button>
 </form>
 
 <script>
-    // This function will be called once the reCAPTCHA script is fully loaded
-    function onRecaptchaLoad() {
-        const orderDetails = localStorage.getItem("orderDetails");
-        if (orderDetails) {
-            const order = JSON.parse(orderDetails);
-            initPaymentTab(order); // Initialize the payment tab with order details
-            localStorage.removeItem("orderDetails"); // Clear the stored data
+    // Update the countdown timer every second
+    function updateTimer() {
+        const startTime = localStorage.getItem('paymentStartTime');
+        if (startTime) {
+            const elapsed = new Date().getTime() - parseInt(startTime);
+            const remaining = Math.max(0, 600000 - elapsed); // 10 minutes in ms
+
+            const minutes = Math.floor(remaining / 60000);
+            const seconds = Math.floor((remaining % 60000) / 1000);
+
+            document.getElementById('time-remaining').textContent =
+                `Time remaining: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+            if (remaining <= 0) {
+                handlePaymentTimeout();
+            }
         }
     }
+
+    // Start the timer when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        setInterval(updateTimer, 1000);
+    });
 </script>
 </body>
 </html>
