@@ -150,4 +150,44 @@ public class UserSpecification {
             );
         };
     }
+
+    public static Specification<User> hasMinOrderCount(Long minOrderCount) {
+        return (root, query, criteriaBuilder) -> {
+            if (minOrderCount == null) return null;
+            query.distinct(true);
+
+            // Use criteriaBuilder.literal() to convert Long to Expression<Integer>
+            return criteriaBuilder.or(
+                    criteriaBuilder.greaterThanOrEqualTo(
+                            criteriaBuilder.size(root.join("expert", JoinType.LEFT).get("orderList")),
+                            criteriaBuilder.literal(minOrderCount.intValue()) // Convert Long to Integer
+                    ),
+                    criteriaBuilder.greaterThanOrEqualTo(
+                            criteriaBuilder.size(root.join("customer", JoinType.LEFT).get("orderList")),
+                            criteriaBuilder.literal(minOrderCount.intValue()) // Convert Long to Integer
+                    )
+            );
+        };
+    }
+
+    public static Specification<User> hasMaxOrderCount(Long maxOrderCount) {
+        return (root, query, criteriaBuilder) -> {
+            if (maxOrderCount == null) return null;
+            query.distinct(true);
+
+            // Use criteriaBuilder.literal() to convert Long to Expression<Integer>
+            return criteriaBuilder.or(
+                    criteriaBuilder.lessThanOrEqualTo(
+                            criteriaBuilder.size(root.join("expert", JoinType.LEFT).get("orderList")),
+                            criteriaBuilder.literal(maxOrderCount.intValue()) // Convert Long to Integer
+                    ),
+                    criteriaBuilder.lessThanOrEqualTo(
+                            criteriaBuilder.size(root.join("customer", JoinType.LEFT).get("orderList")),
+                            criteriaBuilder.literal(maxOrderCount.intValue()) // Convert Long to Integer
+                    )
+            );
+        };
+    }
+
+
 }

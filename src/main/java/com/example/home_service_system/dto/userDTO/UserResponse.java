@@ -21,6 +21,7 @@ public record UserResponse(
         byte[] image,
         LocalDateTime createdAt,
         LocalDateTime updatedAt,
+        Long orderCount,
         boolean isDeleted
 ) {
     /*public String getImageBase64() {

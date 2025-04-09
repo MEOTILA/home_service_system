@@ -326,6 +326,13 @@ public class UserServiceImpl implements UserService {
             if (filter.getMaxBalance() != null) {
                 spec = spec.and(UserSpecification.hasMaxBalance(filter.getMaxBalance()));
             }
+            if (filter.getMinOrderCount() != null) {
+                spec = spec.and(UserSpecification.hasMinOrderCount(filter.getMinOrderCount()));
+            }
+
+            if (filter.getMaxOrderCount() != null) {
+                spec = spec.and(UserSpecification.hasMaxOrderCount(filter.getMaxOrderCount()));
+            }
         }
 
         return spec;

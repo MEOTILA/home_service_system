@@ -104,6 +104,18 @@ document.getElementById('filterUsers').addEventListener('click', function() {
             </div>
         </div>
         
+        <!-- Order Count Range -->
+        <div class="form-row">
+            <div class="form-group">
+                <label for="minOrderCount">Min Order Count:</label>
+                <input type="number" id="minOrderCount" name="minOrderCount" min="0">
+            </div>
+            <div class="form-group">
+                <label for="maxOrderCount">Max Order Count:</label>
+                <input type="number" id="maxOrderCount" name="maxOrderCount" min="0">
+            </div>
+        </div>
+        
         <!-- Expert Specific -->
         <div id="expertFields" class="form-row" style="display: none;">
             <div class="form-group">
@@ -155,6 +167,7 @@ document.getElementById('filterUsers').addEventListener('click', function() {
                     <option value="lastName">Last Name</option>
                     <option value="createdAt">Registration Date</option>
                     <option value="balance">Balance</option>
+                    <option value="orderCount">Order Count</option>
                 </select>
             </div>
             <div class="form-group">
@@ -196,7 +209,7 @@ function filterUsers() {
     const simpleFields = [
         'firstName', 'lastName', 'username', 'nationalId',
         'phoneNumber', 'email', 'userType', 'sortBy', 'sortDirection',
-        'expertStatus', 'customerStatus'
+        'expertStatus', 'customerStatus', 'minOrderCount', 'maxOrderCount'
     ];
 
     simpleFields.forEach(field => {
@@ -237,6 +250,8 @@ function filterUsers() {
         });
 }
 
+
+
 function displayUsers(users, totalElements, currentPage, pageSize) {
     const formContainer = document.getElementById('form-container');
 
@@ -273,6 +288,7 @@ function displayUsers(users, totalElements, currentPage, pageSize) {
         <th>Status</th>
         <th>Balance</th>
         <th>Rating</th>
+        <th>Order Count</th>
         <th>Registered</th>
         <th>Actions</th>
     `;
@@ -289,6 +305,7 @@ function displayUsers(users, totalElements, currentPage, pageSize) {
             <td>${user.userStatus || '-'}</td>
             <td>${user.balance || '0'}</td>
             <td>${user.expertRating || '-'}</td>
+            <td>${user.orderCount || '0'}</td>
             <td>${new Date(user.createdAt).toLocaleDateString()}</td>
             <td>
                 <button class="btn view-orders" data-user-id="${user.id}" data-user-type="${user.userType}">View Orders</button>
@@ -348,6 +365,7 @@ function displayUsers(users, totalElements, currentPage, pageSize) {
         });
     });
 }
+
 
 function viewUserOrders(userId, userType) {
     let url;
@@ -476,7 +494,320 @@ function displayUserOrders(orders, userType) {
     formContainer.appendChild(document.createElement('br'));
     formContainer.appendChild(document.createElement('br'));
     formContainer.appendChild(ordersTable);
+
+    // Add a filter button for orders
+    const filterOrdersButton = document.createElement('button');
+    filterOrdersButton.textContent = 'Filter Orders';
+    filterOrdersButton.className = 'btn filter-orders-btn';
+    filterOrdersButton.addEventListener('click', function() {
+        showOrderFilterForm(userType);
+    });
+    formContainer.appendChild(filterOrdersButton);
 }
+
+function showOrderFilterForm(userType) {
+    const formContainer = document.getElementById('form-container');
+
+    // Create the filter form
+    const filterForm = document.createElement('form');
+    filterForm.id = 'order-filter-form';
+    filterForm.innerHTML = `
+        <h2>Filter Orders</h2>
+        
+        <!-- Sub-Service ID -->
+        <label for="subServiceId">Sub-Service ID:</label>
+        <input type="number" id="subServiceId" name="subServiceId"><br>
+
+        <!-- Customer ID -->
+        <label for="customerId">Customer ID:</label>
+        <input type="number" id="customerId" name="customerId"><br>
+
+        <!-- Expert ID -->
+        <label for="expertId">Expert ID:</label>
+        <input type="number" id="expertId" name="expertId"><br>
+
+        <!-- Min Cost -->
+        <label for="minCost">Min Cost:</label>
+        <input type="number" id="minCost" name="minCost"><br>
+
+        <!-- Max Cost -->
+        <label for="maxCost">Max Cost:</label>
+        <input type="number" id="maxCost" name="maxCost"><br>
+
+        <!-- Description -->
+        <label for="description">Description:</label>
+        <input type="text" id="description" name="description"><br>
+
+        <!-- Service Start Date -->
+        <label for="serviceStartDate">Service Start Date:</label>
+        <input type="datetime-local" id="serviceStartDate" name="serviceStartDate"><br>
+
+        <!-- Service End Date -->
+        <label for="serviceEndDate">Service End Date:</label>
+        <input type="datetime-local" id="serviceEndDate" name="serviceEndDate"><br>
+
+        <!-- Address -->
+        <label for="address">Address:</label>
+        <input type="text" id="address" name="address"><br>
+
+        <!-- Status -->
+        <label for="status">Status:</label>
+        <select id="status" name="status">
+            <option value="">--Select Status--</option>
+            <option value="WAITING_FOR_EXPERT_TO_RESPONSE">Waiting for Expert to Respond</option>
+            <option value="WAITING_FOR_CUSTOMER_TO_ACCEPT">Waiting for Customer to Accept</option>
+            <option value="WAITING_FOR_EXPERT_TO_ARRIVE">Waiting for Expert to Arrive</option>
+            <option value="SERVICE_IS_STARTED">Service Started</option>
+            <option value="SERVICE_IS_DONE">Service Done</option>
+            <option value="SERVICE_IS_PAID">Service Paid</option>
+        </select><br>
+
+        <!-- Payment Type -->
+        <label for="paymentType">Payment Type:</label>
+        <select id="paymentType" name="paymentType">
+            <option value="">--Select Payment Type--</option>
+            <option value="BY_CREDIT_CARD">Credit Card</option>
+            <option value="BY_BALANCE">Balance</option>
+        </select><br>
+
+        <!-- Created After -->
+        <label for="createdAfter">Created After:</label>
+        <input type="datetime-local" id="createdAfter" name="createdAfter"><br>
+
+        <!-- Created Before -->
+        <label for="createdBefore">Created Before:</label>
+        <input type="datetime-local" id="createdBefore" name="createdBefore"><br>
+
+        <!-- Has Comment -->
+        <label for="hasComment">Has Comment:</label>
+        <input type="checkbox" id="hasComment" name="hasComment"><br>
+
+        <!-- Sort By -->
+        <label for="sortBy">Sort By:</label>
+        <select id="sortBy" name="sortBy">
+            <option value="createdAt">Created At</option>
+            <option value="serviceStartDate">Service Start Date</option>
+            <option value="serviceEndDate">Service End Date</option>
+            <option value="minCost">Min Cost</option>
+            <option value="maxCost">Max Cost</option>
+        </select><br>
+
+        <!-- Sort Direction -->
+        <label for="sortDirection">Sort Direction:</label>
+        <select id="sortDirection" name="sortDirection">
+            <option value="ASC">Ascending</option>
+            <option value="DESC">Descending</option>
+        </select><br>
+
+        <!-- Submit Button -->
+        <button type="submit">Apply Filters</button>
+    `;
+
+    // Clear container and add the filter form
+    formContainer.innerHTML = '';
+    formContainer.appendChild(filterForm);
+
+    // Handle form submission
+    filterForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        filterUserOrders(userType);
+    });
+}
+
+function filterUserOrders(userType) {
+    const form = document.getElementById('order-filter-form');
+    const formData = new FormData(form);
+    const filter = {};
+
+    // Convert form data to a JSON object
+    formData.forEach((value, key) => {
+        filter[key] = value;
+    });
+
+    // Add user-specific filter (expert or customer ID)
+    const userId = getUserIdFromSession(); // Replace with your logic to get the user ID
+    if (userType === 'EXPERT') {
+        filter.expertId = userId;
+    } else if (userType === 'CUSTOMER') {
+        filter.customerId = userId;
+    }
+
+    // Convert filter object to query parameters
+    const queryParams = new URLSearchParams(filter).toString();
+
+    // Fetch filtered orders
+    fetch(`http://localhost:8081/v1/orders/paginated?${queryParams}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to fetch filtered orders: ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Display the filtered orders
+            displayUserOrders(data.content, userType);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error fetching filtered orders: ' + error.message);
+        });
+}
+
+function getUserIdFromSession() {
+    // Replace this with your logic to get the user ID from the session or state
+    return 1; // Example: Return a hardcoded user ID for testing
+}
+
+
+
+document.getElementById('filterOrders').addEventListener('click', function () {
+    const formContainer = document.getElementById('form-container');
+    formContainer.innerHTML = `
+        <h2>Filter Orders</h2>
+        <form id="order-filter-form">
+            <label for="subServiceId">Sub-Service ID:</label>
+            <input type="number" id="subServiceId" name="subServiceId"><br>
+
+            <label for="customerId">Customer ID:</label>
+            <input type="number" id="customerId" name="customerId"><br>
+
+            <label for="expertId">Expert ID:</label>
+            <input type="number" id="expertId" name="expertId"><br>
+
+            <label for="minCost">Min Cost:</label>
+            <input type="number" id="minCost" name="minCost"><br>
+
+            <label for="maxCost">Max Cost:</label>
+            <input type="number" id="maxCost" name="maxCost"><br>
+
+            <label for="description">Description:</label>
+            <input type="text" id="description" name="description"><br>
+
+            <label for="serviceStartDate">Service Start Date:</label>
+            <input type="datetime-local" id="serviceStartDate" name="serviceStartDate"><br>
+
+            <label for="serviceEndDate">Service End Date:</label>
+            <input type="datetime-local" id="serviceEndDate" name="serviceEndDate"><br>
+
+            <label for="address">Address:</label>
+            <input type="text" id="address" name="address"><br>
+
+            <label for="status">Status:</label>
+            <select id="status" name="status">
+                <option value="">--Select Status--</option>
+                <option value="PENDING">Pending</option>
+                <option value="COMPLETED">Completed</option>
+                <option value="CANCELED">Canceled</option>
+                <!-- Add other statuses as needed -->
+            </select><br>
+
+            <label for="paymentType">Payment Type:</label>
+            <select id="paymentType" name="paymentType">
+                <option value="">--Select Payment Type--</option>
+                <option value="BY_CREDIT_CARD">Credit Card</option>
+                <option value="BY_BALANCE">Balance</option>
+                <!-- Add other payment types as needed -->
+            </select><br>
+
+            <label for="createdAfter">Created After:</label>
+            <input type="datetime-local" id="createdAfter" name="createdAfter"><br>
+
+            <label for="createdBefore">Created Before:</label>
+            <input type="datetime-local" id="createdBefore" name="createdBefore"><br>
+
+            <label for="hasComment">Has Comment:</label>
+            <input type="checkbox" id="hasComment" name="hasComment"><br>
+
+            <button type="submit">Apply Filters</button>
+        </form>
+    `;
+
+    // Handle form submission
+    document.getElementById('order-filter-form').addEventListener('submit', function (event) {
+        event.preventDefault();
+        filterOrders();
+    });
+});
+
+function filterOrders() {
+    const form = document.getElementById('order-filter-form');
+    const formData = new FormData(form);
+    const filter = {};
+
+    // Convert form data to a JSON object
+    formData.forEach((value, key) => {
+        filter[key] = value;
+    });
+
+    // Convert checkbox value to boolean
+    filter.hasComment = filter.hasComment === 'on';
+
+    // Convert filter object to query parameters
+    const queryParams = new URLSearchParams(filter).toString();
+
+    // Fetch paginated and filtered orders
+    fetch(`http://localhost:8081/v1/orders/paginated?${queryParams}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to fetch filtered orders: ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Display the filtered orders
+            displayFilteredOrders(data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error fetching filtered orders: ' + error.message);
+        });
+}
+
+
+function displayFilteredOrders(filteredOrderResponse) {
+    const formContainer = document.getElementById('form-container');
+
+    // Clear previous results
+    formContainer.innerHTML = '';
+
+    if (!filteredOrderResponse.content || filteredOrderResponse.content.length === 0) {
+        formContainer.innerHTML = '<p>No orders found matching your criteria.</p>';
+        return;
+    }
+
+    const ordersTable = document.createElement('table');
+    ordersTable.className = 'orders-table';
+
+    // Create table header
+    const headerRow = document.createElement('tr');
+    headerRow.innerHTML = `
+        <th>Order ID</th>
+        <th>Service</th>
+        <th>Expert</th>
+        <th>Status</th>
+        <th>Price</th>
+        <th>Created At</th>
+    `;
+    ordersTable.appendChild(headerRow);
+
+    // Add order rows
+    filteredOrderResponse.content.forEach(order => {
+        const orderRow = document.createElement('tr');
+        orderRow.innerHTML = `
+            <td>${order.id}</td>
+            <td>${order.subServiceId}</td>
+            <td>${order.expertId || 'Not assigned'}</td>
+            <td>${order.status}</td>
+            <td>${order.customerOfferedCost}</td>
+            <td>${new Date(order.createdAt).toLocaleDateString()}</td>
+        `;
+        ordersTable.appendChild(orderRow);
+    });
+
+    formContainer.appendChild(ordersTable);
+}
+
+
 
 
 

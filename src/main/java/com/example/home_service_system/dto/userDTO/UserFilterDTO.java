@@ -29,6 +29,9 @@ public class UserFilterDTO {
     private Long minBalance;
     private Long maxBalance;
 
+    private Long minOrderCount;
+    private Long maxOrderCount;
+
     private Integer minExpertRating;
     private String expertStatus;
 

@@ -21,15 +21,18 @@ public class UserMapper {
         Integer expertRating = null;
         Long balance = null;
         byte[] expertImage = null;
+        Long orderCount = null;
 
         if (user.getExpert() != null) {
             userStatus = user.getExpert().getUserStatus().name();
             expertRating = user.getExpert().getRating();
             balance = user.getExpert().getBalance();
             expertImage = user.getExpert().getExpertImage();
+            orderCount = (long) user.getExpert().getOrderList().size();
         } else if (user.getCustomer() != null) {
             userStatus = user.getCustomer().getUserStatus().name();
             balance = user.getCustomer().getBalance();
+            orderCount = (long) user.getCustomer().getOrderList().size();
         }
 
         return new UserResponse(
@@ -48,6 +51,7 @@ public class UserMapper {
                 expertImage,
                 user.getCreatedAt(),
                 user.getUpdatedAt(),
+                orderCount,
                 user.isDeleted()
         );
     }
