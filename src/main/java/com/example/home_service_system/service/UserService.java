@@ -16,13 +16,12 @@ public interface UserService {
 
     User findUserById(Long id);
 
-    Long getExpertOrCustomerId(User user);
+    //Long getExpertOrCustomerId(User user);
 
     List<User> findAllActiveUsers();
 
     void softDelete(Long id);
 
-    // Specialized queries
     User findUserByUsername(String username);
 
     UserResponse findByUsername(String username);
@@ -39,7 +38,6 @@ public interface UserService {
 
     UserResponse findByNationalId(String nationalId);
 
-    // Existence checks
     boolean usernameExists(String username);
 
     boolean emailExists(String email);

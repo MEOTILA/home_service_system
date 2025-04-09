@@ -59,41 +59,22 @@ public class UserServiceImpl implements UserService {
             existingUser.setLastName(user.getLastName());
         }
         if (StringUtils.hasText(user.getUsername())) {
-            // Add username existence check if needed
-            // userService.usernameExists(user.getUsername());
             existingUser.setUsername(user.getUsername());
         }
         if (StringUtils.hasText(user.getNationalId())) {
-            // Add national ID existence check if needed
-            // userService.nationalIdExists(user.getNationalId());
             existingUser.setNationalId(user.getNationalId());
         }
         if (StringUtils.hasText(user.getPhoneNumber())) {
-            // Add phone number existence check if needed
-            // userService.phoneNumberExists(user.getPhoneNumber());
             existingUser.setPhoneNumber(user.getPhoneNumber());
         }
         if (user.getBirthday() != null) {
             existingUser.setBirthday(user.getBirthday());
         }
         if (StringUtils.hasText(user.getEmail())) {
-            // Add email existence check if needed
-            // userService.emailExists(user.getEmail());
             existingUser.setEmail(user.getEmail());
         }
 
         return userRepository.save(existingUser);
-        /*User existingUser = findUserById(user.getId());
-
-        existingUser.setFirstName(user.getFirstName());
-        existingUser.setLastName(user.getLastName());
-        existingUser.setUsername(user.getUsername());
-        existingUser.setNationalId(user.getNationalId());
-        existingUser.setPhoneNumber(user.getPhoneNumber());
-        existingUser.setBirthday(user.getBirthday());
-        existingUser.setEmail(user.getEmail());
-
-        return userRepository.save(existingUser);*/
     }
 
     @Override
@@ -103,7 +84,7 @@ public class UserServiceImpl implements UserService {
                         + id + "} not found", CustomApiExceptionType.NOT_FOUND));
     }
 
-    @Override
+    /*@Override
     public Long getExpertOrCustomerId(User user) {
         if (user.getUserType() == UserType.EXPERT) {
             if (user.getExpert() == null) {
@@ -122,7 +103,7 @@ public class UserServiceImpl implements UserService {
                     + user.getId() + "} is not an expert or customer",
                     CustomApiExceptionType.BAD_REQUEST);
         }
-    }
+    }*/
 
 
     @Override
