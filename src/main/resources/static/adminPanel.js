@@ -1,6 +1,3 @@
-document.getElementById('filterUsers').addEventListener('click', function () {
-    loadFilterForm();
-});
 
 document.getElementById('addMainService').addEventListener('click', function () {
     loadAddMainServiceForm();
@@ -18,214 +15,469 @@ document.getElementById('viewAllMainService').addEventListener('click', function
     loadAllMainServices();
 });
 
-function loadFilterForm() {
-    document.getElementById('form-container').innerHTML = `
+document.getElementById('filterUsers').addEventListener('click', function() {
+    // Clear the form container first
+    const formContainer = document.getElementById('form-container');
+    formContainer.innerHTML = '';
+
+    // Create the filter form
+    const filterForm = document.createElement('form');
+    filterForm.id = 'userFilterForm';
+    filterForm.className = 'admin-form';
+
+    // Add filter options based on UserFilterDTO
+    filterForm.innerHTML = `
         <h2>Filter Users</h2>
-        <div>
-            <h3>Choose a filter:</h3>
-            <button id="filterCustomersBtn">Filter Customers</button>
-            <button id="filterExpertsBtn">Filter Experts</button>
+        
+        <!-- Basic Info -->
+        <div class="form-row">
+            <div class="form-group">
+                <label for="firstName">First Name:</label>
+                <input type="text" id="firstName" name="firstName">
+            </div>
+            <div class="form-group">
+                <label for="lastName">Last Name:</label>
+                <input type="text" id="lastName" name="lastName">
+            </div>
         </div>
-        <div id="filterFormContainer"></div>
+        
+        <div class="form-row">
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username">
+            </div>
+            <div class="form-group">
+                <label for="nationalId">National ID:</label>
+                <input type="text" id="nationalId" name="nationalId">
+            </div>
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group">
+                <label for="phoneNumber">Phone Number:</label>
+                <input type="text" id="phoneNumber" name="phoneNumber">
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email">
+            </div>
+        </div>
+        
+        <!-- User Type and Status -->
+        <div class="form-row">
+            <div class="form-group">
+                <label for="userType">User Type:</label>
+                <select id="userType" name="userType">
+                    <option value="">All</option>
+                    <option value="CUSTOMER">Customer</option>
+                    <option value="EXPERT">Expert</option>
+                    <option value="ADMIN">Admin</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="birthday">Birthday:</label>
+                <input type="date" id="birthday" name="birthday">
+            </div>
+        </div>
+        
+        <!-- Date Range -->
+        <div class="form-row">
+            <div class="form-group">
+                <label for="createdAtFrom">Registered From:</label>
+                <input type="datetime-local" id="createdAtFrom" name="createdAtFrom">
+            </div>
+            <div class="form-group">
+                <label for="createdAtTo">Registered To:</label>
+                <input type="datetime-local" id="createdAtTo" name="createdAtTo">
+            </div>
+        </div>
+        
+        <!-- Balance Range -->
+        <div class="form-row">
+            <div class="form-group">
+                <label for="minBalance">Min Balance:</label>
+                <input type="number" id="minBalance" name="minBalance" min="0">
+            </div>
+            <div class="form-group">
+                <label for="maxBalance">Max Balance:</label>
+                <input type="number" id="maxBalance" name="maxBalance" min="0">
+            </div>
+        </div>
+        
+        <!-- Expert Specific -->
+        <div id="expertFields" class="form-row" style="display: none;">
+            <div class="form-group">
+                <label for="minExpertRating">Min Expert Rating:</label>
+                <input type="number" id="minExpertRating" name="minExpertRating" min="0" max="5" step="0.1">
+            </div>
+            <div class="form-group">
+                <label for="expertStatus">Expert Status:</label>
+                <select id="expertStatus" name="expertStatus">
+                    <option value="">Any</option>
+                    <option value="NEW">New</option>
+                    <option value="PENDING">Pending</option>
+                    <option value="APPROVED">Approved</option>
+                </select>
+            </div>
+        </div>
+        
+        <!-- Customer Specific -->
+        <div id="customerFields" class="form-row" style="display: none;">
+            <div class="form-group">
+                <label for="customerStatus">Customer Status:</label>
+                <select id="customerStatus" name="customerStatus">
+                    <option value="">Any</option>
+                    <option value="NEW">New</option>
+                    <option value="PENDING">Pending</option>
+                    <option value="APPROVED">Approved</option>
+                </select>
+            </div>
+        </div>
+        
+        <!-- Pagination and Sorting -->
+        <div class="form-row">
+            <div class="form-group">
+                <label for="page">Page:</label>
+                <input type="number" id="page" name="page" min="0" value="0">
+            </div>
+            <div class="form-group">
+                <label for="size">Items per page:</label>
+                <input type="number" id="size" name="size" min="1" max="100" value="10">
+            </div>
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group">
+                <label for="sortBy">Sort By:</label>
+                <select id="sortBy" name="sortBy">
+                    <option value="id">ID</option>
+                    <option value="firstName">First Name</option>
+                    <option value="lastName">Last Name</option>
+                    <option value="createdAt">Registration Date</option>
+                    <option value="balance">Balance</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="sortDirection">Sort Direction:</label>
+                <select id="sortDirection" name="sortDirection">
+                    <option value="ASC">Ascending</option>
+                    <option value="DESC">Descending</option>
+                </select>
+            </div>
+        </div>
+        
+        <button type="submit" class="btn">Filter Users</button>
     `;
 
-    document.getElementById('filterCustomersBtn').addEventListener('click', loadFilterCustomersForm);
-    document.getElementById('filterExpertsBtn').addEventListener('click', loadFilterExpertsForm);
-}
+    formContainer.appendChild(filterForm);
 
-function loadFilterCustomersForm() {
-    document.getElementById('filterFormContainer').innerHTML = `
-        <h3>Filter Customers</h3>
-        <form id="filter-customers-form">
-            <input type="text" id="customer-username" placeholder="Username"><br>
-            <input type="text" id="customer-firstname" placeholder="First Name"><br>
-            <input type="text" id="customer-lastname" placeholder="Last Name"><br>
-            <input type="text" id="customer-nationalId" placeholder="National ID"><br>
-            <input type="text" id="customer-phoneNumber" placeholder="Phone Number"><br>
-            <input type="text" id="customer-email" placeholder="Email"><br>
-            <select id="customer-userStatus">
-                <option value="">Select User Status</option>
-                <option value="NEW">New</option>
-                <option value="PENDING">Pending</option>
-                <option value="ACTIVE">Active</option>
-            </select><br>
-            <input type="number" id="customer-balance" placeholder="Balance"><br>
-            <input type="date" id="customer-createdAt" placeholder="Created At"><br>
-            <input type="date" id="customer-birthday" placeholder="Birthday"><br>
-            <button type="submit">Filter</button>
-        </form>
-    `;
-
-    const customerForm = document.getElementById('filter-customers-form');
-    customerForm.addEventListener('submit', function (event) {
-        event.preventDefault();
-
-        const params = new URLSearchParams({
-            username: document.getElementById('customer-username').value,
-            firstName: document.getElementById('customer-firstname').value,
-            lastName: document.getElementById('customer-lastname').value,
-            nationalId: document.getElementById('customer-nationalId').value,
-            phoneNumber: document.getElementById('customer-phoneNumber').value,
-            email: document.getElementById('customer-email').value,
-            userStatus: document.getElementById('customer-userStatus').value,
-            balance: document.getElementById('customer-balance').value,
-            createdAt: document.getElementById('customer-createdAt').value,
-            birthday: document.getElementById('customer-birthday').value
-        });
-
-        fetch(`http://localhost:8081/v1/customers/filter?${params.toString()}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Filtered Customers:', data);
-                // Make sure you're using the "content" field
-                if (data && data.content && data.content.length > 0) {
-                    // Call the function to display the filtered customers
-                    displayFilteredCustomers(data.content);
-                } else {
-                    alert('No customers found with the specified filters.');
-                    document.getElementById('filterFormContainer').innerHTML += `<p>No results found.</p>`;
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Failed to filter customers. Please try again later.');
-            });
+    // Show/hide expert/customer specific fields based on user type
+    document.getElementById('userType').addEventListener('change', function() {
+        const userType = this.value;
+        document.getElementById('expertFields').style.display = userType === 'EXPERT' ? 'flex' : 'none';
+        document.getElementById('customerFields').style.display = userType === 'CUSTOMER' ? 'flex' : 'none';
     });
-}
-
-function displayFilteredCustomers(customers) {
-    const resultContainer = document.getElementById('filterFormContainer');
-    resultContainer.innerHTML = `<h3>Filtered Customers</h3><ul id="customer-list"></ul>`;
-
-    const customerList = document.getElementById('customer-list');
-
-    customers.forEach(customer => {
-        const listItem = document.createElement('li');
-        listItem.innerHTML = `
-            <strong>Username:</strong> ${customer.username} <br>
-            <strong>Name:</strong> ${customer.firstName} ${customer.lastName} <br>
-            <strong>Email:</strong> ${customer.email} <br>
-            <strong>National ID:</strong> ${customer.nationalId} <br>
-            <strong>Phone Number:</strong> ${customer.phoneNumber} <br>
-            <strong>Birthday:</strong> ${customer.birthday} <br>
-            <strong>Created At:</strong> ${customer.createdAt} <br>
-            <strong>User Status:</strong> ${customer.userStatus} <br>
-            <strong>Balance:</strong> ${customer.balance} <br>
-        `;
-        customerList.appendChild(listItem);
-    });
-}
-
-
-function loadFilterExpertsForm() {
-    document.getElementById('filterFormContainer').innerHTML = `
-        <h3>Filter Experts</h3>
-        <form id="filter-experts-form">
-            <input type="text" id="expert-username" placeholder="Username"><br>
-            <input type="text" id="expert-firstname" placeholder="First Name"><br>
-            <input type="text" id="expert-lastname" placeholder="Last Name"><br>
-            <input type="text" id="expert-nationalId" placeholder="National ID"><br>
-            <input type="text" id="expert-phoneNumber" placeholder="Phone Number"><br>
-            <input type="text" id="expert-email" placeholder="Email"><br>
-            <input type="number" id="expert-rating" placeholder="Rating"><br>
-            <select id="expert-userStatus">
-                <option value="">Select User Status</option>
-                <option value="NEW">New</option>
-                <option value="PENDING">Pending</option>
-                <option value="ACTIVE">Active</option>
-            </select><br>
-            <input type="number" id="expert-balance" placeholder="Balance"><br>
-            <input type="date" id="expert-createdAt" placeholder="Created At"><br>
-            <input type="date" id="expert-birthday" placeholder="Birthday"><br>
-            <input type="number" id="expert-subServiceId" placeholder="Sub Service ID"><br>
-            <button type="submit">Filter</button>
-        </form>
-        <div id="filter-results"></div>
-    `;
 
     // Handle form submission
-    const expertForm = document.getElementById('filter-experts-form');
-    expertForm.addEventListener('submit', function (event) {
-        event.preventDefault();
+    filterForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        filterUsers();
+    });
+});
 
-        const params = new URLSearchParams();
-        const addParam = (key, value) => { if (value) params.append(key, value); };
+function filterUsers() {
+    const form = document.getElementById('userFilterForm');
+    const formData = new FormData(form);
 
-        addParam('username', document.getElementById('expert-username').value);
-        addParam('firstName', document.getElementById('expert-firstname').value);
-        addParam('lastName', document.getElementById('expert-lastname').value);
-        addParam('nationalId', document.getElementById('expert-nationalId').value);
-        addParam('phoneNumber', document.getElementById('expert-phoneNumber').value);
-        addParam('email', document.getElementById('expert-email').value);
-        addParam('rating', document.getElementById('expert-rating').value);
-        addParam('userStatus', document.getElementById('expert-userStatus').value);
-        addParam('balance', document.getElementById('expert-balance').value);
-        addParam('createdAt', document.getElementById('expert-createdAt').value);
-        addParam('birthday', document.getElementById('expert-birthday').value);
-        addParam('subServiceId', document.getElementById('expert-subServiceId').value);
+    // Build query parameters from form data
+    const params = new URLSearchParams();
 
-        fetch(`http://localhost:8081/v1/experts/filter?${params.toString()}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
+    // Add all simple fields
+    const simpleFields = [
+        'firstName', 'lastName', 'username', 'nationalId',
+        'phoneNumber', 'email', 'userType', 'sortBy', 'sortDirection',
+        'expertStatus', 'customerStatus'
+    ];
+
+    simpleFields.forEach(field => {
+        const value = formData.get(field);
+        if (value) params.append(field, value);
+    });
+
+    // Add date fields
+    const dateFields = ['birthday', 'createdAtFrom', 'createdAtTo'];
+    dateFields.forEach(field => {
+        const value = formData.get(field);
+        if (value) params.append(field, value);
+    });
+
+    // Add numeric fields
+    const numericFields = ['minBalance', 'maxBalance', 'minExpertRating', 'page', 'size'];
+    numericFields.forEach(field => {
+        const value = formData.get(field);
+        if (value) params.append(field, value);
+    });
+
+    // Make GET request with query parameters
+    fetch(`/v1/admin/filter?${params.toString()}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
             }
+            return response.json();
         })
-            .then(response => {
-                if (!response.ok) {
-                    return response.json().then(errorData => {
-                        throw new Error(errorData.message || 'An error occurred.');
-                    });
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log('Filtered Experts:', data);
-                if (data && data.content && data.content.length > 0) {
-                    displayFilteredExperts(data.content);
-                } else {
-                    document.getElementById('filter-results').innerHTML = `<p>No experts found.</p>`;
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert(`Error: ${error.message}`);
-            });
-    });
+        .then(data => {
+            displayUsers(data.content, data.totalElements,
+                parseInt(formData.get('page') || 0),
+                parseInt(formData.get('size') || 10));
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error filtering users: ' + error.message);
+        });
 }
 
-// Function to display filtered experts
-function displayFilteredExperts(experts) {
-    const resultContainer = document.getElementById('filter-results');
-    resultContainer.innerHTML = `<h3>Filtered Experts</h3><ul id="expert-list"></ul>`;
+function displayUsers(users, totalElements, currentPage, pageSize) {
+    const formContainer = document.getElementById('form-container');
 
-    const expertList = document.getElementById('expert-list');
+    // Clear previous results
+    formContainer.innerHTML = '';
 
-    experts.forEach(expert => {
-        const listItem = document.createElement('li');
-        listItem.innerHTML = `
-            <strong>Username:</strong> ${expert.username} <br>
-            <strong>Name:</strong> ${expert.firstName} ${expert.lastName} <br>
-            <strong>Email:</strong> ${expert.email} <br>
-            <strong>National ID:</strong> ${expert.nationalId} <br>
-            <strong>Phone Number:</strong> ${expert.phoneNumber} <br>
-            <strong>Rating:</strong> ${expert.rating} <br>
-            <strong>User Status:</strong> ${expert.userStatus} <br>
-            <strong>Balance:</strong> ${expert.balance} <br>
-            <strong>Created At:</strong> ${expert.createdAt} <br>
-            <strong>Birthday:</strong> ${expert.birthday} <br>
-            <strong>Sub Service ID:</strong> ${expert.subServiceId} <br>
+    if (!users || users.length === 0) {
+        formContainer.innerHTML = '<p>No users found matching your criteria.</p>';
+        return;
+    }
+
+    const resultsDiv = document.createElement('div');
+    resultsDiv.className = 'results-container';
+
+    // Show pagination info
+    const paginationInfo = document.createElement('div');
+    paginationInfo.className = 'pagination-info';
+    const startItem = currentPage * pageSize + 1;
+    const endItem = Math.min((currentPage + 1) * pageSize, totalElements);
+    paginationInfo.textContent = `Showing ${startItem}-${endItem} of ${totalElements} users`;
+    resultsDiv.appendChild(paginationInfo);
+
+    // Create users table
+    const usersTable = document.createElement('table');
+    usersTable.className = 'users-table';
+
+    // Create table header
+    const headerRow = document.createElement('tr');
+    headerRow.innerHTML = `
+        <th>ID</th>
+        <th>Name</th>
+        <th>Username</th>
+        <th>Type</th>
+        <th>Status</th>
+        <th>Balance</th>
+        <th>Rating</th>
+        <th>Registered</th>
+        <th>Actions</th>
+    `;
+    usersTable.appendChild(headerRow);
+
+    // Add user rows
+    users.forEach(user => {
+        const userRow = document.createElement('tr');
+        userRow.innerHTML = `
+            <td>${user.id}</td>
+            <td>${user.firstName} ${user.lastName}</td>
+            <td>${user.username}</td>
+            <td>${user.userType}</td>
+            <td>${user.userStatus || '-'}</td>
+            <td>${user.balance || '0'}</td>
+            <td>${user.expertRating || '-'}</td>
+            <td>${new Date(user.createdAt).toLocaleDateString()}</td>
+            <td>
+                <button class="btn view-orders" data-user-id="${user.id}" data-user-type="${user.userType}">View Orders</button>
+            </td>
         `;
-        expertList.appendChild(listItem);
+        usersTable.appendChild(userRow);
+    });
+
+    resultsDiv.appendChild(usersTable);
+
+    // Add pagination controls
+    const totalPages = Math.ceil(totalElements / pageSize);
+    if (totalPages > 1) {
+        const paginationDiv = document.createElement('div');
+        paginationDiv.className = 'pagination-controls';
+
+        // Previous button
+        if (currentPage > 0) {
+            const prevButton = document.createElement('button');
+            prevButton.textContent = 'Previous';
+            prevButton.className = 'btn';
+            prevButton.addEventListener('click', () => {
+                document.getElementById('page').value = currentPage - 1;
+                filterUsers();
+            });
+            paginationDiv.appendChild(prevButton);
+        }
+
+        // Page info
+        const pageInfo = document.createElement('span');
+        pageInfo.textContent = `Page ${currentPage + 1} of ${totalPages}`;
+        paginationDiv.appendChild(pageInfo);
+
+        // Next button
+        if (currentPage < totalPages - 1) {
+            const nextButton = document.createElement('button');
+            nextButton.textContent = 'Next';
+            nextButton.className = 'btn';
+            nextButton.addEventListener('click', () => {
+                document.getElementById('page').value = currentPage + 1;
+                filterUsers();
+            });
+            paginationDiv.appendChild(nextButton);
+        }
+
+        resultsDiv.appendChild(paginationDiv);
+    }
+
+    formContainer.appendChild(resultsDiv);
+
+    // Add event listeners to view orders buttons
+    document.querySelectorAll('.view-orders').forEach(button => {
+        button.addEventListener('click', function() {
+            const userId = this.getAttribute('data-user-id');
+            const userType = this.getAttribute('data-user-type');
+            viewUserOrders(userId, userType);
+        });
     });
 }
 
-// Load the form on page load
-window.onload = loadFilterExpertsForm;
+function viewUserOrders(userId, userType) {
+    let url;
+
+    // Determine the URL to fetch the expert or customer ID
+    if (userType === 'EXPERT') {
+        url = `http://localhost:8081/v1/users/expert-id/${userId}`;
+    } else if (userType === 'CUSTOMER') {
+        url = `http://localhost:8081/v1/users/customer-id/${userId}`;
+    } else {
+        alert('Orders cannot be viewed for this user type.');
+        return;
+    }
+
+    // Fetch the expert or customer ID
+    fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to fetch expert/customer ID: ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            const expertOrCustomerId = data.id; // Assuming the response contains the ID
+
+            // Fetch orders using the expert or customer ID
+            let ordersUrl;
+            if (userType === 'EXPERT') {
+                ordersUrl = `http://localhost:8081/v1/orders/expert/${expertOrCustomerId}`;
+            } else if (userType === 'CUSTOMER') {
+                ordersUrl = `http://localhost:8081/v1/orders/customer/${expertOrCustomerId}`;
+            }
+
+            // Fetch the orders
+            return fetch(ordersUrl);
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to fetch orders: ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then(orders => {
+            // Display the orders
+            displayUserOrders(orders, userType);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error fetching user orders: ' + error.message);
+        });
+}
+
+function displayUserOrders(orders, userType) {
+    const formContainer = document.getElementById('form-container');
+
+    // Create a back button
+    const backButton = document.createElement('button');
+    backButton.textContent = 'Back to Users';
+    backButton.className = 'btn back-btn';
+    backButton.addEventListener('click', function() {
+        // Re-trigger the filter to show users again
+        document.getElementById('filterUsers').click();
+    });
+
+    // Create orders table
+    const ordersTable = document.createElement('table');
+    ordersTable.className = 'orders-table';
+
+    // Create table header based on user type
+    const headerRow = document.createElement('tr');
+    if (userType === 'CUSTOMER') {
+        headerRow.innerHTML = `
+            <th>Order ID</th>
+            <th>Service</th>
+            <th>Expert</th>
+            <th>Status</th>
+            <th>Price</th>
+            <th>Created At</th>
+        `;
+    } else if (userType === 'EXPERT') {
+        headerRow.innerHTML = `
+            <th>Order ID</th>
+            <th>Service</th>
+            <th>Customer</th>
+            <th>Status</th>
+            <th>Price</th>
+            <th>Created At</th>
+        `;
+    }
+    ordersTable.appendChild(headerRow);
+
+    // Add order rows
+    if (orders && orders.length > 0) {
+        orders.forEach(order => {
+            const orderRow = document.createElement('tr');
+            if (userType === 'CUSTOMER') {
+                orderRow.innerHTML = `
+                    <td>${order.id}</td>
+                    <td>${order.subServiceId}</td>
+                    <td>${order.expertId || 'Not assigned'}</td>
+                    <td>${order.status}</td>
+                    <td>${order.customerOfferedCost}</td>
+                    <td>${new Date(order.createdAt).toLocaleDateString()}</td>
+                `;
+            } else if (userType === 'EXPERT') {
+                orderRow.innerHTML = `
+                    <td>${order.id}</td>
+                    <td>${order.subServiceId}</td>
+                    <td>${order.customerId}</td>                   
+                    <td>${order.status}</td>
+                    <td>${order.customerOfferedCost}</td>
+                    <td>${new Date(order.createdAt).toLocaleDateString()}</td>
+                `;
+            }
+            ordersTable.appendChild(orderRow);
+        });
+    } else {
+        const noOrdersRow = document.createElement('tr');
+        noOrdersRow.innerHTML = '<td colspan="6">No orders found for this user.</td>';
+        ordersTable.appendChild(noOrdersRow);
+    }
+
+    // Clear container and add elements
+    formContainer.innerHTML = '';
+    formContainer.appendChild(backButton);
+    formContainer.appendChild(document.createElement('br'));
+    formContainer.appendChild(document.createElement('br'));
+    formContainer.appendChild(ordersTable);
+}
+
 
 
 

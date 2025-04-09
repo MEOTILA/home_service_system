@@ -44,7 +44,9 @@ public class SecurityConfig {
                                 "/api/auth/**",
                                 "/perform_login"  // Allow access to login endpoint
                         ).permitAll()
-                        .requestMatchers("/v1/expert/**").hasAnyRole("Customer", "EXPERT", "ADMIN")
+                        .requestMatchers("/v1/admin/**").hasAnyRole("CUSTOMER", "EXPERT", "ADMIN")
+                        .requestMatchers("/v1/users/**").hasAnyRole("CUSTOMER", "EXPERT", "ADMIN")
+                        .requestMatchers("/v1/expert/**").hasAnyRole("CUSTOMER", "EXPERT", "ADMIN")
                         .requestMatchers("/v1/customer/**").hasAnyRole("CUSTOMER", "EXPERT", "ADMIN")
                         .requestMatchers("/v1/main-services/**").hasAnyRole("CUSTOMER", "EXPERT", "ADMIN")
                         .requestMatchers("/v1/sub-services/**").hasAnyRole("CUSTOMER", "EXPERT", "ADMIN")

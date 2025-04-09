@@ -16,6 +16,8 @@ public interface UserService {
 
     User findUserById(Long id);
 
+    Long getExpertOrCustomerId(User user);
+
     List<User> findAllActiveUsers();
 
     void softDelete(Long id);

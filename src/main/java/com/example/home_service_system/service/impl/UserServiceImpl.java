@@ -4,13 +4,13 @@ import com.example.home_service_system.dto.userDTO.FilteredUserResponse;
 import com.example.home_service_system.dto.userDTO.UserFilterDTO;
 import com.example.home_service_system.dto.userDTO.UserResponse;
 import com.example.home_service_system.entity.User;
+import com.example.home_service_system.entity.enums.UserType;
 import com.example.home_service_system.exceptions.CustomApiException;
 import com.example.home_service_system.exceptions.CustomApiExceptionType;
 import com.example.home_service_system.mapper.UserMapper;
 import com.example.home_service_system.repository.UserRepository;
 import com.example.home_service_system.service.UserService;
 import com.example.home_service_system.specification.UserSpecification;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -102,6 +102,28 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new CustomApiException("User with id {"
                         + id + "} not found", CustomApiExceptionType.NOT_FOUND));
     }
+
+    @Override
+    public Long getExpertOrCustomerId(User user) {
+        if (user.getUserType() == UserType.EXPERT) {
+            if (user.getExpert() == null) {
+                throw new CustomApiException("Expert profile not found for user with id {"
+                        + user.getId() + "}", CustomApiExceptionType.NOT_FOUND);
+            }
+            return user.getExpert().getId();
+        } else if (user.getUserType() == UserType.CUSTOMER) {
+            if (user.getCustomer() == null) {
+                throw new CustomApiException("Customer profile not found for user with id {"
+                        + user.getId() + "}", CustomApiExceptionType.NOT_FOUND);
+            }
+            return user.getCustomer().getId();
+        } else {
+            throw new CustomApiException("User with id {"
+                    + user.getId() + "} is not an expert or customer",
+                    CustomApiExceptionType.BAD_REQUEST);
+        }
+    }
+
 
     @Override
     public List<User> findAllActiveUsers() {
