@@ -9,6 +9,7 @@ import java.util.List;
 
 public record OrderResponse(
         Long id,
+        Long mainServiceId,
         Long subServiceId,
         Long customerId,
         Long expertId,

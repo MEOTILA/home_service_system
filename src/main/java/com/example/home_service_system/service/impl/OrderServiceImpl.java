@@ -348,6 +348,7 @@ public class OrderServiceImpl implements OrderService {
                 .and(OrderSpecification.hasPaymentType(filter.getPaymentType()))
                 .and(OrderSpecification.createdAtAfter(filter.getCreatedAfter()))
                 .and(OrderSpecification.createdAtBefore(filter.getCreatedBefore()))
+                .and(OrderSpecification.hasMainServiceId(filter.getMainServiceId()))
                 .and(filter.getHasComment() != null ?
                         OrderSpecification.hasCustomerComment(filter.getHasComment()) :
                         null);

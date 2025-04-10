@@ -11,6 +11,7 @@ public class OrderMapper {
     public static OrderResponse to(Order order) {
         return new OrderResponse(
                 order.getId(),
+                order.getSubService().getMainService() != null ? order.getSubService().getMainService().getId() : null,
                 order.getSubService() != null ? order.getSubService().getId() : null,
                 order.getCustomer() != null ? order.getCustomer().getId() : null,
                 order.getExpert() != null ? order.getExpert().getId() : null,
@@ -87,6 +88,7 @@ public class OrderMapper {
                 filter.getSortBy(),
                 filter.getSortDirection(),
                 // Filter metadata
+                filter.getMainServiceId(),
                 filter.getSubServiceId(),
                 filter.getCustomerId(),
                 filter.getExpertId(),
@@ -120,6 +122,7 @@ public class OrderMapper {
                 filter.getSortBy(),
                 filter.getSortDirection(),
                 // Filter metadata
+                filter.getMainServiceId(),
                 filter.getSubServiceId(),
                 filter.getCustomerId(),
                 filter.getExpertId(),

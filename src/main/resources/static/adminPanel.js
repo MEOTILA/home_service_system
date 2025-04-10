@@ -514,6 +514,10 @@ function showOrderFilterForm(userType) {
     filterForm.innerHTML = `
         <h2>Filter Orders</h2>
         
+        <!-- Main-Service ID -->
+        <label for="mainServiceId">Main-Service ID:</label>
+        <input type="number" id="mainServiceId" name="mainServiceId"><br>
+        
         <!-- Sub-Service ID -->
         <label for="subServiceId">Sub-Service ID:</label>
         <input type="number" id="subServiceId" name="subServiceId"><br>
@@ -665,6 +669,10 @@ document.getElementById('filterOrders').addEventListener('click', function () {
     formContainer.innerHTML = `
         <h2>Filter Orders</h2>
         <form id="order-filter-form">
+        
+            <label for="mainServiceId">Main-Service ID:</label>
+            <input type="number" id="mainServiceId" name="mainServiceId"><br>
+        
             <label for="subServiceId">Sub-Service ID:</label>
             <input type="number" id="subServiceId" name="subServiceId"><br>
 

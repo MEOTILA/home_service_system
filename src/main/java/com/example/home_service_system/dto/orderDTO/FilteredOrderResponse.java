@@ -16,6 +16,7 @@ public record FilteredOrderResponse(
         String sortBy,
         String sortDirection,
         // Filter metadata
+        Long mainServiceId,
         Long subServiceId,
         Long customerId,
         Long expertId,

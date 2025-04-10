@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderFilterDTO {
+    private Long mainServiceId;
     private Long subServiceId;
     private Long customerId;
     private Long expertId;

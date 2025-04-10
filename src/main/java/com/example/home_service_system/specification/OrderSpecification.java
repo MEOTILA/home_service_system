@@ -124,4 +124,12 @@ public class OrderSpecification {
             return null;
         };
     }
+
+    public static Specification<Order> hasMainServiceId(Long mainServiceId) {
+        return (root, query, criteriaBuilder) ->
+                mainServiceId != null ?
+                        criteriaBuilder.equal(root.get("subService").get("mainService")
+                                .get("id"), mainServiceId) :
+                        null;
+    }
 }
