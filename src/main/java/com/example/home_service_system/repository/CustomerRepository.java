@@ -33,7 +33,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long>
 
     // Status and balance queries
     @EntityGraph(attributePaths = "user")
-    @Query("SELECT c FROM Customer c WHERE c.userStatus = :status AND c.user.isDeleted = false")
+    @Query("SELECT c FROM Customer c WHERE c.user.userStatus = :status AND c.user.isDeleted = false")
     List<Customer> findByStatusAndIsDeletedFalse(UserStatus status);
 
     @EntityGraph(attributePaths = "user")

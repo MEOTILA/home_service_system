@@ -24,7 +24,8 @@ public class AdminMapper {
                 user.getBirthday(),
                 user.getEmail(),
                 user.getCreatedAt(),
-                user.getUpdatedAt()
+                user.getUpdatedAt(),
+                user.getUserStatus()
         );
     }
     /*public static AdminResponse to(Admin admin) {

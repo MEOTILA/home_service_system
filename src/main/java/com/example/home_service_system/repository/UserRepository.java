@@ -34,6 +34,8 @@ public interface UserRepository extends JpaRepository<User, Long>,
     @Query("SELECT u FROM User u WHERE u.isDeleted = false AND u.nationalId = :nationalId")
     Optional<User> findByNationalIdAndIsDeletedFalse(String nationalId);
 
+    Optional<User> findByVerificationToken(String verificationToken);
+
     // Existence checks (for all users including soft-deleted)
     boolean existsByUsername(String username);
     boolean existsByEmail(String email);

@@ -42,7 +42,8 @@ public class SecurityConfig {
                                 "/js/**",
                                 "/images/**",
                                 "/api/auth/**",
-                                "/perform_login"  // Allow access to login endpoint
+                                "/perform_login",
+                                "/verify"
                         ).permitAll()
                         .requestMatchers("/v1/admin/**").hasAnyRole("CUSTOMER", "EXPERT", "ADMIN")
                         .requestMatchers("/v1/users/**").hasAnyRole("CUSTOMER", "EXPERT", "ADMIN")

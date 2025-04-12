@@ -6,6 +6,7 @@ import com.example.home_service_system.dto.customerDTO.CustomerSaveRequest;
 import com.example.home_service_system.dto.customerDTO.CustomerUpdateRequest;
 import com.example.home_service_system.entity.enums.UserStatus;
 import com.example.home_service_system.service.CustomerService;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -30,7 +31,7 @@ public class CustomerController {
     }
 
     @PostMapping
-    public ResponseEntity<CustomerResponse> save(@Valid @RequestBody CustomerSaveRequest request) {
+    public ResponseEntity<CustomerResponse> save(@Valid @RequestBody CustomerSaveRequest request) throws MessagingException {
         return ResponseEntity.status(HttpStatus.CREATED).body(customerService.save(request));
     }
 

@@ -1,5 +1,7 @@
 package com.example.home_service_system.dto.adminDTO;
 
+import com.example.home_service_system.entity.enums.UserStatus;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -13,5 +15,6 @@ public record AdminResponse(
         LocalDate birthday,
         String email,
         LocalDateTime createdAt,
-        LocalDateTime updatedAt) {
+        LocalDateTime updatedAt,
+        UserStatus userStatus) {
 }

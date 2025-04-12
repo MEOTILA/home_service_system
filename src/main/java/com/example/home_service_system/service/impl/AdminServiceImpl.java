@@ -6,6 +6,7 @@ import com.example.home_service_system.dto.adminDTO.AdminSaveRequest;
 import com.example.home_service_system.dto.adminDTO.AdminUpdateRequest;
 import com.example.home_service_system.entity.Admin;
 import com.example.home_service_system.entity.User;
+import com.example.home_service_system.entity.enums.UserStatus;
 import com.example.home_service_system.entity.enums.UserType;
 import com.example.home_service_system.exceptions.CustomApiException;
 import com.example.home_service_system.exceptions.CustomApiExceptionType;
@@ -13,6 +14,7 @@ import com.example.home_service_system.mapper.AdminMapper;
 import com.example.home_service_system.repository.AdminRepository;
 import com.example.home_service_system.service.AdminService;
 import com.example.home_service_system.service.UserService;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +38,7 @@ public class AdminServiceImpl implements AdminService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public AdminResponse save(@Valid AdminSaveRequest request) {
+    public AdminResponse save(@Valid AdminSaveRequest request) throws MessagingException {
         User user = new User();
         user.setFirstName(request.firstName());
         user.setLastName(request.lastName());
@@ -47,6 +49,7 @@ public class AdminServiceImpl implements AdminService {
         user.setBirthday(request.birthday());
         user.setEmail(request.email());
         user.setUserType(UserType.ADMIN);
+        user.setUserStatus(UserStatus.NEW);
 
         //String hashedPassword = passwordEncoder.encode(request.password());
         Admin admin = AdminMapper.fromSaveRequest(request);

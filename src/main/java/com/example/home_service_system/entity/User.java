@@ -1,6 +1,7 @@
 package com.example.home_service_system.entity;
 
 import com.example.home_service_system.base.BaseEntity;
+import com.example.home_service_system.entity.enums.UserStatus;
 import com.example.home_service_system.entity.enums.UserType;
 import jakarta.persistence.*;
 import lombok.*;
@@ -50,6 +51,10 @@ public class User extends BaseEntity<Long> {
     @Column(nullable = false)
     UserType userType;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    UserStatus userStatus;
+
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     LocalDateTime createdAt;
@@ -57,6 +62,9 @@ public class User extends BaseEntity<Long> {
     @UpdateTimestamp
     @Column(nullable = false)
     LocalDateTime updatedAt;
+
+    @Column(length = 250)
+    String verificationToken;
 
     @OneToOne(mappedBy = "user")
     Expert expert;

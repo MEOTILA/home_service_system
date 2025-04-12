@@ -28,9 +28,9 @@ public class Customer extends BaseEntity<Long> {
     @OneToMany(mappedBy = "customer")
     List<Order> orderList = new ArrayList<>();
 
-    @Enumerated(EnumType.STRING)
+    /*@Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    UserStatus userStatus;
+    UserStatus userStatus;*/
 
     @Column(nullable = false)
     Long balance = 0L;

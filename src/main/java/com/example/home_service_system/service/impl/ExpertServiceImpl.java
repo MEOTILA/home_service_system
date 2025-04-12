@@ -16,6 +16,7 @@ import com.example.home_service_system.repository.ExpertRepository;
 import com.example.home_service_system.service.ExpertService;
 import com.example.home_service_system.service.SubServiceService;
 import com.example.home_service_system.service.UserService;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -51,7 +52,7 @@ public class ExpertServiceImpl implements ExpertService {
     }
 
     @Override
-    public ExpertResponse save(@Valid ExpertSaveRequest request) {
+    public ExpertResponse save(@Valid ExpertSaveRequest request) throws MessagingException {
         User user = new User();
         user.setFirstName(request.firstName());
         user.setLastName(request.lastName());
@@ -62,9 +63,9 @@ public class ExpertServiceImpl implements ExpertService {
         user.setBirthday(request.birthday());
         user.setEmail(request.email());
         user.setUserType(UserType.EXPERT);
+        user.setUserStatus(UserStatus.NEW);
 
         Expert expert = ExpertMapper.fromSaveRequest(request);
-        expert.setUserStatus(UserStatus.NEW);
 
         if (request.expertImage().getSize() > 300 * 1024) {
             throw new CustomApiException("Image size must not exceed 300KB!",
@@ -118,7 +119,7 @@ public class ExpertServiceImpl implements ExpertService {
             updatingUser.setEmail(request.email());
         }
         if (request.userStatus() != null) {
-            updatingExpert.setUserStatus(request.userStatus());
+            updatingExpert.getUser().setUserStatus(request.userStatus());
         }
         if (request.balance() != null) {
             updatingExpert.setBalance(request.balance());

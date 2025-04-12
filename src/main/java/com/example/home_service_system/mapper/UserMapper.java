@@ -24,13 +24,13 @@ public class UserMapper {
         Long orderCount = null;
 
         if (user.getExpert() != null) {
-            userStatus = user.getExpert().getUserStatus().name();
+            userStatus = user.getUserStatus().name();
             expertRating = user.getExpert().getRating();
             balance = user.getExpert().getBalance();
             expertImage = user.getExpert().getExpertImage();
             orderCount = (long) user.getExpert().getOrderList().size();
         } else if (user.getCustomer() != null) {
-            userStatus = user.getCustomer().getUserStatus().name();
+            userStatus = user.getUserStatus().name();
             balance = user.getCustomer().getBalance();
             orderCount = (long) user.getCustomer().getOrderList().size();
         }

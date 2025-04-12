@@ -5,12 +5,13 @@ import com.example.home_service_system.dto.adminDTO.AdminResponse;
 import com.example.home_service_system.dto.adminDTO.AdminSaveRequest;
 import com.example.home_service_system.dto.adminDTO.AdminUpdateRequest;
 import com.example.home_service_system.entity.Admin;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 
 import java.util.List;
 
 public interface AdminService {
-    AdminResponse save(@Valid AdminSaveRequest adminSaveRequest);
+    AdminResponse save(@Valid AdminSaveRequest adminSaveRequest) throws MessagingException;
 
     AdminResponse update(@Valid AdminUpdateRequest adminUpdateRequest);
 

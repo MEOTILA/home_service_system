@@ -4,13 +4,14 @@ import com.example.home_service_system.dto.userDTO.FilteredUserResponse;
 import com.example.home_service_system.dto.userDTO.UserFilterDTO;
 import com.example.home_service_system.dto.userDTO.UserResponse;
 import com.example.home_service_system.entity.User;
+import jakarta.mail.MessagingException;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
-    User save(User user);
+    User save(User user) throws MessagingException;
 
     User update(User user);
 
@@ -21,6 +22,8 @@ public interface UserService {
     List<User> findAllActiveUsers();
 
     void softDelete(Long id);
+
+    User findByVerificationToken(String verificationToken);
 
     User findUserByUsername(String username);
 
@@ -49,6 +52,10 @@ public interface UserService {
     String getUserRole(Long userId);
 
     void changePassword(User user);
+
+    void approveExpert(Long userId);
+
+    void verifyUser(String token);
 
     FilteredUserResponse findAllWithFilters(UserFilterDTO filter);
 }

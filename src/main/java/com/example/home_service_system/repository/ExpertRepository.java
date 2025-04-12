@@ -39,14 +39,14 @@ public interface ExpertRepository extends JpaRepository<Expert, Long>
     List<Expert> findBySubServiceAndIsDeletedFalse(SubService subService);
 
     @EntityGraph(attributePaths = "user")
-    @Query("SELECT e FROM Expert e WHERE e.userStatus = :status AND e.user.isDeleted = false")
+    @Query("SELECT e FROM Expert e WHERE e.user.userStatus = :status AND e.user.isDeleted = false")
     List<Expert> findByStatusAndIsDeletedFalse(UserStatus status);
 
     // Search with multiple criteria
     @EntityGraph(attributePaths = {"user", "expertServiceFields"})
     @Query("SELECT e FROM Expert e WHERE " +
             "(:minRating IS NULL OR e.rating >= :minRating) AND " +
-            "(:status IS NULL OR e.userStatus = :status) AND " +
+            "(:status IS NULL OR e.user.userStatus = :status) AND " +
             "(:minBalance IS NULL OR e.balance >= :minBalance) AND " +
             "e.user.isDeleted = false")
     List<Expert> searchExperts(Integer minRating, UserStatus status, Long minBalance);

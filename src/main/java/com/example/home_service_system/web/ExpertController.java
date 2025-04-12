@@ -6,6 +6,7 @@ import com.example.home_service_system.dto.expertDTO.ExpertSaveRequest;
 import com.example.home_service_system.dto.expertDTO.ExpertUpdateRequest;
 import com.example.home_service_system.entity.enums.UserStatus;
 import com.example.home_service_system.service.ExpertService;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -31,7 +32,7 @@ public class ExpertController {
         return ResponseEntity.status(HttpStatus.CREATED).body(expertService.save(request));
     }*/
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ExpertResponse> save(@Valid @ModelAttribute ExpertSaveRequest request) {
+    public ResponseEntity<ExpertResponse> save(@Valid @ModelAttribute ExpertSaveRequest request) throws MessagingException {
         return ResponseEntity.status(HttpStatus.CREATED).body(expertService.save(request));
     }
 

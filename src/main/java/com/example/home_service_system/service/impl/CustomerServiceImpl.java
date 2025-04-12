@@ -14,6 +14,7 @@ import com.example.home_service_system.mapper.CustomerMapper;
 import com.example.home_service_system.repository.CustomerRepository;
 import com.example.home_service_system.service.CustomerService;
 import com.example.home_service_system.service.UserService;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +38,7 @@ public class CustomerServiceImpl implements CustomerService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public CustomerResponse save(@Valid CustomerSaveRequest request) {
+    public CustomerResponse save(@Valid CustomerSaveRequest request) throws MessagingException {
         User user = new User();
         user.setFirstName(request.firstName());
         user.setLastName(request.lastName());
@@ -48,9 +49,9 @@ public class CustomerServiceImpl implements CustomerService {
         user.setBirthday(request.birthday());
         user.setEmail(request.email());
         user.setUserType(UserType.CUSTOMER);
+        user.setUserStatus(UserStatus.NEW);
 
         Customer customer = CustomerMapper.fromSaveRequest(request);
-        customer.setUserStatus(UserStatus.NEW);
         userService.save(user);
         customer.setUser(user);
         customerRepository.save(customer);
@@ -91,7 +92,7 @@ public class CustomerServiceImpl implements CustomerService {
             updatingUser.setEmail(request.email());
         }
         if (request.userStatus() != null) {
-            updatingCustomer.setUserStatus(request.userStatus());
+            updatingCustomer.getUser().setUserStatus(request.userStatus());
         }
         if (request.balance() != null) {
             updatingCustomer.setBalance(request.balance());

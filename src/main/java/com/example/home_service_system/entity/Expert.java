@@ -28,9 +28,9 @@ public class Expert extends BaseEntity<Long> {
     @Column(nullable = false)
     Integer rating = 0;
 
-    @Enumerated(EnumType.STRING)
+    /*@Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    UserStatus userStatus;
+    UserStatus userStatus;*/
 
     @Column(nullable = false)
     Long balance = 0L;

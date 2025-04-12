@@ -1,9 +1,11 @@
 package com.example.home_service_system.service.impl;
 
+import com.example.home_service_system.config.EmailService;
 import com.example.home_service_system.dto.userDTO.FilteredUserResponse;
 import com.example.home_service_system.dto.userDTO.UserFilterDTO;
 import com.example.home_service_system.dto.userDTO.UserResponse;
 import com.example.home_service_system.entity.User;
+import com.example.home_service_system.entity.enums.UserStatus;
 import com.example.home_service_system.entity.enums.UserType;
 import com.example.home_service_system.exceptions.CustomApiException;
 import com.example.home_service_system.exceptions.CustomApiExceptionType;
@@ -11,6 +13,7 @@ import com.example.home_service_system.mapper.UserMapper;
 import com.example.home_service_system.repository.UserRepository;
 import com.example.home_service_system.service.UserService;
 import com.example.home_service_system.specification.UserSpecification;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -25,6 +28,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -34,17 +39,21 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
 
 
     @Override
-    public User save(User user) {
+    public User save(User user) throws MessagingException {
         usernameExists(user.getUsername());
         phoneNumberExists(user.getPhoneNumber());
         emailExists(user.getEmail());
         nationalIdExists(user.getNationalId());
         String hashedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(hashedPassword);
+        String verificationToken = UUID.randomUUID().toString();
+        user.setVerificationToken(verificationToken);
+        emailService.sendVerificationEmail(user);
         return userRepository.save(user);
     }
 
@@ -119,6 +128,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User findByVerificationToken(String verificationToken) {
+        return userRepository.findByVerificationToken(verificationToken)
+                .orElseThrow(() -> new CustomApiException("User with verification token {"
+                        + verificationToken
+                        + "} not found", CustomApiExceptionType.NOT_FOUND));
+    }
+
+    @Override
     public User findUserByUsername(String username) {
         return userRepository.findByUsernameAndIsDeletedFalse(username)
                 .orElseThrow(() -> new CustomApiException("User with username {"
@@ -145,6 +162,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new CustomApiException("User with national ID {"
                         + nationalId + "} not found", CustomApiExceptionType.NOT_FOUND));
     }
+
     @Override
     public UserResponse findByUsername(String username) {
         User user = userRepository.findByUsernameAndIsDeletedFalse(username)
@@ -228,6 +246,49 @@ public class UserServiceImpl implements UserService {
         String hashedNewPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(hashedNewPassword);
         userRepository.save(updatingUser);
+    }
+
+    @Override
+    public void approveExpert(Long userId) {
+        User user = findUserById(userId);
+        if (user.getUserType() == UserType.EXPERT && user.getUserStatus() == UserStatus.PENDING) {
+            user.setUserStatus(UserStatus.APPROVED);
+            userRepository.save(user);
+        } else {
+            throw new CustomApiException("User is not an expert or is not in PENDING status.",
+                    CustomApiExceptionType.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public void verifyUser(String token) {
+        Optional<User> optionalUser = userRepository.findByVerificationToken(token);
+
+        if (optionalUser.isEmpty()) {
+            throw new CustomApiException("Email is already verified or invalid status.",
+                    CustomApiExceptionType.BAD_REQUEST);
+        }
+
+        User user = optionalUser.get();
+        if (user.getUserStatus() == UserStatus.NEW) {
+            switch (user.getUserType()) {
+                case ADMIN:
+                case CUSTOMER:
+                    user.setUserStatus(UserStatus.APPROVED);
+                    break;
+                case EXPERT:
+                    user.setUserStatus(UserStatus.PENDING);
+                    break;
+                default:
+                    throw new CustomApiException("Invalid user role.",
+                            CustomApiExceptionType.BAD_REQUEST);
+            }
+            user.setVerificationToken(null);
+            userRepository.save(user);
+        } else {
+            throw new CustomApiException("Email is already verified or invalid status."
+                    ,CustomApiExceptionType.BAD_REQUEST);
+        }
     }
 
     @Override

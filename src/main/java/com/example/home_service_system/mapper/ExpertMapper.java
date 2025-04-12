@@ -38,7 +38,7 @@ public class ExpertMapper {
                 user.getUpdatedAt(),
                 expert.getExpertImage(),
                 expert.getRating(),
-                expert.getUserStatus(),
+                expert.getUser().getUserStatus(),
                 expert.getBalance(),
                 expert.getOrderList() != null
                         ? expert.getOrderList().stream()
@@ -116,7 +116,7 @@ public class ExpertMapper {
                     CustomApiExceptionType.BAD_REQUEST);
         }
         expert.setRating(0);
-        expert.setUserStatus(UserStatus.NEW);
+        //expert.setUserStatus(UserStatus.NEW);
         expert.setBalance(0L);
 
         return expert;
@@ -169,7 +169,7 @@ public class ExpertMapper {
                 user.getEmail(),
                 null,
                 expert.getRating(),
-                expert.getUserStatus(),
+                expert.getUser().getUserStatus(),
                 expert.getBalance(),
                 serviceFieldIds
         );

@@ -38,7 +38,7 @@ public class CustomerMapper {
                 orderIds,
                 user.getCreatedAt(),
                 user.getUpdatedAt(),
-                customer.getUserStatus(),
+                customer.getUser().getUserStatus(),
                 customer.getBalance()
         );
     }
@@ -100,7 +100,7 @@ public class CustomerMapper {
         // Create Customer and establish relationship
         Customer customer = new Customer();
         customer.setUser(user);
-        customer.setUserStatus(UserStatus.NEW); // Set default status
+        //customer.setUserStatus(UserStatus.NEW); // Set default status
         customer.setBalance(0L);
 
         // Establish bidirectional relationship

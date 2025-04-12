@@ -7,11 +7,9 @@ import com.example.home_service_system.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -35,5 +33,15 @@ public class AdminController {
         filter.setSortDirection(sortDirection);
 
         return ResponseEntity.ok(userService.findAllWithFilters(filter));
+    }
+
+    @PutMapping("/approve-expert/{userId}")
+    public ResponseEntity<String> approveExpert(@PathVariable Long userId) {
+        try {
+            userService.approveExpert(userId);
+            return ResponseEntity.ok("Expert approved successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Approval failed: " + e.getMessage());
+        }
     }
 }

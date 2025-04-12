@@ -27,6 +27,7 @@ import com.example.home_service_system.entity.enums.OrderStatus;
 import com.example.home_service_system.mapper.MainServiceMapper;
 import com.example.home_service_system.service.*;
 import com.example.home_service_system.service.OrderService;
+import jakarta.mail.MessagingException;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.domain.Page;
@@ -39,7 +40,7 @@ import java.time.LocalDateTime;
 @SpringBootApplication(scanBasePackages = "com.example.home_service_system")
 public class HomeServiceSystemApplication {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws MessagingException {
         var context = SpringApplication.run(HomeServiceSystemApplication.class, args);
         var adminService = context.getBean(AdminService.class);
         var customerService = context.getBean(CustomerService.class);
