@@ -143,22 +143,59 @@ function loadOrderForm(subServiceId) {
     document.getElementById("form-container").innerHTML = `
         <h3>Place an Order</h3>
         <form id="place-order-form">
-<!--            <input type="number" id="sub-service-id" value="${subServiceId}" readonly><br>-->
             <input type="number" id="customer-id" placeholder="Customer ID" required><br>
             <input type="number" id="customer-offered-cost" placeholder="Offered Cost" required><br>
             <textarea id="customer-description" placeholder="Order Description" required></textarea><br>
             <input type="datetime-local" id="service-date" required><br>
-            <input type="text" id="address" placeholder="Address" required><br>
+            <input type="text" id="address" placeholder="Address" required readonly><br>
+            <div id="map" style="width: 100%; height: 300px;"></div>
             <button type="submit">Place Order</button>
         </form>
     `;
 
+    // Ensure the map container is present in the DOM
+    const mapContainer = document.getElementById('map');
+    if (!mapContainer) {
+        console.error('Map container not found!');
+        return;
+    }
+
+    // Initialize the Neshan Map
+    const map = new L.Map("map", {
+        key: "web.319b572001ee4c4b90efbdd7e93561b7",
+        maptype: "neshan",
+        poi: false,
+        traffic: false,
+        center: [35.699756, 51.338076],
+        zoom: 14,
+    })
+
+    // Add a marker to the map
+    const marker = L.marker([35.699739, 51.338097]).addTo(map);
+    marker.bindPopup("<b>Click on the map to select a location</b>").openPopup();
+
+    // Add a click event listener to the map
+    map.on('click', async function (event) {
+        const latlng = event.latlng; // Get the clicked coordinates
+        const latitude = latlng.lat;
+        const longitude = latlng.lng;
+
+        // Update the marker position
+        marker.setLatLng([latitude, longitude]);
+
+        // Fetch the address using reverse geocoding
+        const address = await fetchReverseGeocode(latitude, longitude);
+
+        // Populate the address field in the form
+        document.getElementById('address').value = address;
+    });
+
+    // Add event listener for form submission
     document.getElementById("place-order-form").addEventListener("submit", function (event) {
         event.preventDefault();
 
         const request = {
             subServiceId: subServiceId,
-            // subServiceId: document.getElementById("sub-service-id").value,
             customerId: document.getElementById("customer-id").value,
             customerOfferedCost: document.getElementById("customer-offered-cost").value,
             customerDescription: document.getElementById("customer-description").value,
@@ -195,6 +232,30 @@ function loadOrderForm(subServiceId) {
     });
 }
 
+// Function to fetch reverse geocoding data from Neshan API
+async function fetchReverseGeocode(latitude, longitude) {
+    const url = `https://api.neshan.org/v5/reverse?lat=${latitude}&lng=${longitude}`;
+
+    try {
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Api-Key': 'service.11558101566c438488e4c48ee0d4cab9', // Replace with your valid Neshan API key
+            },
+        });
+
+        if (!response.ok) {
+            const errorMessage = await response.text();
+            throw new Error(`Error: ${response.status} - ${errorMessage}`);
+        }
+
+        const data = await response.json();
+        return data.formatted_address; // Return the formatted address
+    } catch (error) {
+        console.error('Error fetching reverse geocoding data:', error);
+        throw error;
+    }
+}
 
 // Function to validate the order data
 function validateOrderData(request) {

@@ -167,7 +167,7 @@ public class SubServiceServiceImpl implements SubServiceService {
         expert.getExpertServiceFields().add(subService);
         subService.getExpertList().add(expert);
 
-        expertService.update(ExpertMapper.toUpdateRequest(expert));
+        //expertService.update(ExpertMapper.toUpdateRequest(expert));
 
         log.info("Expert with id {} added to SubService with id {}", expertId, subServiceId);
     }
@@ -184,7 +184,7 @@ public class SubServiceServiceImpl implements SubServiceService {
         }
         expert.getExpertServiceFields().remove(subService);
         subService.getExpertList().remove(expert);
-        expertService.update(ExpertMapper.toUpdateRequest(expert));
+        //expertService.update(ExpertMapper.toUpdateRequest(expert));
         log.info("Expert with id {} removed from SubService with id {}", expertId, subServiceId);
     }
 
