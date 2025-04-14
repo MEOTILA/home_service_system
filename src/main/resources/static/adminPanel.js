@@ -120,7 +120,7 @@ document.getElementById('filterUsers').addEventListener('click', function() {
         <div id="expertFields" class="form-row" style="display: none;">
             <div class="form-group">
                 <label for="minExpertRating">Min Expert Rating:</label>
-                <input type="number" id="minExpertRating" name="minExpertRating" min="0" max="5" step="0.1">
+                <input type="number" id="minExpertRating" name="minExpertRating" min="0" max="100" step="0.1">
             </div>
             <div class="form-group">
                 <label for="expertStatus">Expert Status:</label>
@@ -826,7 +826,7 @@ function loadAddMainServiceForm() {
         <h2>Add Main Service</h2>
         <form id="add-main-service-form">
             <input type="text" id="main-service-name" placeholder="Main Service Name" required><br>
-            <button type="submit">Add Main Service</button>
+            <button type="submit" class="btn">Add Main Service</button>
         </form>
     `;
 
@@ -886,7 +886,7 @@ function loadAddSubServiceForm() {
             <select id="sub-service-mainServiceId" required>
                 <option value="">Select Main Service</option>
             </select><br>
-            <button type="submit">Add Sub Service</button>
+            <button type="submit" class="btn">Add Sub Service</button>
         </form>
     `;
 
@@ -1003,7 +1003,7 @@ function loadAddExpertToSubServiceForm() {
         </div>
         <div id="expert-id-container" style="display:none;">
             <input type="number" id="expert-id" placeholder="Expert ID" required><br>
-            <button type="submit" id="add-expert-btn">Add Expert</button>
+            <button type="submit" id="add-expert-btn" class="btn">Add Expert</button>
         </div>
     `;
 

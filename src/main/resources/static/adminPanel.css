@@ -10,7 +10,7 @@ body {
 .sidebar {
     width: 250px;
     height: 100vh;
-    background-color: #2c3e50;
+    background: linear-gradient(135deg, #16a085, #2c3e50);
     position: fixed;
     color: white;
     padding-top: 20px;
@@ -21,6 +21,7 @@ body {
     text-align: center;
     margin-bottom: 20px;
     font-size: 1.8em;
+    color: #070707; /* Changed to white for better contrast */
 }
 
 .sidebar ul {
@@ -31,7 +32,10 @@ body {
 .sidebar ul li {
     padding: 15px;
     text-align: center;
-    transition: background-color 0.3s ease;
+    margin-bottom: 10px; /* Added margin for spacing */
+    border-radius: 8px; /* Rounded corners for button shape */
+    background-color: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Added transform transition */
 }
 
 .sidebar ul li a {
@@ -42,7 +46,9 @@ body {
 }
 
 .sidebar ul li:hover {
-    background-color: #34495e;
+    background-color: #34495e; /* Darker background on hover */
+    transform: scale(1.05); /* Slight scale-up effect on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
 }
 
 /* Main Content Styles */
