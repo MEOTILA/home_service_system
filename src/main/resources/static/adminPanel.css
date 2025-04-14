@@ -1,3 +1,11 @@
+/* General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
 /* Sidebar Styles */
 .sidebar {
     width: 250px;
@@ -6,11 +14,13 @@
     position: fixed;
     color: white;
     padding-top: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
 }
 
 .sidebar h2 {
     text-align: center;
     margin-bottom: 20px;
+    font-size: 1.8em;
 }
 
 .sidebar ul {
@@ -19,17 +29,19 @@
 }
 
 .sidebar ul li {
-    padding: 10px;
+    padding: 15px;
     text-align: center;
+    transition: background-color 0.3s ease;
 }
 
 .sidebar ul li a {
     color: white;
     text-decoration: none;
     display: block;
+    font-size: 1.1em;
 }
 
-.sidebar ul li a:hover {
+.sidebar ul li:hover {
     background-color: #34495e;
 }
 
@@ -41,8 +53,317 @@
 
 h1 {
     text-align: center;
+    color: #333;
+    font-size: 2.5em;
+    margin-bottom: 20px;
 }
 
 #form-container {
     margin-top: 20px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Form Styles */
+.admin-form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.admin-form h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.form-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.form-group {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.form-group:last-child {
+    margin-right: 0;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1em;
+}
+
+.form-group input[type="checkbox"] {
+    width: auto;
+    margin-right: 5px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #2980b9;
+}
+
+.back-btn {
+    background-color: #e74c3c;
+}
+
+.back-btn:hover {
+    background-color: #c0392b;
+}
+
+/* Table Styles */
+.users-table,
+.orders-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.users-table th,
+.users-table td,
+.orders-table th,
+.orders-table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.users-table th,
+.orders-table th {
+    background-color: #f2f2f2;
+    color: #333;
+}
+
+.users-table tr:nth-child(even),
+.orders-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.users-table tr:hover,
+.orders-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Pagination Styles */
+.pagination-info {
+    text-align: center;
+    margin-top: 20px;
+    color: #555;
+}
+
+.pagination-controls {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.pagination-controls button {
+    margin: 0 5px;
+}
+
+/* Dynamic Form Styles */
+.results-container {
+    margin-top: 20px;
+}
+
+.results-container h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.results-container p {
+    text-align: center;
+    color: #555;
+}
+
+/* Dropdown Styles */
+select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1em;
+}
+
+/* Button Group Styles */
+.btn-group {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.btn-group button {
+    margin: 0 5px;
+}
+
+/* Expert/Customer Specific Fields */
+#expertFields,
+#customerFields {
+    margin-top: 20px;
+}
+
+#expertFields .form-group,
+#customerFields .form-group {
+    margin-bottom: 15px;
+}
+
+/* Loading Message */
+.loading-message {
+    text-align: center;
+    color: #555;
+    margin-top: 20px;
+}
+
+/* Error Message */
+.error-message {
+    text-align: center;
+    color: #e74c3c;
+    margin-top: 20px;
+}
+
+/* Add Main Service Form */
+#add-main-service-form {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+#add-main-service-form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+#add-main-service-form button {
+    width: 100%;
+}
+
+/* Add Sub Service Form */
+#add-sub-service-form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+#add-sub-service-form input,
+#add-sub-service-form textarea,
+#add-sub-service-form select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+#add-sub-service-form button {
+    width: 100%;
+}
+
+/* Add Expert to Sub Service Form */
+#add-expert-to-sub-service-form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+#add-expert-to-sub-service-form select,
+#add-expert-to-sub-service-form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+#add-expert-to-sub-service-form button {
+    width: 100%;
+}
+
+/* Filter Orders Form */
+#order-filter-form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+#order-filter-form input,
+#order-filter-form select,
+#order-filter-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+#order-filter-form button {
+    width: 100%;
+}
+
+/* View Services */
+#main-service-list {
+    list-style: none;
+    padding: 0;
+}
+
+#main-service-list li {
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#main-service-list li a {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+#main-service-list li a:hover {
+    text-decoration: underline;
+}
+
+#sub-service-container {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#sub-service-container ul {
+    list-style: none;
+    padding: 0;
+}
+
+#sub-service-container ul li {
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #f1f1f1;
+    border-radius: 4px;
 }
