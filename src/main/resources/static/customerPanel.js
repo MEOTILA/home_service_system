@@ -43,7 +43,7 @@ function loadChangePasswordForm() {
             <input type="number" id="customer-id" placeholder="Customer ID" required><br>
             <input type="password" id="current-password" placeholder="Current Password" required><br>
             <input type="password" id="new-password" placeholder="New Password" required><br>
-            <button type="submit">Change Password</button>
+            <button type="submit" class="btn btn-blue">Change Password</button>
         </form>
     `;
 
@@ -149,7 +149,7 @@ function loadOrderForm(subServiceId) {
             <input type="datetime-local" id="service-date" required><br>
             <input type="text" id="address" placeholder="Address" required readonly><br>
             <div id="map" style="width: 100%; height: 300px;"></div>
-            <button type="submit">Place Order</button>
+            <button type="submit" class="btn btn-green">Place Order</button>
         </form>
     `;
 
@@ -299,7 +299,7 @@ function loadViewSuggestionsForm() {
         <h3>View Suggestions for an Order</h3>
         <form id="view-suggestions-form">
             <input type="number" id="order-id" placeholder="Order ID" required><br>
-            <button type="submit">View Suggestions</button>
+            <button type="submit" class="btn btn-blue">View Suggestions</button>
         </form>
     `;
 
@@ -383,7 +383,7 @@ function loadSortedSuggestionsForm() {
                 <option value="price">Sort by Price</option>
                 <option value="rating">Sort by Rating</option>
             </select><br>
-            <button type="submit">View Suggestions</button>
+            <button type="submit" class="btn btn-blue">View Suggestions</button>
         </form>
     `;
 
@@ -461,7 +461,7 @@ function loadChooseExpertForm() {
         <form id="choose-expert-form">
             <input type="number" id="order-id" placeholder="Order ID" required><br>
             <input type="number" id="expert-id" placeholder="Expert ID" required><br>
-            <button type="submit">Choose Expert</button>
+            <button type="submit" class="btn btn-green">Choose Expert</button>
         </form>
     `;
 
@@ -512,7 +512,7 @@ function loadAddCommentForm() {
             <input type="text" id="order-id" placeholder="Order ID" required><br>
             <textarea id="comment-text" placeholder="Comment"></textarea><br>
             <input type="number" id="rating" min="1" max="100" placeholder="Rating (1-100)" required><br>
-            <button type="submit">Submit Comment</button>
+            <button type="submit" class="btn btn-green">Submit Comment</button>
         </form>
     `;
 
@@ -596,23 +596,46 @@ function loadViewAllCustomerOrders() {
 
 // Function to display all orders
 function displayOrders(orders) {
-    let ordersHTML = "<h3>Your Orders</h3><ul>";
+    // Start building the HTML for the table
+    let ordersHTML = `
+        <h3>Your Orders</h3>
+        <table class="orders-table">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Status</th>
+                    <th>Offered Cost</th>
+                    <th>Description</th>
+                    <th>Service Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
 
+    // Loop through each order and add a row to the table
     orders.forEach(order => {
         ordersHTML += `
-            <li>
-                <strong>Order ID:</strong> ${order.id}<br>
-                <strong>Status:</strong> ${order.status}<br>
-                <strong>Offered Cost:</strong> ${order.customerOfferedCost} Rial<br>
-                <strong>Description:</strong> ${order.customerDescription}<br>
-                <strong>Service Date:</strong> ${formatDateTime(order.serviceDate)}<br>
-                ${order.status === "SERVICE_IS_DONE" ? `<button class="pay-button" data-order-id="${order.id}">Pay</button>` : ""}
-                <hr>
-            </li>
+            <tr>
+                <td>${order.id}</td>
+                <td>${order.status}</td>
+                <td>${order.customerOfferedCost} Rial</td>
+                <td>${order.customerDescription}</td>
+                <td>${formatDateTime(order.serviceDate)}</td>
+                <td>
+                    ${order.status === "SERVICE_IS_DONE" ? `<button class="pay-button" data-order-id="${order.id}">Pay</button>` : "N/A"}
+                </td>
+            </tr>
         `;
     });
 
-    ordersHTML += "</ul>";
+    // Close the table
+    ordersHTML += `
+            </tbody>
+        </table>
+    `;
+
+    // Insert the table into the container
     document.getElementById("form-container").innerHTML = ordersHTML;
 
     // Add event listeners to the pay buttons
@@ -620,27 +643,6 @@ function displayOrders(orders) {
         button.addEventListener("click", handlePayment);
     });
 }
-
-
-/*let recaptchaLoaded = false; // Global flag to track if reCAPTCHA is loaded
-
-// Function to load the reCAPTCHA script
-function loadRecaptchaScript(callback) {
-    if (recaptchaLoaded) {
-        callback(); // If already loaded, call the callback immediately
-        return;
-    }
-
-    const script = document.createElement("script");
-    script.src = "https://www.google.com/recaptcha/api.js?render=explicit";
-    script.async = true;
-    script.defer = true;
-    script.onload = () => {
-        recaptchaLoaded = true;
-        callback(); // Call the callback once the script is loaded
-    };
-    document.head.appendChild(script);
-}*/
 
 // Function to handle payment for an order
 function handlePayment(event) {
