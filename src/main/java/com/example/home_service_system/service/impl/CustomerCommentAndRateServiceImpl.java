@@ -62,7 +62,7 @@ public class CustomerCommentAndRateServiceImpl implements CustomerCommentAndRate
                 .findExpertByIdAndIsDeletedFalse(commentAndRate.getOrder().getExpert().getId());
         Integer averageRating = repository.calculateAverageRatingByExpertId(expert.getId());
         expert.setRating(averageRating);
-        //expertService.update(ExpertMapper.toUpdateRequest(expert));
+        expertService.update(ExpertMapper.toUpdateRequest(expert));
 
         log.info("customer comment and rate with id {} is saved", commentAndRate.getId());
         return CustomerCommentAndRateMapper.to(repository.save(commentAndRate));

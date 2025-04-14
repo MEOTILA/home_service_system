@@ -99,22 +99,26 @@ public class ExpertServiceImpl implements ExpertService {
         if (StringUtils.hasText(request.lastName())) {
             updatingUser.setLastName(request.lastName());
         }
-        if (StringUtils.hasText(request.username())) {
+        if (StringUtils.hasText(request.username()) &&
+                !request.username().equals(updatingUser.getUsername())) {
             userService.usernameExists(request.username());
             updatingUser.setUsername(request.username());
         }
-        if (StringUtils.hasText(request.nationalId())) {
+        if (StringUtils.hasText(request.nationalId()) &&
+                !request.nationalId().equals(updatingUser.getNationalId())) {
             userService.nationalIdExists(request.nationalId());
             updatingUser.setNationalId(request.nationalId());
         }
-        if (StringUtils.hasText(request.phoneNumber())) {
+        if (StringUtils.hasText(request.phoneNumber()) &&
+                !request.phoneNumber().equals(updatingUser.getPhoneNumber())) {
             userService.phoneNumberExists(request.phoneNumber());
             updatingUser.setPhoneNumber(request.phoneNumber());
         }
         if (request.birthday() != null) {
             updatingUser.setBirthday(request.birthday());
         }
-        if (StringUtils.hasText(request.email())) {
+        if (StringUtils.hasText(request.email()) &&
+                !request.email().equals(updatingUser.getEmail())) {
             userService.emailExists(request.email());
             updatingUser.setEmail(request.email());
         }
