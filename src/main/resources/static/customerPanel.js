@@ -90,7 +90,7 @@ function loadPlaceOrderForm() {
             mainServices.forEach(service => {
                 mainServicesHTML += `
                     <li>
-                        <button class="main-service-button" data-id="${service.id}">${service.name}</button>
+                        <button class="main-service-button btn btn-blue" data-id="${service.id}">${service.name}</button>
                     </li>
                 `;
             });
@@ -119,7 +119,7 @@ function loadSubServices(mainServiceId) {
             subServices.forEach(service => {
                 subServicesHTML += `
                     <li>
-                        <button class="sub-service-button" data-id="${service.id}">${service.name}</button>
+                        <button class="sub-service-button btn btn-blue" data-id="${service.id}">${service.name}</button>
                     </li>
                 `;
             });
