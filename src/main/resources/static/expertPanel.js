@@ -69,7 +69,7 @@ function loadChangePasswordForm() {
             <input type="number" id="expert-id" placeholder="Expert ID" required><br>
             <input type="password" id="current-password" placeholder="Current Password" required><br>
             <input type="password" id="new-password" placeholder="New Password" required><br>
-            <button type="submit">Change Password</button>
+            <button type="submit" class="btn btn-blue">Change Password</button>
         </form>
     `;
 
@@ -121,26 +121,54 @@ function loadExpertOrders() {
             return response.json();
         })
         .then(data => {
-            let resultHTML = "<h3>Orders Related to Your Expertise</h3><ul>";
+            // Start building the table HTML
+            let resultHTML = `
+                <h3>Orders Related to Your Expertise</h3>
+                <table class="orders-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Sub-Service ID</th>
+                            <th>Customer ID</th>
+                            <th>Offered Cost</th>
+                            <th>Description</th>
+                            <th>Service Date</th>
+                            <th>Address</th>
+                            <th>Status</th>
+                            <th>Suggestions</th>
+                            <th>Created At</th>
+                            <th>Updated At</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            // Loop through each order and add a row to the table
             data.forEach(order => {
                 resultHTML += `
-                    <li>
-                        <strong>Order ID:</strong> ${order.id} <br>
-                        <strong>Sub-Service ID:</strong> ${order.subServiceId} <br>
-                        <strong>Customer ID:</strong> ${order.customerId} <br>
-                        <strong>Customer Offered Cost:</strong> ${order.customerOfferedCost} Rial <br>
-                        <strong>Description:</strong> ${order.customerDescription} <br>
-                        <strong>Service Date:</strong> ${formatDateTime(order.serviceDate)} <br>
-                        <strong>Address:</strong> ${order.address} <br>
-                        <strong>Status:</strong> ${order.status} <br>
-                        <strong>Expert Suggestions:</strong> ${order.expertSuggestionListIds.length} suggestions <br>
-                        <strong>Created At:</strong> ${formatDateTime(order.createdAt)} <br>
-                        <strong>Updated At:</strong> ${formatDateTime(order.updatedAt)} <br>
-                        <hr>
-                    </li>
+                    <tr>
+                        <td>${order.id}</td>
+                        <td>${order.subServiceId}</td>
+                        <td>${order.customerId}</td>
+                        <td>${order.customerOfferedCost} Rial</td>
+                        <td>${order.customerDescription}</td>
+                        <td>${formatDateTime(order.serviceDate)}</td>
+                        <td>${order.address}</td>
+                        <td>${order.status}</td>
+                        <td>${order.expertSuggestionListIds.length}</td>
+                        <td>${formatDateTime(order.createdAt)}</td>
+                        <td>${formatDateTime(order.updatedAt)}</td>
+                    </tr>
                 `;
             });
-            resultHTML += "</ul>";
+
+            // Close the table
+            resultHTML += `
+                    </tbody>
+                </table>
+            `;
+
+            // Insert the table into the container
             document.getElementById("form-container").innerHTML = resultHTML;
         })
         .catch(error => alert("Error: " + error.message));
@@ -152,15 +180,28 @@ function loadExpertOrders() {
 
 function loadSuggestForOrderForm() {
     document.getElementById("form-container").innerHTML = `
-        <h3>Suggest for an Order</h3>
-        <form id="suggestion-form">
-            <input type="number" id="order-id" placeholder="Order ID" required><br>
-            <input type="number" id="expert-id" placeholder="Your Expert ID" required><br>
-            <textarea id="expert-suggestion" placeholder="Your Suggestion (max 500 chars)" maxlength="500" required></textarea><br>
-            <input type="number" id="offered-cost" placeholder="Offered Cost" required><br>
-            <input type="number" id="service-duration" placeholder="Service Duration (in minutes)" required><br>
-            <input type="datetime-local" id="service-start-time" required><br>
-            <button type="submit">Submit Suggestion</button>
+       <h3>Suggest for an Order</h3>
+        <form id="suggestion-form" class="expert-form">
+            <div class="form-group">
+                <input type="number" id="order-id" placeholder="Order ID" required>
+            </div>
+            <div class="form-group">
+                <input type="number" id="expert-id" placeholder="Your Expert ID" required>
+            </div>
+            <div class="form-group">
+                <textarea id="expert-suggestion" placeholder="Your Suggestion (max 500 chars)" maxlength="500" required></textarea>
+            </div>
+            <div class="form-group">
+                <input type="number" id="offered-cost" placeholder="Offered Cost" required>
+            </div>
+            <div class="form-group">
+                <input type="number" id="service-duration" placeholder="Service Duration (in minutes)" required>
+            </div>
+            <div class="form-group">
+                <label for="service-start-time">Service Start Time</label>
+                <input type="datetime-local" id="service-start-time" required>
+            </div>
+            <button type="submit" class="btn btn-green">Submit Suggestion</button>
         </form>
     `;
 
@@ -232,26 +273,50 @@ function loadExpertSuggestions() {
                 return;
             }
 
-            let resultHTML = "<h3>Your Submitted Suggestions</h3><ul>";
+            // Start building the table HTML
+            let resultHTML = `
+                <h3>Your Submitted Suggestions</h3>
+                <table class="orders-table">
+                    <thead>
+                        <tr>
+                            <th>Suggestion ID</th>
+                            <th>Order ID</th>
+                            <th>Expert ID</th>
+                            <th>Suggestion</th>
+                            <th>Offered Cost</th>
+                            <th>Service Duration</th>
+                            <th>Suggested Start Time</th>
+                            <th>Created At</th>
+                            <th>Updated At</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
 
+            // Loop through each suggestion and add a row to the table
             data.forEach(suggestion => {
                 resultHTML += `
-                    <li>
-                        <strong>Suggestion ID:</strong> ${suggestion.id}<br>
-                        <strong>Order ID:</strong> ${suggestion.orderId}<br>
-                        <strong>Expert ID:</strong> ${suggestion.expertId}<br>
-                        <strong>Suggestion:</strong> ${suggestion.expertSuggestion}<br>
-                        <strong>Offered Cost:</strong> ${suggestion.expertOfferedCost} Rial<br>
-                        <strong>Service Duration:</strong> ${formatDuration(suggestion.serviceTimeDuration)}<br>
-                        <strong>Suggested Start Time:</strong> ${formatDateTime(suggestion.expertServiceStartDateTime)}<br>
-                        <strong>Created At:</strong> ${formatDateTime(suggestion.createdAt)}<br>
-                        <strong>Updated At:</strong> ${formatDateTime(suggestion.updatedAt)}<br>
-                        <hr>
-                    </li>
+                    <tr>
+                        <td>${suggestion.id}</td>
+                        <td>${suggestion.orderId}</td>
+                        <td>${suggestion.expertId}</td>
+                        <td>${suggestion.expertSuggestion}</td>
+                        <td>${suggestion.expertOfferedCost} Rial</td>
+                        <td>${formatDuration(suggestion.serviceTimeDuration)}</td>
+                        <td>${formatDateTime(suggestion.expertServiceStartDateTime)}</td>
+                        <td>${formatDateTime(suggestion.createdAt)}</td>
+                        <td>${formatDateTime(suggestion.updatedAt)}</td>
+                    </tr>
                 `;
             });
 
-            resultHTML += "</ul>";
+            // Close the table
+            resultHTML += `
+                    </tbody>
+                </table>
+            `;
+
+            // Insert the table into the container
             document.getElementById("form-container").innerHTML = resultHTML;
         })
         .catch(error => alert("Error: " + error.message));
@@ -276,16 +341,13 @@ function formatDuration(duration) {
 }
 
 
-
-
-
 function loadAddExpertToSubServiceForm() {
     document.getElementById('form-container').innerHTML = `
         <h2>Add Expert to Sub Service</h2>
         <form id="add-expert-to-sub-service-form">
             <input type="number" id="sub-service-id" placeholder="Sub Service ID" required><br>
             <input type="number" id="expert-id" placeholder="Expert ID" required><br>
-            <button type="submit">Add Expert</button>
+            <button type="submit" class="btn btn-green">Add Expert</button>
         </form>
     `;
 
@@ -347,14 +409,41 @@ function loadOrderHistory() {
             return response.json();
         })
         .then(async (data) => {
-            let resultHTML = "<h3>Order History</h3><ul>";
+            if (data.length === 0) {
+                document.getElementById("form-container").innerHTML = "<h3>No order history found.</h3>";
+                return;
+            }
 
+            // Start building the table HTML
+            let resultHTML = `
+                <h3>Order History</h3>
+                <table class="orders-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Sub-Service ID</th>
+                            <th>Customer ID</th>
+                            <th>Expert ID</th>
+                            <th>Offered Cost</th>
+                            <th>Description</th>
+                            <th>Service Date</th>
+                            <th>Address</th>
+                            <th>Status</th>
+                            <th>Suggestions</th>
+                            <th>Rate</th>
+                            <th>Created At</th>
+                            <th>Updated At</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            // Loop through each order and add a row to the table
             for (const order of data) {
                 let ratingText = "No comment";
                 if (order.customerCommentAndRateId) {
                     try {
-                        const ratingResponse =
-                            await fetch(`http://localhost:8081/v1/customer-comments/${order.customerCommentAndRateId}`);
+                        const ratingResponse = await fetch(`http://localhost:8081/v1/customer-comments/${order.customerCommentAndRateId}`);
                         if (ratingResponse.ok) {
                             const ratingData = await ratingResponse.json();
                             ratingText = `Rating: ${ratingData.rating}`;
@@ -365,26 +454,31 @@ function loadOrderHistory() {
                 }
 
                 resultHTML += `
-                    <li>
-                        <strong>Order ID:</strong> ${order.id} <br>
-                        <strong>Sub-Service ID:</strong> ${order.subServiceId} <br>
-                        <strong>Customer ID:</strong> ${order.customerId} <br>
-                        <strong>Expert ID:</strong> ${order.expertId || "Not assigned"} <br>
-                        <strong>Customer Offered Cost:</strong> ${order.customerOfferedCost} Rial <br>
-                        <strong>Customer Description:</strong> ${order.customerDescription} <br>
-                        <strong>Service Date:</strong> ${formatDateTime(order.serviceDate)} <br>
-                        <strong>Address:</strong> ${order.address} <br>
-                        <strong>Status:</strong> ${order.status} <br>
-                        <strong>Expert Suggestions:</strong> ${order.expertSuggestionListIds.length} suggestions <br>
-                        <strong>Rate:</strong> ${ratingText} <br>
-                        <strong>Created At:</strong> ${formatDateTime(order.createdAt)} <br>
-                        <strong>Updated At:</strong> ${formatDateTime(order.updatedAt)} <br>
-                        <hr>
-                    </li>
+                    <tr>
+                        <td>${order.id}</td>
+                        <td>${order.subServiceId}</td>
+                        <td>${order.customerId}</td>
+                        <td>${order.expertId || "Not assigned"}</td>
+                        <td>${order.customerOfferedCost} Rial</td>
+                        <td>${order.customerDescription}</td>
+                        <td>${formatDateTime(order.serviceDate)}</td>
+                        <td>${order.address}</td>
+                        <td>${order.status}</td>
+                        <td>${order.expertSuggestionListIds.length}</td>
+                        <td>${ratingText}</td>
+                        <td>${formatDateTime(order.createdAt)}</td>
+                        <td>${formatDateTime(order.updatedAt)}</td>
+                    </tr>
                 `;
             }
 
-            resultHTML += "</ul>";
+            // Close the table
+            resultHTML += `
+                    </tbody>
+                </table>
+            `;
+
+            // Insert the table into the container
             document.getElementById("form-container").innerHTML = resultHTML;
         })
         .catch(error => alert("Error: " + error.message));

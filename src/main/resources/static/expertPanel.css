@@ -1,16 +1,27 @@
+/* General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
 /* Sidebar Styles */
 .sidebar {
     width: 250px;
     height: 100vh;
-    background-color: #2c3e50;
+    background: linear-gradient(135deg, #16a085, #2c3e50);
     position: fixed;
     color: white;
     padding-top: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
 }
 
 .sidebar h2 {
     text-align: center;
     margin-bottom: 20px;
+    font-size: 1.8em;
+    color: white;
 }
 
 .sidebar ul {
@@ -19,18 +30,26 @@
 }
 
 .sidebar ul li {
-    padding: 10px;
+    padding: 12px;
     text-align: center;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.1);
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    transform-origin: center;
 }
 
 .sidebar ul li a {
     color: white;
     text-decoration: none;
     display: block;
+    font-size: 1em;
 }
 
-.sidebar ul li a:hover {
+.sidebar ul li:hover {
     background-color: #34495e;
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 /* Main Content Styles */
@@ -41,8 +60,196 @@
 
 h1 {
     text-align: center;
+    color: #333;
+    font-size: 2.5em;
+    margin-bottom: 20px;
 }
 
 #form-container {
     margin-top: 20px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Form Styles */
+.expert-form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.expert-form h3 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1em;
+}
+
+.form-group input[type="checkbox"] {
+    width: auto;
+    margin-right: 5px;
+}
+
+/* Button Styles */
+.btn {
+    display: inline-block;
+    padding: 12px 24px;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-blue {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+}
+
+.btn-blue:hover {
+    background: linear-gradient(135deg, #2980b9, #3498db);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+.btn-green {
+    background: linear-gradient(135deg, #27ae60, #2ecc71);
+}
+
+.btn-green:hover {
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+.btn-red {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+}
+
+.btn-red:hover {
+    background: linear-gradient(135deg, #c0392b, #e74c3c);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Table Styles */
+.orders-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 1em;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.orders-table th,
+.orders-table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.orders-table th {
+    background-color: #f2f2f2;
+    color: #333;
+    font-weight: bold;
+}
+
+.orders-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.orders-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Pagination Styles */
+.pagination-info {
+    text-align: center;
+    margin-top: 20px;
+    color: #555;
+}
+
+.pagination-controls {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.pagination-controls button {
+    margin: 0 5px;
+}
+
+/* Loading Message */
+.loading-message {
+    text-align: center;
+    color: #555;
+    margin-top: 20px;
+}
+
+/* Error Message */
+.error-message {
+    text-align: center;
+    color: #e74c3c;
+    margin-top: 20px;
+}
+
+/* Specific Form Styles */
+
+/* Change Password Form */
+#change-password-form {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+#change-password-form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+#change-password-form button {
+    width: 100%;
+}
+
+/* Add Expert to Sub Service Form */
+#add-expert-to-sub-service-form {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+#add-expert-to-sub-service-form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+#add-expert-to-sub-service-form button {
+    width: 100%;
 }
