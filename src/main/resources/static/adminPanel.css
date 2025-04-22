@@ -298,7 +298,8 @@ select {
 }
 
 #add-expert-to-sub-service-form select,
-#add-expert-to-sub-service-form input {
+#add-expert-to-sub-service-form input,
+#expert-id {
     width: 100%;
     padding: 10px;
     margin-bottom: 15px;

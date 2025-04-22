@@ -604,7 +604,7 @@ function showOrderFilterForm(userType) {
         </select><br>
 
         <!-- Submit Button -->
-        <button type="submit">Apply Filters</button>
+        <button type="submit" class="btn btn-blue">Apply Filters</button>
     `;
 
     // Clear container and add the filter form
@@ -980,11 +980,6 @@ function submitSubService(payload) {
         });
 }
 
-
-
-
-
-
 function loadAddExpertToSubServiceForm() {
     // Step 1: Load main services
     document.getElementById('form-container').innerHTML = `
@@ -1003,7 +998,7 @@ function loadAddExpertToSubServiceForm() {
         </div>
         <div id="expert-id-container" style="display:none;">
             <input type="number" id="expert-id" placeholder="Expert ID" required><br>
-            <button type="submit" id="add-expert-btn" class="btn">Add Expert</button>
+            <button type="submit" id="add-expert-btn" class="btn btn-green">Add Expert</button>
         </div>
     `;
 
