@@ -1,6 +1,6 @@
 package com.example.home_service_system.service.impl;
 
-import com.example.home_service_system.config.EmailService;
+import com.example.home_service_system.securityAndConfig.EmailService;
 import com.example.home_service_system.dto.userDTO.FilteredUserResponse;
 import com.example.home_service_system.dto.userDTO.UserFilterDTO;
 import com.example.home_service_system.dto.userDTO.UserResponse;

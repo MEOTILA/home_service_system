@@ -1,6 +1,6 @@
 package com.example.home_service_system.service.impl;
 
-import com.example.home_service_system.config.CaptchaService;
+import com.example.home_service_system.securityAndConfig.CaptchaService;
 import com.example.home_service_system.dto.orderDTO.*;
 import com.example.home_service_system.entity.*;
 import com.example.home_service_system.entity.enums.OrderStatus;
@@ -11,7 +11,6 @@ import com.example.home_service_system.mapper.OrderMapper;
 import com.example.home_service_system.repository.OrderRepository;
 import com.example.home_service_system.service.*;
 import com.example.home_service_system.specification.OrderSpecification;
-import jakarta.persistence.criteria.Predicate;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

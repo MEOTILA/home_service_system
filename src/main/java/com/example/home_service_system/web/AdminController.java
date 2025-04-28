@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.List;
 public class AdminController {
     private final UserService userService;
 
+    //todo: @PreAuthorize("ADMIN")
     @GetMapping("/filter")
     public ResponseEntity<FilteredUserResponse> filterUsers(
             @Valid UserFilterDTO filter,

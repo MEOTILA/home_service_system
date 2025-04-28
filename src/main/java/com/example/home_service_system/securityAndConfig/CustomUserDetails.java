@@ -1,8 +1,5 @@
-package com.example.home_service_system.config;
+package com.example.home_service_system.securityAndConfig;
 
-import com.example.home_service_system.entity.Admin;
-import com.example.home_service_system.entity.Customer;
-import com.example.home_service_system.entity.Expert;
 import com.example.home_service_system.entity.User;
 import com.example.home_service_system.entity.enums.UserType;
 import lombok.RequiredArgsConstructor;

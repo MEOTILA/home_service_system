@@ -1,4 +1,4 @@
-package com.example.home_service_system.config;
+package com.example.home_service_system.securityAndConfig;
 
 import com.example.home_service_system.entity.User;
 import jakarta.mail.MessagingException;
